@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd" default-autowire="byName">
+
+	<!-- 【调度作业：客户提醒 发送Email】...start -->
+	<bean id="SpringQtzJob" class="com.sankai.inside.crm.service.QuartzEmailService" />
+	
+	<bean id="SpringQtzJobMethod"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="SpringQtzJob" />
+		</property>
+		<property name="targetMethod">
+		<value>execute</value>
+		</property>
+	</bean>
+
+	<!-- ======================== 调度触发器 ======================== -->
+	<bean id="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="SpringQtzJobMethod"></property>
+		<!-- 每天凌晨3点执行 -->
+		<property name="cronExpression" value="0 0 3 * * ? "></property>
+	</bean>
+	<!-- 【调度作业：客户提醒 发送Email】...end -->
+	
+	<!-- 【调度作业：客户上限、下限是否满足】...start -->
+	<bean id="SpringQtzJob_2" class="com.sankai.inside.crm.service.job.QuartzCustomerLimitService" />
+	
+	<bean id="SpringQtzJobMethod_2"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="SpringQtzJob_2" />
+		</property>
+		<property name="targetMethod" >
+		<value>execute</value>
+		</property>
+	</bean>
+
+	<!-- ======================== 调度触发器 ======================== -->
+	<bean id="CronTriggerBean_2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="SpringQtzJobMethod_2"></property>
+		<!-- 每3天凌晨2点执行一次点执行 -->
+		<property name="cronExpression" value="0 0 2 1/3 * ?"></property>
+	</bean>
+	<!-- 【调度作业：客户上限、下限是否满足】...end -->
+	<!-- 定义目标bean和bean中的方法 -->
+	<bean id="SpringQtzJobYun" class="com.sankai.inside.crm.service.job.CustomerYunTransformCrmService" />
+	
+	<bean id="SpringQtzJobMethodYun"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="SpringQtzJobYun" />
+		</property>
+		<property name="targetMethod">  <!-- 要执行的方法名称 -->
+			<value>execute</value>
+		</property>
+	</bean>
+
+	<!-- ======================== 调度触发器【云客户转Crm客户】 ======================== -->
+	<bean id="CronTriggerBeanYun" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="SpringQtzJobMethodYun"></property>
+		 <!-- 每天每小时30分整点执行一次 -->
+		 <property name="cronExpression" value="0 30 0/1 * * ?"></property>
+	</bean>
+	<!-- ======================== 调度工厂 ======================== -->
+	<bean id="SpringJobSchedulerFactoryBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" autowire="no">
+		<property name="triggers">
+			<list>
+				<ref bean="CronTriggerBeanYun" />
+				<ref bean="CronTriggerBean" />
+				<ref bean="CronTriggerBean_2" />
+			</list>
+		</property>
+	</bean>
+
+
+</beans>

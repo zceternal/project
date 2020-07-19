@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.IAnalysis">
+	<select id="list" resultType="java.lang.Integer" parameterType="com.sankai.inside.crm.entity.AnalysisSearch">
+		SELECT
+			COUNT(*) AS count
+		FROM
+			sys_customer a
+		INNER JOIN sys_account c ON a.create_id = c.id
+		INNER JOIN sys_customer_share d ON a.id = d.customer_id
+	<if test="status!=null">
+		AND a.`STATUS`=#{status} 
+	</if>
+		
+ 	<if test="accountIds!=null and accountIds.size()>0">
+ 	  AND d.account_id in 
+ 	<foreach collection="accountIds" item="item" index="index"
+					separator="," open="(" close=")">
+					#{item}
+	</foreach>
+		AND d.account_id = d.allow_account_id 
+	</if>
+ 	<if test="startTime!=null">
+ 	
+		  AND a.create_time>=#{startTime}
+	</if>
+	<if test="endTime!=null">
+	
+		<![CDATA[ AND a.create_time<=#{endTime}]]>
+	</if>
+	</select>
+	
+	
+	<select id="count" resultType="com.sankai.inside.crm.entity.Analysis" parameterType="com.sankai.inside.crm.entity.AnalysisSearch">
+		SELECT
+			b.`name` AS statuName,
+			DATE_FORMAT(a.create_time, '%m-%d') AS days,
+			COUNT(*) AS count
+		FROM
+			sys_customer a
+		INNER JOIN sys_dict b ON a.`status` = b.id 
+		INNER JOIN sys_customer_share d ON a.id = d.customer_id 
+		WHERE b.`value` > 0 
+ 	<if test="accountIds!=null and accountIds.size()>0">
+ 	  AND d.account_id in 
+ 	<foreach collection="accountIds" item="item" index="index"
+					separator="," open="(" close=")">
+					#{item}
+	</foreach>
+	 AND d.account_id = d.allow_account_id 
+	</if>
+ 	<if test="startTime!=null">
+ 	
+		  AND a.create_time>=#{startTime}
+	</if>
+	<if test="endTime!=null">
+	
+		<![CDATA[ AND a.create_time<=#{endTime}]]>
+	</if>
+	GROUP BY
+	days 
+	ORDER BY a.create_time ASC
+	</select>
+</mapper>

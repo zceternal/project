@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.ICustomerTransferDAO">
+	<!--根据ID查找要共享的客户信息 -->
+	<insert id="insertTransfer" parameterType="com.sankai.inside.crm.entity.CustomerTransfer">
+		INSERT INTO `sys_customer_transfer`
+		(
+		`customer_id`,
+		`account_id`,
+		`allow_account_id`,
+		`create_time`)
+		VALUES (
+		#{customerId},
+		#{accountId},
+		#{allowAccountId},
+		#{createTime});
+	</insert>
+
+</mapper>

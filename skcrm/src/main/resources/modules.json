@@ -1,0 +1,85 @@
+[
+{
+    groupName: "用户信息管理",
+    items: [{
+        name: "用户信息",
+        key: "account_info"
+    }, {
+        name: "修改密码",
+        key: "account_edit_pwd"
+    }]
+},
+{
+    groupName: "客户管理",
+    items: [{
+        name: "客户列表",
+        key: "customer_list"
+    },{
+        name: "新增客户",
+        key: "customer_add"
+    },{
+        name: "客户共享",
+        key: "customer_share"
+    },{
+        name: "客户转移",
+        key: "customer_transfer"
+    },{
+        name: "客户修改",
+        key: "customer_edit"
+    },{
+        name: "客户删除",
+        key: "customer_remove"
+    }
+    ]
+},
+{
+    groupName: "联系人管理",
+    items: [{
+        name: "联系人列表",
+        key: "contact_list"
+    },{
+        name: "新增联系人",
+        key: "contact_add"
+    },{
+        name: "联系人共享",
+        key: "contact_share"
+    },{
+        name: "查看详情",
+        key: "contact_details"
+    },{
+        name: "联系人修改",
+        key: "contact_edit"
+    },{
+        name: "联系人删除",
+        key: "contact_remove"
+    }
+    ]
+},
+
+{
+    groupName: "增值服务",
+    items: [
+    {
+        name: "智能分析",
+        key: "analysis_index"
+    },
+    {
+        name: "回访记录查询",
+        key: "cusRecord_index"
+    }
+    ]
+},
+{
+    groupName: "公海管理",
+    items: [{
+        name: "公海列表",
+        key: "highseas_list"
+    },{
+        name: "投入公海",
+        key: "highseas_transfer"
+    }
+    ]
+}
+]
+
+

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sankai.inside.crm.dao.ICustomerLogDAO">
+
+	<select id="selectList" parameterType="Integer" resultType="com.sankai.inside.crm.entity.CustomerLogList">
+		 <![CDATA[ SELECT a.id,a.type,a.create_time AS createTime ,(CASE account_ids WHEN '' THEN '' ELSE (SELECT GROUP_CONCAT(c.`name`) FROM sys_account c WHERE LOCATE(CONCAT(",",CONCAT(c.id,",")),CONCAT(",",CONCAT(account_ids,","))) AND c.`state`=0 ) END )accountNames,b.name AS customerName,
+			(SELECT d.`name` FROM sys_account d WHERE d.id=a.create_id) AS createName
+			FROM sys_customer_log a
+			LEFT JOIN sys_customer b ON a.customer_id = b.id 
+			WHERE a.customer_id =  #{value} ]]> 
+	</select>
+	
+	<select id="selectListState" parameterType="Integer" resultType="com.sankai.inside.crm.entity.CustomerLogList">
+		 <![CDATA[ SELECT a.id,a.type,a.create_time AS createTime ,(CASE account_ids WHEN '' THEN '' ELSE (SELECT GROUP_CONCAT(c.`name`) FROM sys_account c WHERE LOCATE(CONCAT(",",CONCAT(c.id,",")),CONCAT(",",CONCAT(account_ids,",")))) END )accountNames,(
+    CASE account_ids WHEN '' THEN '' ELSE (SELECT state FROM sys_account c WHERE LOCATE(CONCAT(",", CONCAT(c.id, ",")),CONCAT(",", CONCAT(account_ids, ",")))LIMIT 0,1) END) state,b.name AS customerName,
+			(SELECT d.`name` FROM sys_account d WHERE d.id=a.create_id) AS createName
+			FROM sys_customer_log a
+			LEFT JOIN sys_customer b ON a.customer_id = b.id 
+			WHERE a.customer_id =  #{value} ]]> 
+	</select>
+	
+	<insert id="insert" parameterType="com.sankai.inside.crm.entity.CustomerLog" useGeneratedKeys="true"  keyProperty="id">
+			INSERT INTO  `sys_customer_log`
+		            (`customer_id`,
+		             `account_ids`,
+		             `type`,
+		             `create_time`,
+		             `create_id`)
+			VALUES (#{customerId},
+			        #{accountIds},
+			        #{type},
+			        #{createTime},
+			        #{createId});
+	</insert>
+	
+
+</mapper>

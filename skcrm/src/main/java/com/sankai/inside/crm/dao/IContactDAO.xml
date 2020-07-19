@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.IContactDAO">
+
+	<!-- 根据Id获取实体 -->
+	<select id="selectById" parameterType="int"
+		resultType="com.sankai.inside.crm.entity.Contact">
+		SELECT
+		c.id,
+		c. NAME,
+		c.sex,
+		c.position,
+		c.department,
+		c.customer_id AS customerId,
+		u.`short_name` AS customerName,
+		c.role,
+		c.direct_supervisor AS directSupervisor,
+		c.subordinate,
+		c.phone,
+		c.phone1,
+		c.phone2,
+		c.wechat,
+		c.special_phone AS specialPhone,
+		c.qq,
+		c.email,
+		c.microblog,
+		c.fax,
+		c.birthday,
+		c.hobby,
+		c.visiting_card AS
+		visitingCard,
+		c.create_id AS createId,
+		c.create_time AS createTime
+		FROM
+		sys_contact AS c
+		LEFT JOIN sys_customer u ON c.customer_id = u.id
+		where
+		c.id=#{value}
+	</select>
+	<!-- 根据客户id获取联系人 -->
+	<select id="getConByCusId" parameterType="com.sankai.inside.crm.entity.ContactSearchByCusId"
+		resultType="com.sankai.inside.crm.entity.Contact">
+		SELECT
+		c.id AS id,
+		c.NAME AS NAME,
+		c.phone AS phone,
+		c.qq AS
+		qq,
+		c.email AS
+		email,
+		c.position AS position,
+		t.NAME AS customerName,
+		a.NAME AS CName,
+		c.create_time AS createTime,
+		c.role AS role,
+		c.sort AS
+		sort,
+		c.customer_id AS customerId,
+		c.wechat AS wechat,
+		c.name_simple_py,
+		c.name_py
+		FROM
+		sys_contact c
+		LEFT JOIN sys_customer t ON c.customer_id =
+		t.id
+		LEFT JOIN sys_account a ON c.create_id = a.id
+		WHERE
+		c.id IN (
+		SELECT
+		contact_id
+		FROM
+		sys_contact_share
+		WHERE
+		customer_id =#{custerId} and
+		allow_account_id=#{accountId } and `state` = 0
+		) GROUP BY `NAME`
+	</select>
+
+	<!--登录人既不是部门领导、也不是第一创建人， 根据登录id获取客户Id然后获取联系人 是第一负责人 -->
+	<select id="getConByLoginId" parameterType="com.sankai.inside.crm.entity.ContactSearch"
+		resultType="com.sankai.inside.crm.entity.Contact">
+		SELECT c.id AS id, c.NAME AS NAME, c.phone AS phone, c.qq AS qq,
+		c.email AS email, c.position AS position,
+		t.NAME AS customerName,
+		a.NAME AS CName, c.create_time AS createTime, c.role
+		AS role, c.sort AS
+		sort,
+		c.customer_id AS customerId, c.wechat AS wechat,
+		c.name_simple_py, c.name_py,
+		c.create_id, cs.allow_account_id
+		FROM
+		sys_contact c LEFT JOIN sys_customer t ON c.customer_id = t.id LEFT
+		JOIN sys_account a ON c.create_id = a.id
+		LEFT JOIN sys_contact_share cs
+		ON c.id = cs.contact_id WHERE c.id IN(
+
+		select contact_id from (
+		SELECT
+		contact_id FROM
+		sys_contact_share
+		WHERE
+		allow_account_id = #{accountId}
+		and `state` = 0 UNION SELECT
+		contact_id FROM
+		sys_contact_share WHERE
+		customer_id IN
+		(SELECT
+		customer_id FROM
+		sys_customer_share WHERE
+		allow_account_id =
+		#{accountId} AND state = 0
+		AND is_own = 1) AND
+		allow_account_id !=
+		#{accountId} AND account_id =
+		allow_account_id
+		) as
+		ttt
+		)
+		<if test="customerType==1">
+			and c.customer_id !=0
+		</if>
+		<if test="customerType==0">
+			and c.customer_id =0
+		</if>
+		<if test="contactRole!=0">
+			and c.role = #{contactRole}
+		</if>
+		<if test="content!=null">
+			and (
+			c.name like CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			c.name_simple_py like CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			c.name_py
+			like CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			t.name like
+			CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			t.name_simple_py like
+			CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			t.name_py like
+			CONCAT(CONCAT('%',#{content}),'%')
+
+			)
+		</if>
+		<if test="iswechat==true">
+			and c.wechat !=''
+		</if>
+		<if test="isqq==true">
+			and c.qq !=''
+		</if>
+		<if test="isphone==true">
+			and c.phone !=''
+		</if>
+		<if test="isemail==true">
+			and c.email !=''
+		</if>
+		GROUP BY `NAME`
+	</select>
+
+	<!-- 根据查询条件，获取列表 -->
+	<select id="list" parameterType="com.sankai.inside.crm.entity.ContactSearch"
+		resultType="com.sankai.inside.crm.entity.Contact">
+		SELECT
+		td.contactId AS id,
+		td.`name` AS name,
+		td.phone AS phone,
+		td.qq AS
+		qq,
+		td.email AS email,
+		td.position AS position,
+		td.customerName AS
+		customerName,
+		td.CName AS CName,
+		td.createTime AS createTime,
+		td.role AS
+		role,
+		td.sort AS sort
+		FROM
+		sys_contact_share
+		cs
+		LEFT JOIN (
+		SELECT
+		c.id AS
+		contactId,
+		c. NAME AS NAME,
+		c.sex,
+		c.position,
+		c.department,
+		c.customer_id
+		AS customerId,
+		t.short_name AS customerName,
+		c.role AS
+		role,
+		c.direct_supervisor AS directSupervisor,
+		c.subordinate,
+		c.phone AS
+		phone,
+		c.phone1,
+		c.phone2,
+		c.wechat AS wechat,
+		c.special_phone
+		AS
+		specialPhone,
+		c.qq AS qq,
+		c.email AS email,
+		c.microblog,
+		c.fax,
+		c.birthday,
+		c.hobby,
+		c.visiting_card AS visitingCard,
+		c.create_id AS
+		createId,
+		a. NAME AS CName,
+		c.create_time AS createTime,
+		c.sort AS sort,
+		c.name_py,
+		c.name_simple_py,
+		t.name as tname,
+		t.name_py as tname_py,
+		t.name_simple_py as tname_simple_py
+		FROM
+		sys_contact c
+		LEFT JOIN
+		sys_customer t ON
+		c.customer_id = t.id
+		LEFT JOIN
+		sys_account a ON
+		c.create_id = a.id
+		) AS
+		td ON cs.contact_id =
+		td.contactId
+		WHERE cs.state
+		= 0
+		<!-- <if test="isDeptManaer"> AND (cs.account_id = allow_account_id OR 
+			account_id != #{accountId}) </if> -->
+		<if test="customerType==1">
+			and td.customerId !=0
+		</if>
+		<if test="customerType==0">
+			and td.customerId =0
+		</if>
+		<if test="contactRole!=0">
+			and td.role = #{contactRole}
+		</if>
+		<if test="content!=null">
+			and (td.name like CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			td.name_simple_py like CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			td.name_py like CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			td.tname like
+			CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			td.tname_simple_py like
+			CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			td.tname_py like
+			CONCAT(CONCAT('%',#{content}),'%')
+			)
+		</if>
+		<if test="iswechat==true">
+			and td.wechat !=''
+		</if>
+		<if test="isqq==true">
+			and td.qq !=''
+		</if>
+		<if test="isphone==true">
+			and td.phone !=''
+		</if>
+		<if test="isemail==true">
+			and td.email !=''
+		</if>
+		<if test="principal!=null">
+			and cs.allow_account_id in
+			<if test="isGetValue==0">
+				<foreach collection="principal" item="item" index="index"
+					separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="isGetValue!=0">
+				(#{isGetValue})
+			</if>
+		</if>
+		<!-- GROUP BY `NAME` -->
+
+		<if test="orderField==null or orderField==''">
+			<![CDATA[ order by td.`sort` desc ]]>
+		</if>
+		<if test="orderField!=null and orderField!=''">
+			<![CDATA[ order by td.`${orderField}` ${orderType} ]]>
+		</if>
+	</select>
+	
+	
+	<!-- 根据查询条件，获取列表  自动填充  李肖   -->
+	<select id="listAutocomplate" parameterType="com.sankai.inside.crm.entity.AutocomplateEntity" resultType="com.sankai.inside.crm.entity.ContactAutocomplate">
+		SELECT a.`name`,
+		a.phone, 
+		b.`name` AS createName  
+		FROM sys_contact a 
+		INNER JOIN sys_account b ON a.create_id=b.id
+		INNER JOIN sys_contact_share c ON a.id=c.contact_id 
+		WHERE
+		c.state=0 AND
+	  	c.account_id=c.allow_account_id AND
+		<if test="type==1">
+			 a.`name` LIKE CONCAT(CONCAT('%', #{value}),'%')
+		</if>
+		<if test="type==2">
+			 a.`phone` LIKE CONCAT(CONCAT('%', #{value}),'%')
+		</if>
+	</select>
+	
+	
+	
+
+	<!-- 根据查询条件，获取列表 -->
+	<select id="showList" parameterType="com.sankai.inside.crm.entity.ContactSearch"
+		resultType="com.sankai.inside.crm.entity.Contact">
+		SELECT
+		td.contactId AS id,
+		td.`name` AS name,
+		td.phone AS phone,
+		td.qq AS
+		qq,
+		td.email AS email,
+		td.position AS position,
+		td.customerName AS
+		customerName,
+		td.CName AS CName,
+		td.createTime AS createTime,
+		td.role AS
+		role,
+		td.sort AS sort
+		FROM
+		sys_contact_share cs
+		LEFT JOIN (
+		SELECT
+		c.id AS
+		contactId,
+		c. NAME AS NAME,
+		c.sex,
+		c.position,
+		c.department,
+		c.customer_id
+		AS customerId,
+		t.short_name AS customerName,
+		c.role AS
+		role,
+		c.direct_supervisor AS directSupervisor,
+		c.subordinate,
+		c.phone AS
+		phone,
+		c.phone1,
+		c.phone2,
+		c.wechat AS wechat,
+		c.special_phone AS
+		specialPhone,
+		c.qq AS qq,
+		c.email AS email,
+		c.microblog,
+		c.fax,
+		c.birthday,
+		c.hobby,
+		c.visiting_card AS visitingCard,
+		c.create_id AS
+		createId,
+		a. NAME AS CName,
+		c.create_time AS createTime,
+		c.sort AS sort,
+		c.name_py,
+		c.name_simple_py
+		FROM
+		sys_contact c
+		LEFT JOIN sys_customer t ON
+		c.customer_id = t.id
+		LEFT JOIN sys_account a ON c.create_id = a.id
+		) AS
+		td ON cs.contact_id = td.contactId
+		WHERE cs.state = 0 AND
+		(cs.account_id =
+		allow_account_id OR account_id != #{accountId})
+		<if test="customerType==1">
+			and td.customerId !=0
+		</if>
+		<if test="customerType==0">
+			and td.customerId =0
+		</if>
+		<if test="contactRole!=0">
+			and td.role = #{contactRole}
+		</if>
+		<if test="content!=null">
+			and (td.name like CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			td.name_simple_py like CONCAT(CONCAT('%',#{content}),'%')
+			OR
+			td.name_py like CONCAT(CONCAT('%',#{content}),'%'))
+		</if>
+		<if test="iswechat==true">
+			and td.wechat !=''
+		</if>
+		<if test="isqq==true">
+			and td.qq !=''
+		</if>
+		<if test="isphone==true">
+			and td.phone !=''
+		</if>
+		<if test="isemail==true">
+			and td.email !=''
+		</if>
+		<if test="customerId != null">
+			and cs.`customer_id`= #{customerId}
+		</if>
+		<!-- <if test="principal!=null"> and cs.allow_account_id in <foreach collection="principal" 
+			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach> 
+			</if> -->
+		GROUP BY `NAME`
+
+		<if test="orderField==null or orderField==''">
+			<![CDATA[ order by td.`sort` desc ]]>
+		</if>
+		<if test="orderField!=null and orderField!=''">
+			<![CDATA[ order by td.`${orderField}` ${orderType} ]]>
+		</if>
+	</select>
+
+	<!-- 根据Id删除数据 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM
+		sys_contact
+		WHERE id
+		= #{value}
+	</delete>
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="com.sankai.inside.crm.entity.Contact"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT into
+		sys_contact(
+		name,
+		sex,
+		position,
+		department,
+		customer_id,
+		role,
+		direct_supervisor,
+		subordinate,
+		phone,
+		phone1,
+		phone2,
+		wechat,
+		special_phone,
+		qq,
+		email,
+		microblog,
+		fax,
+		birthday,
+		hobby,
+		visiting_card,
+		create_id,
+		create_time,
+		sort,
+		name_simple_py,
+		name_py)
+		VALUES(
+		#{name},
+		#{sex},
+		#{position},
+		#{department},
+		#{customerId},
+		#{role},
+		#{directSupervisor},
+		#{subordinate},
+		#{phone},
+		#{phone1},
+		#{phone2},
+		#{wechat},
+		#{specialPhone},
+		#{qq},
+		#{email},
+		#{microblog},
+		#{fax},
+		#{birthday},
+		#{hobby},
+		#{visitingCard},
+		#{createId},
+		#{createTime},
+		#{sort},
+		#{nameSimplePy},
+		#{namePy})
+	</insert>
+	
+	
+	<select id="insertExit" parameterType="com.sankai.inside.crm.entity.Contact" resultType="com.sankai.inside.crm.entity.Contact">
+	SELECT 
+	*  
+	FROM sys_contact a
+	INNER JOIN sys_contact_share b ON a.id=b.contact_id 
+	WHERE 
+	b.state = 0 AND b.account_id=b.allow_account_id  
+	<if test="id==null">
+	 AND a.`name`= #{name} AND a.phone=#{phone}
+	</if>
+	<if test="id!=null">
+	 AND  a.id=#{id}
+	</if>
+	   LIMIT 0,1
+	</select>
+	
+	
+	<!-- 修改数据 -->
+	<update id="update" parameterType="com.sankai.inside.crm.entity.Contact">
+		UPDATE sys_contact
+		set
+		name=#{name},
+		sex=#{sex},
+		position=#{position},
+		department=#{department},
+		customer_id=#{customerId},
+		role=#{role},
+		direct_supervisor=#{directSupervisor},
+		subordinate=#{subordinate},
+		phone=#{phone},
+		phone1=#{phone1},
+		phone2=#{phone2},
+		wechat=#{wechat},
+		special_phone=#{specialPhone},
+		qq=#{qq},
+		email=#{email},
+		microblog=#{microblog},
+		fax=#{fax},
+		birthday=#{birthday},
+		hobby=#{hobby},
+		visiting_card=#{visitingCard},
+		create_id=#{createId},
+		name_simple_py=#{nameSimplePy},
+		name_py=#{namePy}
+		where id=#{id}
+	</update>
+	<!-- 获取最大的排序ID -->
+	<select id="getMaxOrder" resultType="int">
+		SELECT
+		max(sort)
+		FROM
+		sys_contact
+	</select>
+	<!-- 修改置顶序号 -->
+	<update id="topOperate" parameterType="map">
+		UPDATE sys_contact
+		set
+		sort=#{sort}
+		where id=#{id}
+	</update>
+	<!-- 大于要修改的sort所有值减1 -->
+	<update id="minusOperate" parameterType="int">
+		UPDATE
+		sys_contact
+		set
+		sort=sort-1
+		where sort>#{sort}
+	</update>
+	
+		<select id="selectTopContact" resultType="com.sankai.inside.crm.entity.Contact">
+		SELECT
+			id AS id,
+			`name` AS name,
+			phone AS phone
+		FROM
+			sys_contact
+		WHERE customer_id = #{value} 
+		ORDER BY create_time ASC
+		LIMIT 1
+
+	</select>
+	
+	<!-- 修改联系人的第一负责人  -->
+	<update id="UpdateFirstMan" parameterType="com.sankai.inside.crm.entity.Contact">
+		UPDATE sys_contact_share SET account_id =${param2},`state` = 0, allow_account_id=${param2} WHERE account_id = allow_account_id AND customer_id = ${param1}
+	</update>
+	
+	<!-- 根据客户id 批量删除共享者的信息  -->
+	<update id="DeleteBatchShare" >
+		UPDATE sys_contact_share SET `state` = -1 WHERE account_id != allow_account_id AND customer_id = #{value}
+	</update>
+	
+	
+</mapper>

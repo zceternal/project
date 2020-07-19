@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.ICustomerRecordRevertDAO">
+	<!-- 添加回复纪录 -->
+	<insert id="insertCustomerRecordRevert" parameterType="com.sankai.inside.crm.entity.CustomerRecordRevert">
+		INSERT INTO
+		sys_customer_record_revert(record_id,account_id,create_time,remark) 
+		VALUES(#{recordId},#{accountId},#{createTime},#{remark})
+	</insert>
+	
+	<select id="selectBy" resultType="com.sankai.inside.crm.entity.CustomerRecordRevert">
+		SELECT
+		a.id,
+		a.record_id AS recordId,
+		a.account_id AS accountId,
+		b.`name` AS accountName,
+		a.create_time AS createTime,
+		a.remark
+	FROM
+		sys_customer_record_revert a
+	LEFT JOIN sys_account b ON a.account_id = b.id
+	WHERE
+		a.record_id = #{value} 
+		ORDER BY
+	a.create_time DESC
+    </select>
+
+</mapper>

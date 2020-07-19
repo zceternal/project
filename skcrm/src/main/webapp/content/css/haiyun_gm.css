@@ -1,0 +1,34 @@
+*{margin:0;padding:0;}
+ul,ol,li{list-style:none;}
+img{border:0;}
+a { text-decoration:none; color:#333;outline:none}
+a:hover { text-decoration:none;}
+html{height: 100%}
+body {height: 100%;font-family:"Microsoft YaHei"; color:#333; background:#fff url(../img/haiyun_left_bg.jpg) repeat-y}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.clearfix{zoom:1}
+
+/*=============================登录页面样式====================================*/
+#floater {height: 42%;margin-bottom: -202px;position: relative;}
+.hy_login_main { margin:0 auto; width:1020px; height:558px; }
+.hy_login_title { margin:0 auto; width:612px; height:80px; background:url(../img/hy_login_titlebg.png) no-repeat;}
+.hy_login_tab { position:relative; margin:30px auto 0; height:448px; background:url(../img/hy_login_tabbg.png) no-repeat;}
+.hy_login_tab .hy_login_inpa { position:absolute; top:102px; left:614px; width:314px; height:30px; padding:5px; border:0; background:none}
+.hy_login_tab .hy_login_btna { cursor:pointer; position:absolute; top:305px; left:562px; width:180px; height:60px; background:none; border:0}
+.hy_login_tab .hy_login_btnb { cursor:pointer; position:absolute; top:305px; left:763px; width:180px; height:60px; background:none; border:0}
+.hy_login_tab .boxa {position:absolute; top:250px; left:565px; font-size:15px;}
+.hy_login_msgpa { position:absolute; top:222px; left:565px; font-size:15px; color:#ed1515; font-size:14px;}
+/*焦点图*/
+.focus{ position:absolute; top:45px; left:45px; position:relative; width:429px; height:357px; background-color: #000;}  
+.focus img{ width: 429px; height: 357px;}  
+.focus .fPic{ position:absolute; left:0px; top:0px; }  
+.focus .D1fBt{ overflow:hidden; zoom:1;  height:16px; z-index:10;  }  
+.focus .fcon{ position:relative; width:100%; float:left;  display:none; background:#000  }  
+.focus .fcon img{ display:block; }  
+.focus .fbg{bottom:20px; width: 100%; position:absolute; height:21px; text-align:center; z-index: 200; }  
+.focus .fbg div{margin:4px auto 0;overflow:hidden;zoom:1;height:14px}    
+.focus .D1fBt a{position:relative; display: inline-block; width:12px; height:12px; border-radius:7px; margin:0 5px;color:#B0B0B0;font:12px/15px "\5B8B\4F53"; text-decoration:none; text-align:center; outline:0;  background:#D9D9D9; }    
+.focus .D1fBt .current,.focus .D1fBt a:hover{background:#fc114a;}    
+.focus .D1fBt img{display:none}    
+.focus .D1fBt i{display:none; font-style:normal; }    
+

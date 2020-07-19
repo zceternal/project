@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+    
+	<bean id="sqlSessionFactoryYun" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceYun" />
+		<!-- 扫描所有Map文件 -->
+		<property name="mapperLocations"
+			value="classpath*:com/sankai/inside/crm/yun/*.xml" />
+		<property name="configLocation" value="classpath:mybatis.xml" />
+	</bean>
+
+
+		<!-- 扫描mybatis映射接口类 -->  
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+    <property name="basePackage" value="com.sankai.inside.crm.yun"/>  
+    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryYun"/>  
+	
+
+</bean>  
+</beans>

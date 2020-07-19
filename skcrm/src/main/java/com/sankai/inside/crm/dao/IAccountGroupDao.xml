@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 功能模块:  -->
+<mapper namespace="com.sankai.inside.crm.dao.IAccountGroupDao" >
+
+	<!--通用表字段列表-->
+	<resultMap id="BaseResultMap" type="com.sankai.inside.crm.entity.AccountGroupEntity">
+		<result column="ID" property="id" jdbcType="INTEGER"/>
+		<result column="NAME" property="name" jdbcType="VARCHAR"/>
+		<result column="ACCOUNT_LIST" property="accountList" jdbcType="VARCHAR"/>
+		<result column="ACCOUNT_ID_LIST" property="accountIdList" jdbcType="VARCHAR"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+		<result column="LAST_MODIFY_NAME" property="lastModifyName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--通用表字段列表-->
+    
+	<!--user customize code start-->
+
+	<!--user customize code end  -->
+    
+	<!--通用查询条件组装-->
+	<sql id="whereContation">
+			<if test="id != null">
+				AND  ID=#{id,jdbcType=INTEGER}  
+			</if>
+			<if test="name != null">
+				AND  NAME=#{name,jdbcType=VARCHAR}  
+			</if>
+			<if test="accountList != null">
+				AND  ACCOUNT_LIST=#{accountList,jdbcType=VARCHAR}  
+			</if>
+			<if test="accountIdList != null">
+				AND  ACCOUNT_ID_LIST=#{accountIdList,jdbcType=VARCHAR}  
+			</if>
+			<if test="remark != null">
+				AND  REMARK=#{remark,jdbcType=VARCHAR}  
+			</if>
+			<if test="createTime != null">
+				AND  CREATE_TIME=#{createTime}  
+			</if>
+			<if test="createName != null">
+				AND  CREATE_NAME=#{createName,jdbcType=VARCHAR}  
+			</if>
+			<if test="lastModifyName != null">
+				AND  LAST_MODIFY_NAME=#{lastModifyName,jdbcType=VARCHAR}  
+			</if>
+	</sql>
+	
+	<!--查询字段列表拼装-->
+	<sql id="baseColumnList">
+			 ID		 
+			,NAME		 
+			,ACCOUNT_LIST
+			,ACCOUNT_ID_LIST			 
+			,REMARK		 
+			,CREATE_TIME		 
+			,CREATE_NAME		 
+			,LAST_MODIFY_NAME		 
+	</sql>
+	
+	<!--
+	方法名称: insert
+	调用路径: AccountGroupEntityMapper.insert
+	开发信息: 
+	处理信息: 保存记录
+	-->
+ 	<insert id="insert" parameterType="com.sankai.inside.crm.entity.AccountGroupEntity" >
+	 	INSERT  INTO  SYS_ACCOUNT_GROUP
+	 		<trim prefix="(" suffix=")" suffixOverrides=",">
+					<if test="id != null">
+					ID,
+					</if>
+					<if test="name != null">
+					NAME,
+					</if>
+					<if test="accountList != null">
+					ACCOUNT_LIST,
+					</if>
+					<if test="accountIdList != null">
+					ACCOUNT_ID_LIST,
+					</if>
+					<if test="remark != null">
+					REMARK,
+					</if>
+					<if test="createTime != null">
+					CREATE_TIME,
+					</if>
+					<if test="createName != null">
+					CREATE_NAME,
+					</if>
+					<if test="lastModifyName != null">
+					LAST_MODIFY_NAME,
+					</if>
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides=",">
+					<if test="id != null">
+					 #{id,jdbcType=INTEGER},
+					</if>
+					<if test="name != null">
+					 #{name,jdbcType=VARCHAR},
+					</if>
+					<if test="accountList != null">
+					 #{accountList,jdbcType=VARCHAR},
+					</if>
+					<if test="accountIdList != null">
+					 #{accountIdList,jdbcType=VARCHAR},
+					</if>
+					<if test="remark != null">
+					 #{remark,jdbcType=VARCHAR},
+					</if>
+					<if test="createTime != null">
+					 #{createTime,jdbcType=DATE},
+					</if>
+					<if test="createName != null">
+					 #{createName,jdbcType=VARCHAR},
+					</if>
+					<if test="lastModifyName != null">
+					 #{lastModifyName,jdbcType=VARCHAR},
+					</if>
+			</trim>
+	</insert>
+	
+	<!--
+	方法名称: update
+	调用路径: AccountGroupEntityMapper.update
+	开发信息: 
+	处理信息: 修改记录
+	-->
+ 	<update id="update" parameterType="com.sankai.inside.crm.entity.AccountGroupEntity" >
+		UPDATE   SYS_ACCOUNT_GROUP  	 
+	  	<set> 
+				<if test="name != null">
+			 		NAME = #{name,jdbcType=VARCHAR},
+			 	</if>
+				<if test="accountList != null">
+			 		ACCOUNT_LIST = #{accountList,jdbcType=VARCHAR},
+			 	</if>
+			 	<if test="accountIdList != null">
+			 		ACCOUNT_ID_LIST = #{accountIdList,jdbcType=VARCHAR},
+			 	</if>
+				<if test="remark != null">
+			 		REMARK = #{remark,jdbcType=VARCHAR},
+			 	</if>
+				<if test="createTime != null">
+			 		CREATE_TIME = #{createTime},
+			 	</if>
+				<if test="createName != null">
+			 		CREATE_NAME = #{createName,jdbcType=VARCHAR},
+			 	</if>
+				<if test="lastModifyName != null">
+			 		LAST_MODIFY_NAME = #{lastModifyName,jdbcType=VARCHAR},
+			 	</if>
+		</set>
+		WHERE  
+			ID = #{id,jdbcType=INTEGER}		 
+	</update>
+	
+	
+	<!--
+	方法名称: deleteByPriKey
+	调用路径:AccountGroupEntityMapper.deleteByPriKey
+	开发信息: 
+	处理信息: 删除记录
+	-->
+	<delete id="deleteByPriKey" parameterType="int">
+		DELETE 	FROM SYS_ACCOUNT_GROUP 	 
+		WHERE 
+			ID = #{id,jdbcType=INTEGER}		 
+	</delete>
+	
+	<!--
+	方法名称: findByPriKey
+	调用路径: AccountGroupEntityMapper.findByPriKey
+	开发信息: 
+	处理信息: 根据主键查询记录
+	-->
+	<select id="findByPriKey" parameterType="int"  resultType="com.sankai.inside.crm.entity.AccountGroupEntity">
+		SELECT   
+		   <include refid="baseColumnList"/>
+		FROM   SYS_ACCOUNT_GROUP         
+		WHERE
+				ID = #{id,jdbcType=INTEGER}		 
+	</select>
+	
+	<!-- 判断组名是否存在 -->
+	<select id="existsByGroupName" parameterType="string" resultType="boolean" >
+		 <![CDATA[ SELECT count(id) AS value FROM sys_account_group WHERE name = #{value} ]]>
+	</select>
+		
+	<!--
+	方法名称: getList
+	调用路径: AccountGroupEntityMapper.getList
+	开发信息: 
+	处理信息: 根据条件查询记录
+	-->
+	<select id="getList" parameterType="com.sankai.inside.crm.entity.AccountGroupSearch"  resultType="com.sankai.inside.crm.entity.AccountGroupEntity">
+	   SELECT   
+	   		<include refid="baseColumnList"/>
+	   FROM   SYS_ACCOUNT_GROUP           
+	   WHERE 1=1
+		<if test="content != null">
+		 	and
+			(
+				NAME like CONCAT(CONCAT('%',#{content}),'%')
+				or
+				ACCOUNT_LIST like CONCAT(CONCAT('%', #{content}),'%')
+			)
+		</if>
+		 	ORDER BY create_time desc
+	</select>
+	
+	<!--
+	方法名称: getListByAccId
+	调用路径: AccountGroupEntityMapper.getListByAccId
+	开发信息: 
+	处理信息: 根据当前登录人，获取群组信息集合
+	-->
+	<select id="getListByAccId" parameterType="Integer"  resultType="com.sankai.inside.crm.entity.AccountGroupEntity">
+		<![CDATA[SELECT * FROM sys_account_group  WHERE POSITION(CONCAT(',',${value},',') IN CONCAT(',',account_id_list,',')) >0 ]]>
+	</select>
+</mapper>

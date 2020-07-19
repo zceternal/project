@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.IContactShareDAO">
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="com.sankai.inside.crm.entity.CustomerShare">
+		INSERT into
+		sys_contact_share(
+		contact_id,
+		account_id,
+		allow_account_id,
+		create_time,
+		customer_id)
+		VALUES(
+		#{contactId},
+		#{accountId},
+		#{allowAccountId},
+		#{createTime},
+		#{customerId})
+	</insert>
+
+	<!--查看是否已经共享过 -->
+	<select id="checkExists"
+		parameterType="com.sankai.inside.crm.entity.ContactShareExistsCheck"
+		resultType="int">
+		SELECT
+		COUNT(1) AS value
+		FROM
+		sys_contact_share
+		WHERE
+		allow_account_id=#{allowAccountId}
+		AND contact_id=#{contactId}
+		and
+		`state` = 0
+	</select>
+	<!--保存共享到表 -->
+	<insert id="insertContactShare" parameterType="com.sankai.inside.crm.entity.ContactShare">
+		INSERT into
+		sys_contact_share(
+		contact_id,
+		account_id,
+		allow_account_id,
+		create_time,
+		customer_id)
+		VALUES
+		<foreach collection="list" index="index" item="item"
+			separator=",">
+			(#{item.contactId},
+			#{item.accountId},
+			#{item.allowAccountId},
+			#{item.createTime},
+			#{item.customerId})
+		</foreach>
+	</insert>
+	<!-- 修改数据 -->
+	<update id="update" parameterType="com.sankai.inside.crm.entity.ContactShare">
+		UPDATE sys_contact_share set
+		customer_id=#{customerId} where
+		contact_id=#{contactId} and
+		account_id=#{accountId} and
+		allow_account_id=#{allowAccountId}
+	</update>
+	
+	<!-- 修改数据假删除数据 -->
+	<update id="delete">
+		UPDATE sys_contact_share
+		SET state =- 1
+		WHERE
+		contact_id = #{param1}
+		and
+		allow_account_id = #{param2}
+	</update>
+	
+	<select id="selectIdsByAccId" parameterType="int" resultType="Integer">
+		SELECT id FROM `sys_contact_share` WHERE account_id=#{value} AND allow_account_id = #{value}
+	</select>
+	
+	<update id="updateBatchByIds" parameterType="com.sankai.inside.crm.entity.ContactShare">
+		UPDATE `sys_contact_share` SET  account_id=#{leaderId},allow_account_id = #{leaderId}
+		<if test="ids!=null">
+			WHERE id IN 
+			<foreach collection="ids" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach> 
+		</if>
+		
+	</update>
+	<!--批量修改状态：公海  -->
+	<update id="injectHighSeasByCusId" parameterType="com.sankai.inside.crm.entity.ContactShare" >
+		UPDATE sys_contact_share
+		SET state = #{state} WHERE customer_id = #{customerId}
+	</update>
+	<!-- 客户转移，将客户关联的联系人转移给允许人 -->
+	<update id="updateTran" parameterType="com.sankai.inside.crm.entity.ContactShare">
+	UPDATE sys_contact_share SET account_id = #{allowAccountId},allow_account_id = #{allowAccountId} 
+	WHERE customer_id = #{customerId} AND account_id = allow_account_id
+	</update>
+	
+</mapper>

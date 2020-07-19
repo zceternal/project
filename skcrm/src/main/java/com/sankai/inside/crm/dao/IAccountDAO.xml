@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.IAccountDAO">
+
+	<select id="existsByLoginName" parameterType="string"
+		resultType="boolean">
+		 <![CDATA[ SELECT count(id) AS value FROM sys_account WHERE login_name = #{value} AND state=0 ]]>
+	</select>
+
+
+
+	<select id="existsByNumber" parameterType="string" resultType="boolean">
+		 <![CDATA[ SELECT count(id) AS value FROM sys_account WHERE number = #{value} AND state=0]]>
+	</select>
+	
+	<select id="existsLeader" parameterType="int" resultType="boolean">
+		 <![CDATA[ SELECT count(id) AS value FROM sys_account WHERE sys_dept_id = #{value} AND is_dept_manager=1 AND state=0]]>
+	</select>
+
+	<select id="selectAccountByLoginName" parameterType="string"
+		resultType="com.sankai.inside.crm.entity.Account">
+		 <![CDATA[ SELECT id,login_name AS loginName,login_password AS password,state FROM sys_account WHERE login_name = #{value} AND state != -1 LIMIT 1 ]]>
+	</select>
+	<!--查找用戶名 -->
+	<select id="getLoginName" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT `name` FROM sys_user WHERE
+		account_id=#{value}
+	</select>
+	
+	<select id="selectIdAndNameAll" resultType="com.sankai.inside.crm.entity.Account">
+		SELECT id,name FROM sys_account WHERE state = 0 AND id != #{param1}
+	</select>
+
+	<select id="selectEasyById" parameterType="int"
+		resultType="com.sankai.inside.crm.entity.Account">
+		SELECT
+		ac.id,
+		ac.`name`,
+		ac.sex,
+		ac.is_dept_manager as isDeptManager,
+		ac.email,
+		ac.phone,
+		ac.avatar,
+		ac.sys_dept_id AS deptId,
+		ac.create_id AS createId,
+		ac.record_type AS recordType
+		FROM
+		sys_account AS ac
+		WHERE ac.id = #{value} AND state=0
+	</select>
+
+	<select id="selectBy" resultType="com.sankai.inside.crm.entity.Account"
+		parameterType="String">
+		SELECT
+		ac.id,
+		ac.login_name AS loginName,
+		ac.login_password AS
+		`password`,
+		ac.`name`,
+		ac.number,
+		ac.sex,
+		ac.email,
+		ac.phone,
+		ac.sys_dept_id AS deptId,
+		ac.state,
+		ac.create_time AS createTime,
+		ac.create_id AS createId,
+		ac.is_dept_manager AS isDeptManager
+		FROM
+		sys_account AS ac
+		WHERE state=0 and ac.id != 0
+		<if test="value!=null">
+			AND (
+			ac.login_name LIKE CONCAT(CONCAT('%', #{value}),'%')
+			OR ac.number LIKE CONCAT(CONCAT('%', #{value}),'%')
+			OR ac.name LIKE
+			CONCAT(CONCAT('%', #{value}),'%')
+			OR ac.name_simple_py LIKE
+			CONCAT('%', #{value})
+			OR ac.name_py LIKE CONCAT('%', #{value})
+			)
+		</if>
+		ORDER BY create_time DESC
+	</select>
+	
+	<select id="selectDeptAllBy" resultType="com.sankai.inside.crm.entity.Account" >
+		SELECT
+		ac.id,
+		ac.login_name AS loginName,
+		ac.login_password AS
+		`password`,
+		ac.`name`,
+		ac.number,
+		ac.sex,
+		ac.email,
+		ac.phone,
+		ac.sys_dept_id AS deptId,
+		ac.state,
+		ac.create_time AS createTime,
+		ac.create_id AS createId,
+		ac.is_dept_manager AS isDeptManager
+		FROM
+		sys_account AS ac
+		WHERE ac.id > 0
+		<!-- 在职状态 -->
+		<if test="param3!=1">  
+		    AND state=#{2}
+		</if> 
+		<if test="#{0}!=null">
+			AND (
+			ac.login_name LIKE CONCAT(CONCAT('%', #{0}),'%')
+			OR ac.number LIKE CONCAT(CONCAT('%', #{0}),'%')
+			OR ac.name LIKE
+			CONCAT(CONCAT('%', #{0}),'%')
+			OR ac.name_simple_py LIKE
+			CONCAT('%', #{0})
+			OR ac.name_py LIKE CONCAT('%', #{0})
+			) 
+		</if>
+			
+		AND (
+			(ac.sys_dept_id = (SELECT IF(is_dept_manager=1,sys_dept_id,-1) FROM sys_account WHERE id= #{1}) OR id=#{1}) 
+		OR
+			(#{1} &lt;= 0 AND ac.id != #{1}))
+		ORDER BY state DESC, create_time DESC
+	</select>
+	
+	
+	<select id="selectDeptAllByDeptIds" resultType="com.sankai.inside.crm.entity.Account" >
+		SELECT
+		ac.id,
+		ac.login_name AS loginName,
+		ac.login_password AS
+		`password`,
+		ac.`name`,
+		ac.number,
+		ac.sex,
+		ac.email,
+		ac.phone,
+		ac.sys_dept_id AS deptId,
+		ac.state,
+		ac.create_time AS createTime,
+		ac.is_dept_manager AS isDeptManager,
+		ac.create_id AS createId
+		FROM
+		sys_account AS ac
+		WHERE ac.id > 0 
+		<!-- 在职状态 -->
+		<if test="param6!=1">  
+		    AND state=#{5}
+		</if> 
+		<!-- 不能看自己 -->
+	     AND ac.id != #{2} 
+			<!-- 部门领导 -->
+			<if test="param5">
+				 AND (ac.sys_dept_id in (${param2}) OR sys_dept_id = #{3})
+			</if>
+			<!-- 非部门领导，只能子级 -->
+			<if test="!param5">
+				 AND (ac.sys_dept_id in (${param2}))
+			</if>
+		<if test="#{0}!=null">
+			AND (
+			ac.login_name LIKE CONCAT(CONCAT('%', #{0}),'%')
+			OR ac.number LIKE CONCAT(CONCAT('%', #{0}),'%')
+			OR ac.name LIKE
+			CONCAT(CONCAT('%', #{0}),'%')
+			OR ac.name_simple_py LIKE
+			CONCAT('%', #{0})
+			OR ac.name_py LIKE CONCAT('%', #{0})
+			) 
+			</if>
+			ORDER BY create_time DESC
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from sys_account where id = #{value}
+	</delete>
+
+	<update id="updateState" parameterType="int">
+		update sys_account set state = -1 where id = #{value}
+	</update>
+
+	<insert id="insert" parameterType="com.sankai.inside.crm.entity.Account"  useGeneratedKeys="true"  keyProperty="id">
+		INSERT INTO
+		`sys_account` (
+		`login_name`, `login_password`, `name`, `name_simple_py`, `name_py`,
+		`sex`,is_dept_manager,
+		`number`, `email`, `phone`,
+		`sys_dept_id`,`avatar`, `state`,
+		`create_time`, `create_id`, `record_type`)
+		VALUES (#{loginName},#{password}, #{name},
+		#{nameSimplePy}, #{namePy},
+		#{sex},#{isDeptManager}, #{number}, #{email}, #{phone},
+		#{deptId},#{avatar}, 0, #{createTime}, #{createId},#{recordType})
+	</insert>
+
+	<update id="update" parameterType="com.sankai.inside.crm.entity.Account">
+		UPDATE `sys_account` SET
+		`name`=#{name}, `name_simple_py`=#{nameSimplePy},
+		`name_py`=#{namePy},
+		`sex`=#{sex},`is_dept_manager`=#{isDeptManager}, `email`=#{email}, `phone`=#{phone},
+		 `avatar`=#{avatar},`sys_dept_id`=#{deptId},`record_type`=#{recordType} WHERE
+		(`id`=#{id})
+	</update>
+
+	<select id="selectAccountInfo" resultType="com.sankai.inside.crm.entity.Account">
+		SELECT
+		account.id,
+		account.`name`,
+		account.sex,
+		account.email,
+		account.avatar,
+		sys_dept_id AS deptId,
+		name_py AS namePy,
+		account.phone
+		FROM
+		sys_account
+		AS account
+		WHERE account.id=#{value}
+	</select>
+
+	<update id="updateAccountInfo" parameterType="com.sankai.inside.crm.entity.Account">
+		UPDATE
+		`sys_account` SET `name`=#{name}, `name_simple_py`=#{nameSimplePy},
+		`name_py`=#{namePy},
+		`sex`=#{sex}, `email`=#{email}, `phone`=#{phone}
+		 WHERE (`id`=#{id})
+	</update>
+
+	<update id="recoverAccountState" parameterType="int">
+		UPDATE
+		`sys_account` SET `state`=0
+		 WHERE `id`=#{value}
+	</update>
+	
+	<select id="selectNameAndStateById" resultType="com.sankai.inside.crm.entity.Account"
+		parameterType="int">
+		SELECT
+		`name`,
+		`state`
+		FROM
+		sys_account
+		WHERE id=#{value}
+	</select>
+
+	<select id="selectAccountPwd" resultType="String">
+		SELECT
+		account.login_password AS `password`
+		FROM
+		sys_account AS account
+		WHERE account.id=#{value}
+	</select>
+
+	<update id="updateAccountPwd" parameterType="com.sankai.inside.crm.entity.AccountPwd">
+		UPDATE `sys_account` SET `login_password`=#{newPwd} WHERE (`id`=#{id})
+	</update>
+
+	<update id="updatePwd" parameterType="int">
+		UPDATE `sys_account` SET `login_password`='e10adc3949ba59abbe56e057f20f883e'
+		WHERE (`id`=#{value})
+	</update>
+
+	<select id="getLoginNameX" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		SELECT `name` FROM sys_account WHERE id=#{id}
+	</select>
+
+	<select id="getDeptIdById" resultType="int" parameterType="int">
+		SELECT `sys_dept_id` FROM sys_account WHERE id=#{value}
+	</select>
+	<!-- 查询部门领导人信息 -->
+	<select id="getPrincipalByaccId" resultType="com.sankai.inside.crm.entity.Account" parameterType="int">
+	SELECT * FROM sys_account WHERE sys_dept_id = (SELECT sys_dept_id FROM sys_account WHERE id=#{value}) AND is_dept_manager = 1 AND `state` = 0
+	</select>
+	<!-- 查询部门领导人信息-如果删除的是部门领导，则需要找当前人所在部门的父级部门的领导人 -->
+	<select id="getPrincipalByaccIdForPid" resultType="com.sankai.inside.crm.entity.Account" parameterType="int">
+	SELECT * FROM sys_account WHERE sys_dept_id = (SELECT pid FROM sys_detp WHERE id = (SELECT sys_dept_id FROM sys_account WHERE id=#{value})) AND is_dept_manager = 1 AND `state` = 0
+	</select>
+
+	<select id="findAuthById" resultType="string" parameterType="int">
+		SELECT module_key AS `value` FROM sys_authority where type = 2 AND
+		quote_id = #{value}
+	</select>
+	<select id="selectAccOfDeptByAccId" resultType="com.sankai.inside.crm.entity.AccountOfDept">
+	    <if test="value &gt; 0">
+		select id,`name`,sex,number,sys_dept_id as departmentId,is_dept_manager as isDeptManager,(SELECT id =
+		#{value}) as isMySelf from sys_account
+		where sys_dept_id = (select sys_dept_id from sys_account where id=
+		#{value})
+		and `state` = 0
+		order by isMySelf desc
+		</if>
+		<if test="value &lt; 0">
+		select id,`name`,sex,number,sys_dept_id as departmentId,is_dept_manager as isDeptManager,0 as isMySelf from sys_account
+		where   `state` = 0 and id != 0
+		order by isMySelf desc
+		</if>
+		<if test="value==0">
+		select id,`name`,sex,number,sys_dept_id as departmentId,is_dept_manager as isDeptManager,0 as isMySelf from sys_account
+		where   `state` = 0
+		order by isMySelf desc
+		</if>
+	</select>
+	
+		<select id="selectDeptAllAccOfDeptByDeptIds" resultType="com.sankai.inside.crm.entity.AccountOfDept">
+		 <if test="param1!=0">
+	 	select id,`name`,sex,number,sys_dept_id as departmentId,is_dept_manager as isDeptManager,(SELECT id =
+		${param1}) as isMySelf from sys_account
+		where sys_dept_id in (${param2})
+		and `state` = 0
+		order by isMySelf desc
+			</if>
+		<if test="param1==0">
+		select id,`name`,sex,number,sys_dept_id as departmentId,is_dept_manager as isDeptManager,0 as isMySelf from sys_account
+		where   `state` = 0
+		order by isMySelf desc
+		</if>
+		</select>
+	
+	<select id="selectLeaderById" resultType="java.lang.Integer">
+	select is_dept_manager from sys_account where id = #{value}
+	</select>
+	
+	<select id="getAccountHaveCustomer" resultType="com.sankai.inside.crm.entity.AccountHaveCustomer" parameterType="java.lang.String">
+	<![CDATA[SELECT id,`name`,number,email,phone,sys_dept_id AS deptId,tb.pid AS deptPid,tb.managerId,is_dept_manager AS isDeptManager,
+	(SELECT COUNT(0)  FROM sys_customer_share WHERE `state` = 0 AND allow_account_id = sys_account.id) AS custoemrCount 
+	FROM sys_account 
+	LEFT JOIN (SELECT id AS deptId,pid ,
+	(SELECT `id` FROM sys_account WHERE `state` = 0 AND sys_dept_id=sys_detp.id AND is_dept_manager = 1 LIMIT 0,1) managerId 
+	FROM sys_detp WHERE `state` = 0 ) tb ON sys_account.`sys_dept_id` = tb.deptId
+	WHERE sys_account.`state` = 0 AND sys_account.`id`>0 
+	]]>
+	<if test="value!=null and value!=''">
+	AND sys_dept_id IN (${value})
+	</if>
+	
+	</select>
+	
+	<select id="selectaAllowByName" parameterType="com.sankai.inside.crm.entity.Account" resultType="com.sankai.inside.crm.entity.Account">
+	SELECT DISTINCT e.id FROM sys_customer_share AS f
+		LEFT JOIN sys_account e ON
+		f.account_id = e.id WHERE f.state = 0 AND f.is_own = 1 
+		<if test="name!=null">
+			AND NAME like CONCAT(CONCAT('%', #{name}),'%')
+		</if>
+	</select>
+</mapper>

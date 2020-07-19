@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.ICustomerRemindDAO">
+
+	<select id="selectList"  resultType="com.sankai.inside.crm.entity.CustomerRemindList">
+		
+		SELECT a.id,a.customer_id AS customerId,b.short_name AS shortName,b.status,(SELECT `name` FROM sys_dict WHERE id = b.status) AS statusName ,
+		(SELECT `name` FROM sys_account WHERE id = (SELECT allow_account_id FROM sys_customer_share WHERE customer_id = a.customer_id AND `state` = 0 AND is_own = 1)) AS accountName,
+		a.remind_time AS remindTime,TO_DAYS(a.remind_time) - TO_DAYS(NOW()) overTime,a.remark
+		FROM sys_customer_remind a
+		LEFT JOIN sys_customer b ON a.customer_id = b.id
+		WHERE  a.`state` = 0 AND b.`state` = 0 
+		<if test="value != null">
+			AND a.create_id =  #{value}
+		</if>
+		 
+		order by a.remind_time
+				
+	</select>
+	<!-- 获取当前日期所有提醒客户信息 -->
+	<select id="selectListByRemindTime" parameterType="java.lang.String"  resultType="com.sankai.inside.crm.entity.CustomerRemindSendEmail">
+	SELECT a.id AS remindId,b.name AS customerName,a.remind_time AS remindTime,c.name AS accountName,c.email,a.remark FROM `sys_customer_remind` AS a
+	LEFT JOIN `sys_customer`  AS b ON a.customer_id = b.id
+	LEFT JOIN `sys_account`  AS c ON a.create_id = c.id
+	WHERE a.state = 0 
+	
+	<if test="value != null">
+		AND DATE_FORMAT(a.remind_time,'%Y-%m-%d') = #{value}
+	</if>
+	
+	</select>
+	
+	<select id="selectById" parameterType="java.lang.Integer"  resultType="com.sankai.inside.crm.entity.CustomerRemindDTO">
+		SELECT
+	  `id`,
+	  `customer_id` AS customerId,
+	  `create_time` AS createTime,
+	  `create_id` AS createId,
+	  `remind_time` AS remindTime,
+	  `type`,
+	  `state`,
+	  `remark`
+	FROM `sys_customer_remind` where id = #{value}
+				
+	</select>
+	
+	<insert id="insert"  parameterType="com.sankai.inside.crm.entity.CustomerRemindDTO" useGeneratedKeys="true"  keyProperty="id">
+	INSERT INTO `sys_customer_remind`
+            (`customer_id`,
+             `create_time`,
+             `create_id`,
+             `remind_time`,
+             `type`,
+             `remark`,
+             `state`)
+	VALUES (#{customerId},
+	        #{createTime},
+	        #{createId},
+	        #{remindTime},
+	        #{type},
+	        #{remark},
+	        '0');
+	</insert>
+	
+	<update id="update" parameterType="com.sankai.inside.crm.entity.CustomerRemindEdit">
+	UPDATE `sys_customer_remind`
+	SET `remind_time` = #{remindTime},
+	`remark` = #{remark}
+	WHERE `id` = #{id};
+	</update>
+	
+	<update id="updateState" >
+	UPDATE `sys_customer_remind`
+	SET `state` = #{param2}
+	WHERE `id` = #{param1};
+	</update>
+	
+</mapper>

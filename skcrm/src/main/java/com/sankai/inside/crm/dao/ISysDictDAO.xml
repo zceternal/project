@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.ISysDictDAO">
+	<!--根据pid获取所有的内容 -->
+	<select id="findAllByPid" parameterType="java.lang.Integer"
+		resultType="com.sankai.inside.crm.entity.SysDict">
+		SELECT id,`value`,`name` FROM sys_dict sd
+		WHERE
+		parent_id=#{pid} AND state!=-1
+		ORDER BY sd.`order` ASC
+	</select>
+	<!--根据pid列表+查询 -->
+	<select id="findAllByPidSearch" parameterType="com.sankai.inside.crm.entity.SysDictSearchDTO"
+		resultType="com.sankai.inside.crm.entity.SysDictListDTO">
+		SELECT id,`value`,`name`,remark,create_time,
+		(SELECT `name` FROM
+		sys_account WHERE id=sd.`create_id`) AS createName,
+		parent_id AS
+		parentId ,sd.`order`
+		FROM sys_dict sd
+		WHERE parent_id=#{pid} AND
+		state!=-1
+		<if test="keyWord!=null and keyWord!=''">
+			AND (name LIKE #{keyWord} OR pycode LIKE #{keyWord} OR
+			pyname LIKE #{keyWord})
+		</if>
+		ORDER BY sd.`order` ASC
+	</select>
+	<!--增加 -->
+	<insert id="insert" parameterType="com.sankai.inside.crm.entity.SysDict"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		sys_dict(`value`,`name`,parent_id,`order`,create_id,create_time,state,remark,pycode,pyname)
+		VALUES(#{value},#{name},#{parentId},#{order},#{createId},#{createTime},0,#{remark},#{pycode},#{pyname})
+	</insert>
+	<!--查询，用于修改 -->
+	<select id="findById" parameterType="java.lang.Integer"
+		resultType="com.sankai.inside.crm.entity.SysDict">
+		SELECT `value`,`name`,`order`,remark,parent_id AS parentId
+		FROM sys_dict WHERE id=#{id}
+	</select>
+	<!-- 查询，当前登录人的销售记录类型 -->
+	<select id="findByRecordType" parameterType="java.lang.String"
+		resultType="com.sankai.inside.crm.entity.SysDictListByRecordTypeDTO">
+		SELECT `id`,`name`,remark,parent_id AS parentId
+		FROM sys_dict WHERE id in(${value})
+	</select>
+	<!--修改 -->
+	<update id="updateDict" parameterType="com.sankai.inside.crm.entity.SysDict">
+		UPDATE sys_dict SET
+		value=#{value},name=#{name},remark=#{remark},pycode=#{pycode},pyname=#{pyname}
+		WHERE id=#{id}
+	</update>
+	<!--删除 -->
+	<update id="doRemove" parameterType="java.lang.Integer">
+		UPDATE sys_dict SET state=-1
+		WHERE id=#{id}
+	</update>
+	<!--获取新的排序 -->
+	<select id="getNewOrder" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT MAX(`order`)+1 AS `order` FROM sys_dict sd
+		WHERE
+		parent_id=#{pid} and state!=-1
+	</select>
+	<!--删除 -->
+	<update id="deleteDict" parameterType="java.lang.Integer">
+		UPDATE sys_dict SET
+		state=-1
+		WHERE id=#{id}
+	</update>
+	<!--判断是否存在，用于修改删除 -->
+	<select id="checkExists" parameterType="com.sankai.inside.crm.entity.CheckDictExistsDTO"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM sys_dict WHERE `name`=#{name} AND
+		parent_id=#{pid} AND state=0
+		<if test="id!=null and id!=''">
+			AND id!=#{id}
+		</if>
+	</select>
+
+	<!--上移/下移 start -->
+	<!--1. 获取移动目标的前一个/后一个目标的ID -->
+	<select id="getBrotherId" parameterType="com.sankai.inside.crm.entity.DictOrderDTO"
+		resultType="java.lang.Integer">
+		SELECT id FROM sys_dict WHERE parent_id=#{pid} AND
+		`order`=#{newOrder} AND state=0
+	</select>
+	<!--2. 修改前一个/后一个目标的order -->
+	<update id="updateBrotherOrder" parameterType="com.sankai.inside.crm.entity.DictOrderDTO">
+		UPDATE sys_dict
+		SET `order`=#{iOrder} WHERE id=#{brotherId}
+	</update>
+	<!--3. 修改自身的order -->
+	<update id="updateSelfOrder" parameterType="com.sankai.inside.crm.entity.DictOrderDTO">
+		UPDATE sys_dict SET
+		`order`=#{newOrder} WHERE id=#{id}
+	</update>
+	<!--上移/下移 end -->
+	<!--修改小于本order的其它所有目标 ，用于删除 start -->
+	<!--查到大于自身ORDER的其他所有目标(用于删除) -->
+	<select id="findDictForDelete" parameterType="com.sankai.inside.crm.entity.DictOrderDTO"
+		resultType="com.sankai.inside.crm.entity.DictOrderDTO">
+		SELECT id,`order` AS iOrder FROM sys_dict WHERE
+		`order`>#{iOrder} AND parent_id=#{pid} AND state=0
+	</select>
+	<!--修改order (用于删除) -->
+	<update id="updateOrderForDelete" parameterType="com.sankai.inside.crm.entity.DictOrderDTO">
+		UPDATE sys_dict SET `order`=#{newOrder} WHERE id=#{id}
+	</update>
+	<!--修改小于本order的其它所有目标 ，用于删除 end -->
+
+	<select id="findDictAllByType" resultType="com.sankai.inside.crm.entity.Dict"
+		parameterType="int">
+		SELECT id,`value`,`name`
+		FROM sys_dict
+		WHERE parent_id=#{value} AND state!=-1
+		ORDER BY `order` ASC
+	</select>
+
+	<select id="findDictById" resultType="com.sankai.inside.crm.entity.Dict"
+		parameterType="int">
+		SELECT `value`,`name`,`state`
+		FROM sys_dict
+		WHERE id=#{value}
+	</select>
+</mapper>

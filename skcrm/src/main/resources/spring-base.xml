@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	<context:component-scan base-package="com.sankai.inside.crm" />
+	<context:property-placeholder location="classpath*:*.properties"/>
+	<context:annotation-config/>
+	
+	
+	<!-- 集成redis -->
+    <!-- <import resource="classpath:spring-redis.xml"/> -->
+    
+    
+    <!-- 集成AOP --> 
+     <import resource="classpath:spring-aop.xml"/> 
+    
+    <!-- 集成ehCache --> 
+     <import resource="classpath:spring-ehcache.xml"/> 
+    
+    <!-- 集成springmvc --> 
+    <import resource="classpath:spring-servlet.xml"/>
+    
+    <!-- 集成Model验证框架 -->
+	<import resource="classpath:spring-validator.xml"/>	
+	
+	<!-- 集成JDBC连接池 -->
+ 	<import resource="classpath:spring-pool.xml"/>
+ 	
+ 	<!-- 集成mybatis -->
+	<import resource="classpath:spring-mybatis.xml"/>
+	<!-- 集成mybatis【智慧云】 -->
+	<import resource="classpath:spring-mybatis-yun.xml"/>
+	
+	<!-- shiro权限管理框架 -->
+	<import resource="classpath:spring-shiro.xml"/> 
+	
+	<!-- 异常处理，上线后启用 -->
+	<import resource="classpath:spring-exception.xml"/>
+	 
+    <!-- 集成事物框架 -->
+	<import resource="classpath:spring-tx.xml"/>
+	
+	<!-- 调度作业 【采集智慧云客户、联系人信息】调度作业【1、客户提醒功能-发送邮件 2、客户上限、下限是否满足系统要求】-->
+	<import resource="classpath:job/spring-quartz-transform.xml"/>
+	
+	<!-- 调度作业 [公海管理]  -->
+	<import resource="classpath:job/customer-pool-job.xml"/>
+
+    <bean class="com.sankai.inside.crm.core.utils.SpringBeanUtil"></bean>
+    
+     <!--上传必需要 cgq  -->
+     <!-- 与百度编辑器冲突 -->
+     <!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/> --> 
+</beans>

@@ -1,0 +1,4 @@
+
+.empty{;width:18px;height:13px;margin:auto;}
+.up{background:url(../img/up.png) no-repeat;width:18px;height:13px;margin:auto;cursor:pointer}
+.down{background:url(../img/down.png) no-repeat;width:18px;height:13px;margin:auto;cursor:pointer}

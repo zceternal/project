@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.ICustomerDAO">
+	<!--根据ID查询客户信息 -->
+	<select id="findCustomerInfoById" parameterType="java.lang.Integer"
+		resultType="com.sankai.inside.crm.entity.CustomerTransDTO">
+		SELECT id,name,short_name AS
+		shortName,status,type,source,url,phone,province,city,country,address,x_coord
+		AS xCoord,
+		y_coord AS yCoord,remark,
+
+		(SELECT name FROM
+		sys_prov_city_area_street WHERE code=province) AS provinceName,
+		(SELECT name FROM sys_prov_city_area_street WHERE code=city) AS
+		cityName,
+		(SELECT name FROM sys_prov_city_area_street WHERE
+		code=country) AS countryName,
+		create_id AS createId
+		FROM sys_customer
+		WHERE id=#{id}
+	</select>
+	<!--根据客户ID查询客户的共享信息 -->
+	<select id="findAllows" parameterType="java.lang.Integer"
+		resultType="com.sankai.inside.crm.entity.CustomerShareTransDTO">
+		SELECT
+		(SELECT NAME FROM sys_account WHERE
+		id=scs.allow_account_id) AS allowName,
+		(SELECT phone FROM sys_account
+		WHERE id=scs.allow_account_id) AS
+		phone,
+		(SELECT `name` FROM sys_detp
+		WHERE id=(SELECT sys_dept_id FROM
+		sys_account WHERE
+		id=scs.allow_account_id)) AS deptName,
+		(SELECT pid
+		FROM sys_detp WHERE
+		id=(SELECT sys_dept_id FROM sys_account WHERE
+		id=scs.allow_account_id)) AS deptPid,
+		scs.allow_account_id AS
+		allowAccountId
+		FROM sys_customer_share AS scs WHERE
+		customer_id=#{customerId} AND state=0
+		AND scs.is_own!=1
+		ORDER BY
+		deptName
+	</select>
+	<!--查找销售第一负责人 -->
+	<select id="findFirstAllow" parameterType="java.lang.Integer"
+		resultType="com.sankai.inside.crm.entity.CustomerShareTransDTO">
+		SELECT scs.allow_account_id as allowAccountId,
+		(SELECT NAME
+		FROM sys_account WHERE id=scs.allow_account_id) AS allowName,
+		(SELECT
+		phone FROM sys_account WHERE id=scs.allow_account_id) AS phone,
+		(SELECT `name` FROM sys_detp WHERE id=(SELECT sys_dept_id FROM
+		sys_account WHERE id=scs.allow_account_id)) AS deptName
+		FROM
+		sys_customer_share AS scs WHERE customer_id=#{customerId}
+		AND
+		scs.is_own=1
+	</select>
+	<!--查询客户联系人 -->
+	<select id="findContactInfoByCustoemrId" parameterType="java.lang.Integer"
+		resultType="com.sankai.inside.crm.entity.Contact">
+		SELECT `name`,`position`,phone,customer_id,id FROM sys_contact WHERE
+		customer_id=#{customerId}
+	</select>
+	<!-- 客户管理列表 -->
+	<select id="selectList" resultType="com.sankai.inside.crm.entity.CustomerList"
+		parameterType="com.sankai.inside.crm.entity.CustomerListSearch">
+		SELECT *,(SELECT `name` FROM sys_account WHERE tb2.accountId = id ) AS optName
+ 		FROM (
+ 		select * from (
+		select * from (SELECT
+		a.id AS shareId,b.id AS
+		customerId,a.`state`,b.name,b.phone,
+		a.`order`,b.short_name AS
+		shortName,b.`status`,a.is_own as isOwn,
+		b.name_simple_py AS nameSimplePy,b.name_py AS namePy,
+		sales_success_rate AS salesSuccessRate,
+		a.`is_from` AS isFrom,
+		a.`account_id` AS accountId,
+		(SELECT ac.`name` from sys_account ac WHERE ac.id=b.`create_id`) AS createName,
+		a.`allow_account_id` AS allowAccountId,		
+		(SELECT
+		e.name FROM sys_customer_share AS f
+		LEFT JOIN sys_account e ON
+		f.account_id = e.id WHERE f.state = 0 AND f.is_own = 1 AND
+		f.customer_id=a.`customer_id`) AS
+		allowAccountName,
+
+		(SELECT `name` FROM
+		sys_dict WHERE id = b.`status`) AS statusName,
+
+		(SELECT
+		MAX(communication_time)FROM sys_customer_record WHERE customer_id
+		=a.`customer_id`)
+		AS finalTime,b.province,
+
+		(SELECT `name` FROM
+		sys_prov_city_area_street
+		WHERE `code` = b.province) AS
+		provinceName,b.`type`,
+
+		(SELECT GROUP_CONCAT(dict.`name`) FROM sys_dict
+		AS dict WHERE
+		LOCATE(CONCAT(",",CONCAT(dict.id,",")),CONCAT(",",CONCAT(b.`type`,","))))
+		AS
+		typeName,b.create_time AS createTime
+		FROM sys_customer_share AS a
+		LEFT JOIN sys_customer AS b ON a.customer_id = b.id
+		LEFT JOIN sys_account AS g
+		ON a.`allow_account_id` = g.id WHERE
+		a.`state`=0 AND b.`state` = 0 ) as tb
+		where tb.state=0
+		<if test="content!=null and content!=''">
+			and
+			(tb.name like CONCAT(CONCAT('%',#{content}),'%')
+			or
+			tb.shortName like CONCAT(CONCAT('%', #{content}),'%')
+			or
+			tb.nameSimplePy like CONCAT(CONCAT('%', #{content}),'%')
+			or
+			tb.namePy like CONCAT(CONCAT('%', #{content}),'%')
+			or
+			tb.phone like CONCAT(CONCAT('%', #{content}),'%')
+			)
+		</if>
+
+			<if test="traceType>0">
+				<![CDATA[ and TO_DAYS(NOW()) - TO_DAYS(tb.finalTime) >= #{traceType} ]]>
+			</if>
+			<if test="traceType==-2">
+				and tb.finalTime is null
+			</if>
+
+		<if test="status>0">
+				and tb.status = #{status}
+		</if>
+		<if test="isFrom>=0">
+				and tb.isFrom=#{isFrom } 
+		</if>		
+		<if test="customerType>-1">
+			and <![CDATA[ locate(concat(",",concat(#{customerType},",")),concat(",",concat(tb.type,","))) ]]>
+		</if>
+		<if test="salesSuccessRate>-1">
+			and <![CDATA[ locate(concat(",",concat(#{salesSuccessRate},",")),concat(",",concat(tb.salesSuccessRate,","))) ]]>
+		</if>
+		<!-- <if test="customerType!=null"> and tb.`type` in <foreach collection="customerType" 
+			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach> 
+			</if> -->
+		<!-- <if test="principal!=null"> and tb.`allowAccountId` in <foreach collection="principal" 
+			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach> 
+			</if> -->
+		<if test="principalStr!=null and principalStr!=''">
+			<!-- and tb.`allowAccountId` = #{principalStr} -->
+				<![CDATA[ and locate(concat(",",concat(tb.allowAccountId,",")),concat(",",concat(#{principalStr},","))) ]]>
+		</if>
+			<![CDATA[ order by tb.`isOwn` desc ]]>
+			) as tb1
+			) as tb2 
+			<![CDATA[ group by tb2.`customerId` ]]>
+			<if test="orderField==null or orderField==''">
+			<![CDATA[ order by tb2.`order` desc ]]>
+			</if>
+			<if test="orderField!=null and orderField!=''">
+			<![CDATA[ order by tb2.`${orderField}` ${orderType} ]]>
+			</if>
+			
+	</select>
+	
+	<!-- 客户管理列表 -->
+	<select id="selectListForExcel" resultType="com.sankai.inside.crm.entity.CustomerList"
+		parameterType="com.sankai.inside.crm.entity.CustomerListSearch">
+		select * from (
+		select * from (SELECT
+		a.id AS shareId,b.id AS
+		customerId,a.`state`,b.name,b.url,h.name as contactName,h.phone as contactPhone,b.phone,
+		a.`order`,b.short_name AS
+		shortName,b.`status`,a.is_own as isOwn,
+		b.name_simple_py AS nameSimplePy,b.name_py AS namePy,
+		a.`allow_account_id` AS allowAccountId,sales_success_rate AS salesSuccessRate,
+
+		(SELECT
+		e.name FROM sys_customer_share AS f
+		LEFT JOIN sys_account e ON
+		f.account_id = e.id WHERE f.state = 0 AND f.is_own = 1 AND
+		f.customer_id=a.`customer_id`) AS
+		allowAccountName,
+
+		(SELECT `name` FROM
+		sys_dict WHERE id = b.`status`) AS statusName,
+
+		(SELECT
+		MAX(communication_time)FROM sys_customer_record WHERE customer_id
+		=a.`customer_id`)
+		AS finalTime,b.province,
+
+		(SELECT `name` FROM
+		sys_prov_city_area_street
+		WHERE `code` = b.province) AS
+		provinceName,b.`type`,
+
+		(SELECT GROUP_CONCAT(dict.`name`) FROM sys_dict
+		AS dict WHERE
+		LOCATE(CONCAT(",",CONCAT(dict.id,",")),CONCAT(",",CONCAT(b.`type`,","))))
+		AS
+		typeName,b.create_time AS createTime
+
+		FROM sys_customer_share AS a
+		
+		LEFT JOIN sys_customer AS b ON a.customer_id =b.id
+		
+		LEFT JOIN sys_contact AS h ON a.customer_id =h.customer_id
+		
+		LEFT JOIN sys_account AS g ON a.`allow_account_id` = g.id 
+		
+		WHERE
+		a.`state`=0 AND
+		b.`state` = 0 ) <!--  AND (a.account_id = a.allow_account_id OR a.account_id!=#{accountId}) -->
+		as
+		tb
+		where tb.state=0
+		<if test="content!=null and content!=''">
+			and
+			(tb.name like CONCAT(CONCAT('%',#{content}),'%')
+			or
+			tb.shortName like CONCAT(CONCAT('%', #{content}),'%')
+			or
+			tb.nameSimplePy like CONCAT(CONCAT('%', #{content}),'%')
+			or
+			tb.namePy like CONCAT(CONCAT('%', #{content}),'%')
+			or
+			tb.phone like CONCAT(CONCAT('%', #{content}),'%')
+			)
+		</if>
+
+			<if test="traceType>0">
+				<![CDATA[ and TO_DAYS(NOW()) - TO_DAYS(tb.finalTime) >= #{traceType} ]]>
+			</if>
+			<if test="traceType==-2">
+				and tb.finalTime is null
+			</if>
+
+		<if test="status>0">
+				and tb.status = #{status}
+		</if>
+		<if test="customerType>-1">
+			and <![CDATA[ locate(concat(",",concat(#{customerType},",")),concat(",",concat(tb.type,","))) ]]>
+		</if>
+		<if test="salesSuccessRate>-1">
+			and <![CDATA[ locate(concat(",",concat(#{salesSuccessRate},",")),concat(",",concat(tb.salesSuccessRate,","))) ]]>
+		</if>
+		<!-- <if test="customerType!=null"> and tb.`type` in <foreach collection="customerType" 
+			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach> 
+			</if> -->
+		<!-- <if test="principal!=null"> and tb.`allowAccountId` in <foreach collection="principal" 
+			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach> 
+			</if> -->
+		<if test="principalStr!=null and principalStr!=''">
+			<!-- and tb.`allowAccountId` = #{principalStr} -->
+				<![CDATA[ and locate(concat(",",concat(tb.allowAccountId,",")),concat(",",concat(#{principalStr},","))) ]]>
+		</if>
+			<![CDATA[ order by tb.`isOwn` desc ]]>
+			) as tb1 
+			<![CDATA[ group by tb1.`customerId` ]]>
+			<if test="orderField==null or orderField==''">
+			<![CDATA[ order by tb1.`order` desc ]]>
+			</if>
+			<if test="orderField!=null and orderField!=''">
+			<![CDATA[ order by tb1.`${orderField}` ${orderType} ]]>
+			</if>
+			
+	</select>
+	
+	<!-- 客户管理列表  自动填充-->
+	<select id="selectListForAutoComplate" parameterType="com.sankai.inside.crm.entity.AutocomplateEntity" resultType="com.sankai.inside.crm.entity.CustomerAutocomplate">
+		SELECT 
+		 a.`name` 
+		 ,a.short_name AS shortName, 
+		b.`name` AS createName  
+		FROM sys_customer a 
+		INNER JOIN sys_account b ON a.create_id=b.id  
+		where a.state=0 
+		<if test="type==1">
+			AND a.`name` LIKE CONCAT(CONCAT('%', #{value}),'%')
+		</if>
+		<if test="type==2">
+			AND a.`short_name` LIKE CONCAT(CONCAT('%', #{value}),'%')
+		</if>
+		
+	</select>
+	
+	
+	
+	<select id="selectCustomerById" resultType="com.sankai.inside.crm.entity.Customer">
+		SELECT `id`, `name`,
+		`short_name`, `status`, `type`, `source`, `url`,
+		`phone`, `province`,
+		`city`, `country`, `address`, `x_coord`,
+		`y_coord`, `remark`, `state`,
+		`create_id`, `create_time`,sales_success_rate 
+		FROM sys_customer WHERE id=#{id}
+
+	</select>
+	
+	<select id="selectCustomerByCreateTIme" resultType="com.sankai.inside.crm.entity.Customer">
+		SELECT
+			id AS contactId,
+			`name` AS contactName,
+			phone AS contactPhone
+		FROM
+			sys_contact
+		WHERE
+			create_time = #{createTime}
+
+	</select>
+	
+	
+	<!-- 新增客户信息 -->
+	<insert id="insertCustomer" parameterType="com.sankai.inside.crm.entity.Customer"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `sys_customer`
+		(`name`, `short_name`, `status`, `type`,
+		`source`, `url`, `phone`,
+		`province`, `city`, `country`, `address`,
+		`x_coord`, `y_coord`,
+		`remark`, `state`, `create_id`, `create_time`,name_simple_py,name_py,sales_success_rate)
+		VALUES (#{name},
+		#{shortName}, #{status}, #{type}, #{source}, #{url},
+		#{phone},
+		#{province}, #{city}, #{country}, #{address}, #{xCoord},
+		#{yCoord},
+		#{remark}, '0', #{createId}, #{createTime},#{nameSimplePy},
+		#{namePy},#{salesSuccessRate})
+
+	</insert>
+	
+	<select id="selectCustomerId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select id from 
+		sys_customer 
+		where 
+		`name`=#{value}
+	</select>
+	
+
+	<!-- 新增客户共享信息 -->
+	<insert id="insertCustomerShare" parameterType="com.sankai.inside.crm.entity.CustomerShare">
+		INSERT INTO
+		`sys_customer_share` (`customer_id`, `account_id`,
+		`allow_account_id`,
+		`create_time`, `order`, `is_own`, `state`,`isShare`)
+		VALUES (#{customerId},
+		#{accountId}, #{allowAccountId}, #{createTime},
+		#{order}, #{isOwn},
+		'0', #{isShare});
+	</insert>
+	<!-- 获取最大排序 -->
+	<select id="selectMaxOrder" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select max(`order`) from
+		sys_customer_share
+		where
+		allow_account_id=#{0} and state = 0
+	</select>
+	<!-- 根据id获取客户分享实体信息 -->
+	<select id="selectShareById" resultType="com.sankai.inside.crm.entity.CustomerShare">
+		select * from
+		sys_customer_share
+		where id = #{value}
+	</select>
+	<update id="updateShareOrder">
+		update sys_customer_share set `order`=`order`-1 where
+		state = 0 and
+		allow_account_id=#{0} and `order` >#{1}
+	</update>
+
+	<!-- 修改客户信息 -->
+	<update id="updateCustomer" parameterType="com.sankai.inside.crm.entity.Customer">
+		UPDATE `sys_customer`
+		SET `name`=#{name}, `short_name`=#{shortName},
+		`status`=#{status},
+		`type`= #{type}, `source`=#{source},
+		`url`=#{url}, `phone`=#{phone},
+		`province`=#{province}, `city`=#{city},
+		`country`=#{country},
+		`address`=#{address},
+		`x_coord`=#{xCoord}, `y_coord`=#{yCoord},
+		`remark`=#{remark},name_simple_py=#{nameSimplePy},
+		name_py=#{namePy},sales_success_rate=#{salesSuccessRate} WHERE `id`=#{id}
+	</update>
+		<update id="updateCustomerSim" parameterType="com.sankai.inside.crm.entity.Customer">
+		UPDATE `sys_customer`
+		SET create_id=#{createId} WHERE `id`=#{id}
+	</update>
+	<!-- 修改客户信息 -->
+	<!-- 删除客户分享信息 -->
+	<update id="deleteCustomerShare" parameterType="int">
+		update sys_customer_share set state=-1 WHERE id = #{value}
+	</update>
+	<!-- 删除客户信息 -->
+	<update id="deleteCustomer" parameterType="int">
+		update sys_customer set state=-1 WHERE id = #{value}
+	</update>
+	<!-- 修改实体的 order -->
+	<update id="updateOrder">
+		update sys_customer_share set
+		`order`=#{1} WHERE id =
+		#{0}
+	</update>
+	<!-- 搜索的客户列表 -->
+	<select id="searchCustomerList" resultType="com.sankai.inside.crm.entity.SearchCustomerList"
+		parameterType="com.sankai.inside.crm.entity.ConCusterSearch">
+		select * from (SELECT b.id,a.`state`,b.name,b.create_time AS
+		create_time,b.phone,
+		a.`order`,b.short_name as
+		shortName,b.`status`,
+		(select `name` from sys_prov_city_area_street where `code` =
+		b.province) as provinceName,a.allow_account_id as allowAccountId,
+		(select `name` from
+		sys_prov_city_area_street where `code` = b.city) as
+		cityName,
+		(select
+		`name` from sys_prov_city_area_street where `code` = b.country) as
+		countryName,
+		b.address
+		FROM sys_customer_share as
+		a
+		LEFT JOIN sys_customer
+		as b on
+		a.customer_id = b.id
+		LEFT JOIN sys_account as g
+		on
+		allow_account_id =
+		g.id WHERE a.`state`=0 AND b.`state` = 0 AND
+		(a.account_id =
+		allow_account_id OR account_id != #{accountId}) )
+		as tb
+		where tb.state=0
+		<if test="content!=null">
+			and tb.shortName like CONCAT(CONCAT('%',#{content}),'%')
+		</if>
+		and tb.allowAccountId = #{accountId}
+		group by tb.`shortName`
+		order by tb.`order` desc, tb.create_time desc
+	</select>
+	<!--判断客户的负责人是不是这个登录人 -->
+	<select id="checkIsOwn" parameterType="com.sankai.inside.crm.entity.CustomerOwnCheckDTO"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM sys_customer_share WHERE
+		customer_id=#{customerId} AND allow_account_id=#{loginId} AND is_own=1
+	</select>
+	<!--修改客户状态 -->
+	<update id="updateStatus"
+		parameterType="com.sankai.inside.crm.entity.UpdateCustomerStatusDTO">
+		UPDATE sys_customer SET status=#{status} WHERE
+		id=#{customerId}
+	</update>
+	<!-- 获取最大排序 -->
+	<select id="getMaxOrder" resultType="int">
+		select `order` from
+		sys_customer_share
+		where customer_id=1 and allow_account_id=53
+		ORDER BY
+		create_time DESC
+		LIMIT 0,1
+	</select>
+
+	<!--查询共享的客户联系人 -->
+	<select id="findContactShared" parameterType="com.sankai.inside.crm.entity.ContactShareRequestDTO"
+		resultType="com.sankai.inside.crm.entity.Contact">
+		SELECT
+		(SELECT `name`FROM sys_contact WHERE
+		id=ss.contact_id) AS `name`,
+		(SELECT
+		`position` FROM sys_contact WHERE
+		id=ss.contact_id) AS `position`,
+		(SELECT phone FROM sys_contact WHERE
+		id=ss.contact_id) AS phone
+		FROM
+		sys_contact_share AS ss
+		WHERE
+		allow_account_id=#{loginId} AND
+		customer_id=#{customerId}
+	</select>
+	<!-- 判断客户名称是否存在 -->
+	<select id="existsByName" parameterType="java.lang.String"
+		resultType="boolean">
+		SELECT COUNT(id) FROM sys_customer WHERE `name` = #{value} and `state` = 0
+	</select>
+	<!-- 判断客户简称是否存在 -->
+	<select id="existsByShortName" parameterType="java.lang.String"
+		resultType="boolean">
+		SELECT COUNT(id) FROM sys_customer WHERE `short_name` =
+		#{value} and `state` = 0
+	</select>
+	<!-- 根据客户id和允许人id 获取客户分享实体 -->
+	<select id="selectBycidAndAllowId" resultType="com.sankai.inside.crm.entity.CustomerShare">
+		SELECT * FROM
+		sys_customer_share WHERE customer_id = #{0} AND
+		allow_account_id = #{1}
+		and `state` = 0
+	</select>
+	<!-- 客户转移 修改客户分享信息 -->
+	<update id="updateShare" parameterType="com.sankai.inside.crm.entity.CustomerShare">
+		UPDATE
+		`sys_customer_share`
+		SET
+		`account_id` = #{accountId},
+		`allow_account_id`
+		= #{allowAccountId},
+		`create_time` = #{createTime},
+		`order` = #{order},
+		`is_from`=#{isFrom}
+		WHERE `id` = #{id};
+	</update>
+	<!-- 修改客户分享的 删除状态 -->
+	<update id="updateOrderState">
+		UPDATE
+		`sys_customer_share`
+		SET
+		`state` = -1
+		WHERE
+		`customer_id` = #{0} and `allow_account_id` = #{1}
+		and is_own = 0;
+	</update>
+	<select id="selectByShareId" parameterType="java.lang.Integer" resultType="com.sankai.inside.crm.entity.Customer">
+		SELECT * FROM sys_customer
+		WHERE id = (SELECT customer_id FROM sys_customer_share WHERE id = #{value})
+		AND `state` = 0
+	</select>
+	
+	<!-- 获取客户总量【不包含掉入公海的】 -->
+	<select id="selectTotalCustomerByAccountId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(0) from sys_customer_share  where allow_account_id=#{value} and `state`=0
+		and customer_id NOT IN (SELECT id FROM sys_customer WHERE state = 1)
+	</select>
+	
+	<select id="selectTotalContactByAccountId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(0) from sys_contact_share  where allow_account_id=#{value} and `state`=0 
+	</select>
+	
+	<select id="selectTotalTraceBy" resultType="java.lang.Integer">
+		<if test="param2 == null or param3 == null">
+		select count(0) from  (select DISTINCT customer_id from sys_customer_share  where allow_account_id=#{param1} and `state`=0
+		AND customer_id NOT IN (SELECT id FROM sys_customer WHERE state = 1)) a  
+		where a.customer_id not in (select DISTINCT customer_id from sys_customer_record)
+		</if>
+			<if test="param2 != null and param3 != null">
+		<![CDATA[
+		select count(0) from (select customer_id,max(communication_time) communication_time from sys_customer_record  where customer_id in (select DISTINCT customer_id from sys_customer_share  where allow_account_id=#{param1} and `state`=0
+		AND customer_id NOT IN (SELECT id FROM sys_customer WHERE state = 1)) 
+		group by customer_id) tb
+		where TO_DAYS(NOW()) - TO_DAYS(tb.communication_time) >= #{param2} and TO_DAYS(NOW()) - TO_DAYS(tb.communication_time) < #{param3}
+		]]>
+		</if>
+	</select>
+	<select id="selectStatusNo" parameterType="Integer" resultType="com.sankai.inside.crm.entity.CustomerStatus">
+	SELECT `status`,COUNT(id) AS `statusNo` FROM sys_customer 
+	WHERE `state` = 0 AND id IN (SELECT customer_id FROM  sys_customer_share WHERE allow_account_id = #{value})
+	GROUP BY `status` ORDER BY `status`
+	</select>
+	<update id="injectHighSeas" parameterType="java.lang.Integer">
+		UPDATE sys_customer
+		SET state = 1
+		WHERE
+		id = #{cusId}
+	</update>
+	<!--批量投入公海  -->
+	<update id="injectHighSeasBatch" parameterType="java.util.List">
+		UPDATE sys_customer
+		SET state = 1
+		WHERE id IN
+		<foreach collection="list" index="index" item="cusId" separator="," open="(" close=")">
+			 #{cusId}
+		</foreach>
+	</update>
+
+</mapper>

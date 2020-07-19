@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.IAddressDAO">
+	<!--列出所有的省份  -->
+	<select id="listAllProv" resultType="com.sankai.inside.crm.entity.Address">
+		SELECT id,code,parentId as parentId,name,level
+		FROM sys_prov_city_area_street
+		WHERE parentid=0;
+	</select>
+	
+	<!--列出所有城市  -->
+	<select id="findAllCities" parameterType="java.lang.Integer" resultType="com.sankai.inside.crm.entity.Address">
+		SELECT id,CODE,parentId AS parentId,NAME,LEVEL
+		FROM sys_prov_city_area_street
+		WHERE parentId=#{pcode};
+	</select>
+	
+	<!--列出所有县区  -->
+	<select id="findAllDists" parameterType="java.lang.Integer" resultType="com.sankai.inside.crm.entity.Address">
+		SELECT id,CODE,parentId AS parentId,NAME,LEVEL
+		FROM sys_prov_city_area_street
+		WHERE parentId=#{ccode};
+	</select>
+	<!--根据省份列出城市、地区  -->
+	<select id="listCityDicByProv" parameterType="java.lang.Integer" resultType="com.sankai.inside.crm.entity.Address">
+		SELECT id,code,parentId as parentId,name,level
+		FROM sys_prov_city_area_street
+		WHERE parentid=#{parentId};
+	</select>
+	<!--根据code查出对应的省市县 用于自定义标签  -->
+	<select id="findNameByCode" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT name 
+		FROM sys_prov_city_area_street
+		WHERE code=#{code}
+	</select>
+	
+</mapper>

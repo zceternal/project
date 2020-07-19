@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.IMessageDAO">
+	
+	<select id="selectMessageReceiveBy" resultType="com.sankai.inside.crm.entity.Message">
+		SELECT m.id,mr.state,m.title,m.create_time createTime,m.create_id createId FROM sys_message m
+		INNER JOIN sys_message_receive mr on m.id = mr.message_id
+		WHERE mr.receive_id = #{2} AND m.state = 0 AND mr.state = #{0} AND m.type = #{3}
+		<if test="param2!=null">
+			AND m.title LIKE CONCAT(CONCAT('%', #{1}),'%')
+		</if>
+		ORDER BY m.create_time DESC
+	</select>
+	
+	<select id="selectInfo" resultType="com.sankai.inside.crm.entity.Message" parameterType="java.math.BigInteger">
+		SELECT id,title,type,content,create_id createId,create_time createTime FROM sys_message WHERE id = #{value}
+	</select>
+	
+	<select id="selectMessageBy" resultType="com.sankai.inside.crm.entity.Message">
+		SELECT m.id,m.state,m.title,m.create_time createTime,
+		(SELECT GROUP_CONCAT(sa.`name`) FROM sys_message_receive mr INNER JOIN sys_account sa on mr.receive_id = sa.id WHERE mr.message_id = m.id ) AS receive 
+		FROM sys_message m
+		WHERE m.create_id = #{1} AND m.state = 0 AND m.type = #{0}
+		<if test="param3!=null">
+			AND m.title LIKE CONCAT(CONCAT('%', #{2}),'%')
+		</if>
+		ORDER BY create_time DESC
+	</select>
+	
+	<insert id="insert" parameterType="com.sankai.inside.crm.entity.Message">
+		INSERT INTO `sys_message` (`id`, `title`, `type`, `content`, `create_time`, `state`, `create_id`) 
+		VALUES (#{id},#{title},#{type},#{content},#{createTime},0,#{createId})
+	</insert>
+	
+	<insert id="insertReceives" useGeneratedKeys="true">
+		INSERT INTO `sys_message_receive` (`message_id`, `receive_id`, `state`)
+		VALUES 
+		<foreach collection="param1" separator="," item="item">
+			(#{param2},#{item}, 0)
+		</foreach>
+	</insert>
+	
+	<update id="delete" parameterType="java.math.BigInteger">
+		UPDATE sys_message SET state = -1 WHERE id = #{param1}
+	</update>
+	
+	<delete id="deleteReceive">
+		DELETE FROM sys_message_receive WHERE message_id = #{param1} AND receive_id = #{param2}
+	</delete>
+	
+	<update id="updateState">
+		UPDATE `sys_message_receive` set state = 1 WHERE message_id = #{param1} AND receive_id = #{param2}
+	</update>
+	
+	<select id="selectCount" parameterType="int" resultType="int">
+		SELECT COUNT(1) AS `value` FROM sys_message_receive mr INNER JOIN sys_message m on mr.message_id = m.id WHERE receive_id = #{value} AND mr.state = 0 AND m.state = 0
+	</select>
+	
+	<delete id="removeAllById">
+		DELETE FROM sys_message_receive WHERE message_id in
+		<foreach collection="list" close=")" item="item" open="(" separator=",">
+		#{item}
+		</foreach>
+	</delete>
+</mapper>

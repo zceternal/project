@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.ICustomerRecordDAO">
+	<!--查询销售跟踪记录列表 -->
+	<select id="findAllByCustomerId" parameterType="com.sankai.inside.crm.entity.CustomerRecordListDTO"
+		resultType="com.sankai.inside.crm.entity.CustomerRecordDTO">
+		SELECT id, account_id AS accountId,
+		(SELECT NAME FROM sys_account WHERE
+		id=sr.`account_id`) AS accountName,
+		(SELECT NAME FROM sys_detp WHERE
+		id=(SELECT sys_dept_id FROM sys_account WHERE id=sr.`account_id`)) AS
+		deptName,
+		create_time AS createTime,
+		source,remark,
+		(SELECT NAME FROM
+		sys_dict WHERE id=sr.type) AS typeName,sr.type,
+		(SELECT COUNT(1) FROM
+		sys_record_praise WHERE record_id=sr.`id`) AS likeQty,
+		(SELECT COUNT(1)
+		FROM sys_record_praise WHERE record_id=sr.`id` AND
+		account_id=#{loginId}) AS liked,
+		(SELECT avatar FROM sys_account WHERE
+		id=sr.`account_id`) AS avatar
+		FROM sys_customer_record AS sr
+
+		WHERE
+		customer_id=#{customerId}
+		<if test="accountId!=null">
+			AND (account_id=#{accountId} OR sr.id IN 
+			(SELECT record_id FROM sys_customer_record_revert WHERE account_id = #{accountId} AND record_id IN 
+			(SELECT id FROM sys_customer_record WHERE customer_id = #{customerId} )))
+		</if>
+		<!-- <if test="accountId==null and !isDeptLeader">
+			AND (account_id=#{accountId} OR sr.id IN 
+			(SELECT record_id FROM sys_customer_record_revert WHERE account_id = #{accountId} AND record_id IN 
+			(SELECT id FROM sys_customer_record WHERE customer_id = #{customerId} )))
+		</if> -->
+		<if test="typeId!=null and typeId!=''">
+		AND type=#{typeId}
+		</if>
+		<if test="startTime!=null">
+			<![CDATA[ AND CREATE_TIME>=#{startTime}]]>
+		</if>
+		<if test="endTime!=null">
+			<![CDATA[ AND CREATE_TIME<=#{endTime}]]>
+		</if>
+		ORDER BY create_time DESC
+	</select>
+	<!--点赞 -->
+	<insert id="insertRecordPraise" parameterType="com.sankai.inside.crm.entity.LikeItDTO">
+		INSERT INTO
+		sys_record_praise(account_id,record_id)
+		VALUES(#{loginId},#{recordId})
+	</insert>
+	<!-- 根据客户Id 和 分享给默认Id 判断销售跟踪记录是否共享 -->
+	<select id="getIsShare" parameterType="com.sankai.inside.crm.entity.CustomerRecordIsShare"
+		resultType="com.sankai.inside.crm.entity.CustomerRecordShareDTO">
+		SELECT
+		isShare
+		FROM
+		sys_customer_share
+		WHERE
+		customer_id =
+		#{customerId}
+		AND allow_account_id = #{allowAccountId}
+	</select>
+	<!--获取新的点赞数量 -->
+	<select id="getLikeQty" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM sys_record_praise WHERE
+		record_id=#{recordId}
+	</select>
+	<!--是否已经赞过，赞过为1，否则为0 -->
+	<select id="isLiked" parameterType="com.sankai.inside.crm.entity.LikeItDTO"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM sys_record_praise WHERE
+		record_id=#{recordId} AND account_id=#{loginId}
+	</select>
+	<!-- 添加纪录 -->
+	<insert id="insertRecord" parameterType="com.sankai.inside.crm.entity.CustomerRecord">
+		INSERT INTO
+		sys_customer_record(account_id,customer_id,last_time,communication_time,create_time,type,source,remark)
+		VALUES(#{accountId},#{customerId},#{lastTime},#{communicationTime},#{createTime},#{type},#{source},#{remark})
+	</insert>
+	<!--获取记录人上一次跟踪时间 -->
+	<select id="getLastTimeByAccountId" parameterType="com.sankai.inside.crm.entity.LastTimeDTO"
+		resultType="java.util.Date">
+		SELECT MAX(create_time) FROM sys_customer_record WHERE
+		account_id=#{accountId} AND customer_id=#{customerId}
+	</select>
+	<!--获取所有的发布记录人 -->
+	<select id="findAllpublishers" parameterType="com.sankai.inside.crm.entity.CustomerRecordListDTO"
+		resultType="com.sankai.inside.crm.entity.CustomerRecordDTO">
+		SELECT id, account_id AS accountId,
+		(SELECT NAME FROM
+		sys_account WHERE id=sr.`account_id` 
+		<if test="state!=null">
+			and state=#{state}
+		</if>
+		) AS accountName
+		FROM
+		sys_customer_record AS sr
+		WHERE customer_id=#{customerId}
+		GROUP BY
+		accountName
+	</select>
+	
+	<select id="findAllCustomerRecordLogsBy" parameterType="com.sankai.inside.crm.web.model.CustomerRecordSearchForm" resultType="com.sankai.inside.crm.entity.CustomerRecordLogsDTO">
+	   <![CDATA[	
+	    SELECT c.`name`,c.short_name shortName,cr.create_time createTime,cr.remark,cr.customer_id customerId,
+		(SELECT `name` FROM sys_contact ct WHERE ct.customer_id = c.id ORDER BY ct.create_time ASC LIMIT 1) AS contactName,
+		(SELECT `phone` FROM sys_contact ct WHERE ct.customer_id = c.id ORDER BY ct.create_time ASC LIMIT 1) AS contactPhone,
+		cr.account_id AS accountId
+		FROM sys_customer_record cr
+		INNER JOIN sys_customer c on cr.customer_id = c.id
+		INNER JOIN sys_customer_share cs on cs.customer_id = c.id
+		WHERE 1=1 AND cs.account_id = cs.allow_account_id
+		AND cr.create_time >= #{startTime} AND cr.create_time <= #{endTime} ]]> 
+		
+		<if test="ids!=null">
+			AND cs.allow_account_id in(${ids}) 
+		</if>
+		<if test="ids==null">	
+			AND cs.allow_account_id = #{accountId}
+		</if>
+		
+		
+		ORDER BY cr.create_time DESC
+	</select>
+	
+	<select id="getCusNameById" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		SELECT `name` FROM sys_customer WHERE id=56
+	</select>
+
+	
+</mapper>

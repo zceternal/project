@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.ICustomerShareDAO">
+	<!--根据ID查找要共享的客户信息 -->
+	<select id="findCusById" parameterType="java.lang.Integer"
+		resultType="com.sankai.inside.crm.entity.CustomerShareCusDTO">
+		SELECT id AS customerId,`name`,(SELECT `name` FROM
+		`sys_prov_city_area_street` WHERE `code`=sc.province) AS
+		address,(SELECT `name` FROM sys_dict WHERE id=sc.type) AS typeName
+		FROM sys_customer AS sc WHERE id=#{cusid}
+	</select>
+	<!-- -->
+	<select id="getDeptsByPid" parameterType="java.lang.Integer"
+		resultType="com.sankai.inside.crm.entity.DeptDTO">
+		SELECT id AS deptId,`name` AS deptName FROM sys_detp WHERE
+		pid=#{pid} AND state=0
+	</select>
+	<select id="getAccountsByDeptId" parameterType="java.util.List"
+		resultType="com.sankai.inside.crm.entity.CustomerShareAccDTO">
+		SELECT `name` AS accountName, id AS accountId FROM sys_account WHERE
+		sys_dept_id
+		IN(
+		<foreach collection="list" index="index" item="item"
+			separator=",">
+			#{item}
+		</foreach>
+		)
+		and state=0
+	</select>
+		
+	<select id="selectIdsByAccId" parameterType="int" resultType="Integer">
+		SELECT id FROM `sys_customer_share` WHERE account_id=#{value} AND allow_account_id = #{value}
+	</select>
+	
+	<!--保存共享到表 -->
+	<insert id="insertCustomerShare" parameterType="com.sankai.inside.crm.entity.CustomerShareDTO">
+		INSERT INTO
+		sys_customer_share(customer_id,account_id,allow_account_id,create_time,`order`,is_own,state,isShare)
+		VALUES
+		<foreach collection="list" index="index" item="item"
+			separator=",">
+			(#{item.customerId},#{item.accountId},#{item.allowAccountId},#{item.createTime},#{item.order},0,0,#{item.isShare})
+		</foreach>
+	</insert>
+	
+	<insert id="insertShare" parameterType="com.sankai.inside.crm.entity.CustomerShareDTO">
+		INSERT INTO
+		sys_customer_share(customer_id,account_id,allow_account_id,create_time,`order`,is_own,state,isShare,is_from)
+		VALUES (#{customerId},#{accountId},#{allowAccountId},#{createTime},#{order},0,0,#{isShare},#{isForm})
+	</insert>
+
+	<!--取得最大order -->
+	<select id="getMaxOrderByAllowId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT MAX(`order`) FROM sys_customer_share WHERE
+		allow_account_id=#{allowAccountId}
+	</select>
+	<!--查看是否已经共享过 -->
+	<select id="checkExists" parameterType="com.sankai.inside.crm.entity.CustomerShareDTO"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM sys_customer_share WHERE
+		allow_account_id=#{allowAccountId} AND customer_id=#{customerId} AND
+		state=0
+	</select>
+
+	<select id="contactByCuId" parameterType="java.lang.Integer"
+		resultType="com.sankai.inside.crm.entity.CustomerContact">
+		SELECT
+		t.id AS id,
+		t.`name` AS NAME
+		FROM
+		sys_customer c
+		LEFT
+		JOIN sys_contact t ON c.id = t.customer_id
+		WHERE
+		c.id = #{value}
+	</select>
+	<!-- 修改是否共享销售跟踪记录 -->
+	<update id="updateCusIsShare" parameterType="com.sankai.inside.crm.entity.UpdateCustomerShare">
+		update
+		sys_customer_share set
+		isShare=#{isShare}
+		WHERE customer_id =#{customerId}
+		AND allow_account_id=#{allowAccountId}
+	</update>
+	<update id="updateBatchByIds" parameterType="com.sankai.inside.crm.entity.UpdateCustomerShare">
+		UPDATE `sys_customer_share` SET  account_id=#{leaderId},allow_account_id = #{leaderId}
+		<if test="ids!=null">
+			WHERE id IN 
+			<foreach collection="ids" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach> 
+		</if>
+		
+	</update>
+	<!-- 根据客户id 删除所有客户共享信息【作用于：销售负责人删除客户信息】 -->
+	<update id="deleteShareByCustomerId" parameterType="java.lang.Integer">
+	update sys_customer_share set state = -1 WHERE customer_id = #{value}
+	</update>
+	
+	<!-- 根据客户分享id 判断是否是客户的销售负责人 -->
+	<select id="selectOwn" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+	SELECT is_own FROM sys_customer_share WHERE id = #{value}
+	</select>
+	<!-- 根据当前用户id 判断是否是客户的销售负责人 -->
+	<select id="selectOwnByAccountId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+	SELECT count(id) FROM sys_customer_share WHERE customer_id = #{value} AND is_own = 1
+	</select>
+	
+	<select id="selectIsShare" resultType="java.lang.Integer">
+	select isShare from sys_customer_share where customer_id = #{0} and allow_account_id = #{1} and `state` = 0
+	ORDER BY create_time DESC LIMIT 0,1
+	</select>
+	
+</mapper>

@@ -1,0 +1,104 @@
+@charset "utf-8";
+/* 通用样式 */
+*{margin:0;padding:0;}
+ul,ol,li{list-style:none;}
+img{border:0;}
+a{text-decoration:none;outline: medium none; color:#666;}
+a:hover { text-decoration:none;}
+body {font-family:"Microsoft YaHei";}
+.clear { clear:both; height:1px; overflow:hidden;}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.clearfix{zoom:1}
+.hidden{display: none;}/*wyp*/
+
+.a5 a{text-decoration:none;outline: medium none; color:#f5f5f5;}
+.a5 a:hover { text-decoration:none;color:#f5f5f5;}
+
+
+
+/*========================================康老汇部分头部导航====================================*/
+.healthy_top_box { width:100%; height:98px; font-size:16px; background-color:#6fba2b;}
+.healthy_top_in { position:relative; margin:0 auto; width:1000px; height:98px; z-index:12}
+.healthy_top_in h2 { line-height:98px; color:#fff; font-size:40px; font-weight:normal; text-align:center; letter-spacing:28px;}
+
+.healthy_banner_a { position:relative; width:100%; height:618px; background:url(../img/healthy_banner_b.jpg) no-repeat 50% 0;}
+.h_banner_bottom { position:absolute; bottom:0; left:0; width:100%; height:88px; line-height:88px; background-color:#000;-moz-opacity:0.6;-khtml-opacity: 0.6;opacity: 0.6;filter:alpha(opacity=60); font-size:20px;}
+.h_nav_boxa { margin:0 auto; width:1000px;}
+.h_nav_boxa a { color:#fff; padding:0 30px;}
+.h_topb_box { position:relative; margin:0 auto; width:1000px; height:618px;}
+.vip_top_boxa { padding-top:230px; text-align:center;}
+.vip_top_boxa h2 { line-height:90px; font-size:44px; color:#fff; font-weight:normal;}
+.vip_top_boxa h2 i.vip_on { margin-left:10px; padding:0 14px; background:url(../img/healthy_arr_btnh.png) no-repeat 0 22px;}
+.vip_top_boxa h2 i.pingbi_on { margin-left:10px; padding:0 14px; background:url(../img/healthy_pingbi_arr.png) no-repeat 0 22px;}
+.vip_top_boxa p { color:#fff; font-size:20px;}
+.klh_jg_tab { width:100%; background-color:#f9fff1;border-top:1px solid #ccc;}
+.klh_jg_tab td { padding:16px 0; border-bottom:1px solid #ccc;border-right:1px solid #ccc; text-align:center; color:#666}
+.klh_jg_tab th { padding:16px 0; border-bottom:1px solid #ccc;border-right:1px solid #ccc; color:#333; font-weight:normal;}
+.klh_jg_tab .td_noline_r { border-right:0}
+.klh_jg_tab td em { text-decoration:line-through; font-style:normal; color:#999}
+/*=============================康老汇底部样式==================================*/
+.healthy_footer_box { margin-top:30px; width:100%; height:auto; background-color:#545454; color:#f5f5f5;font-family:"Microsoft YaHei"; border-top:2px solid #1db316;}
+.healthy_neirong { height:280px; padding-top:30px;}
+.healthy_neirong_in { margin:0 auto; width:1000px;} 
+.width_170px { width:170px;}
+.width_215px { width:215px;}
+.width_230px { width:230px;}
+.healthy_neirong_in .dla { float:left;}
+.healthy_neirong_in .dla dt { margin-bottom:16px;}
+.healthy_neirong_in .dla dd { height:30px; line-height:30px; font-size:15px;}
+.healthy_neirong_in .dla dd.dda { height:130px; background:url(../img/healthy_weixin_a.jpg) no-repeat; margin-top:12px;}
+.healthy_neirong_in .dla dd.ddb { height:130px; background:url(../img/healthy_weixin_b.jpg) no-repeat; margin-top:12px;}
+.healthy_rights { padding-top:20px; height:68px; text-align:center; line-height:26px; font-size:14px; background-color:#444}
+.healthy_s_footer { color:#999; text-align:center; font-size:14px; padding-bottom:30px;}
+
+
+
+
+.healthy_main { margin:0 auto; width:1000px; height:auto; font-family:"Microsoft YaHei"; background-color:#fff}
+.vip_al_box { float:left; width:725px;}
+.vip_al_box_top { height:50px; line-height:50px;color:#6fba2c; margin-top:10px;}
+.vip_al_box_top h4 { float:left; color:#6fba2c; font-weight:normal;}
+.vip_al_box_top a { float:right; color:#6fba2c; padding-left:28px; background:url(../img/healthy_arr_editor.jpg) no-repeat left 17px;}
+.vip_al_box p { line-height:30px; font-size:15px; color:#666;}
+.vip_al_box p img { float:right; margin:10px 0 30px 10px;}
+/* 康老汇机构首页图片滑动样式 */
+.scroll_area {position:relative;}
+.scroll_list{overflow:hidden;position:relative; margin-left:28px;_margin-left:20px;}
+.scroll_ul{width:9999px;position:relative;overflow:hidden;clear:both;*zoom:1;}
+.scroll_ul li{ width:215px;height:155px; border:1px solid #f5f5f5;margin:4px 3px;float:left;}
+.scroll_ul li a{ display:block;width:215px;height:155px; background-color:#000}
+.scroll_ul li a:hover img{ filter:alpha(opacity=60);-moz-opacity:0.6;-khtml-opacity: 0.6;opacity: 0.6;}
+.btn_icon_a { position:absolute; top:55px; left:5px; _left:-23px; display:block; width:22px; height:50px; background:url(../img/healthy_bg_btnh.jpg) no-repeat;}
+.btn_icon_b { position:absolute; top:55px; right:12px;_left:696px; display:block; width:22px; height:50px; background:url(../img/healthy_bg_btnh.jpg) no-repeat 0 -50px;}
+
+.vip_al_box .dla { margin-left:26px;}
+.vip_al_box .dla dt { float:left; width:266px; height:180px;}
+.vip_al_box .dla dd { float:left; width:390px; height:180px; padding-left:20px; font-size:14px; color:#666; line-height:26px; text-indent:2em;}
+
+.vip_ar_box { float:left; width:258px; margin-left:15px; display:inline; border:1px solid #ccc;}
+.vip_ar_box { margin-top:25px;}
+.vip_ar_box h5 { color:#000; font-size:16px; height:40px; line-height:40px; text-indent:20px; margin-top:5px;}
+.vip_ar_box h5 a {*display: inline-block;/*wyp 10/15*/ padding-left:28px; background:url(../img/healthy_arr_editor.jpg) no-repeat right 12px; }
+.vip_ar_box h5 a.vip_info_btn { text-indent:0; float:left; width:30px; height:30px; padding-left:0}
+.vip_jgimg_box { margin:0 auto; display:block; width:220px; height:165px;}
+.vip_ar_tab { width:100%; padding-bottom:10px;}
+.vip_ar_tab td { height:18px; line-height:18px; color:#666; padding:8px 0;}
+.vip_ar_map { text-align:center; border-top:1px solid #ccc; padding:20px 0;}
+/*=============================遮罩层==================================*/
+.healthy_zhezhao_pop {display: none;/*wyp*/ position:absolute; top:0; left:0; width:100%; background-color:#000;-moz-opacity:0.6;-khtml-opacity: 0.6;opacity: 0.6;filter:alpha(opacity=60); z-index:20}
+/*机构基本信息弹出层*/
+.jigou_pop_a { position:absolute; top:300px; left:50%; width:480px; margin-left:-240px; z-index:20;display: none;/*wyp*/}
+.jigou_pop_a_in { width:100%; /*wypheight:58px*/ background-color:#6fba2a;}
+.jigou_pop_a_in > p { /*wyp*/color:#fff; font-size:22px; text-align:center; height:58px; line-height:58px;position: relative;}
+.jigou_pop_a_in > p a { /*wyp 10/15*/position: absolute;right: 0px;bottom: 15px; display:block; width:25px; height:25px; margin-right:10px; margin-top:14px; display:inline; background:url(../img/healthy_btn_close.jpg) no-repeat; display:inline;}
+
+/*wyp 康老汇机构图片弹出大图 样式*/
+/*wyp 10/15*/.big_img_list{text-align: center;background:rgba(0, 0, 0, 0.8)!important;background:#000;z-index: 20;}
+.big_img_list .jigou_pop_a_in{position: relative;background-color:transparent;text-align: center;margin-top: 50px}/*wyp 10/15*/
+.big_img_list .jigou_pop_a_in p{position: absolute;right: 20px;/*wyp 10/15*/top: -50px;}
+.big_img_list .jigou_pop_a_in p a{background: transparent url(../img/close_btn_x.png) no-repeat center;}
+.big_img_list .jigou_pop_a_cen{width: 720px;height: 554px;margin:auto;overflow:hidden;position:relative;/*wyp 10/15*/background-color:transparent;overflow: hidden;border: 0px !important;}
+.big_img_list .btn_icon_a{top: 245px;left: 20px;/*wyp 10/15*/width: 60px;height: 60px;background: url(../img/prev_circle.png) no-repeat;}
+.big_img_list .btn_icon_b{top: 245px;right: 20px;/*wyp 10/15*/width: 60px;height: 60px;background: url(../img/next_circle.png) no-repeat;}
+.big_ul{width:99999px;overflow: hidden;position: relative;}
+.big_ul li{float: left;width: 720px;height: 554px;}

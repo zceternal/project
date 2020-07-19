@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sankai.inside.crm.dao.IDepartmentDAO">
+
+	<select id="existsByDepartmentName" parameterType="string" resultType="boolean">
+		 <![CDATA[ SELECT count(id) AS value FROM sys_detp WHERE name = #{value} ]]> 
+	</select>
+	
+    
+    <select id="selectBy" resultType="com.sankai.inside.crm.entity.Department" >
+
+    
+   SELECT
+	ace.id,
+	ace.name,
+	ace.remark,
+	ace.create_time AS createTime,
+	ace.create_id AS createId,
+	ace.pid,
+	ace.`order` 
+	FROM
+	sys_detp AS ace
+	WHERE 1=1
+	
+		<if test="value!=null">
+			AND (ace.pid=${value}) 
+		</if>
+		
+	ORDER BY
+	`order`
+    </select>
+    
+    <select id="selectNumByPid" resultType="int" parameterType="int">
+    SELECT COUNT(*) FROM sys_detp WHERE pid=#{value}
+    </select>
+    
+    <delete id="delete" parameterType="int">
+    	DELETE FROM sys_detp WHERE id = #{value}
+    </delete>
+    
+    <insert id="insert" parameterType="com.sankai.inside.crm.entity.Department" useGeneratedKeys="true"  keyProperty="id">
+    	INSERT INTO 
+    	`sys_detp` (
+    	`name`, `remark`, `create_id`, `create_time`,`pid`,`order`)
+    	 VALUES (#{name},#{remark}, #{createId}, #{createTime},#{pid},#{order})
+    </insert>
+    
+    
+    <select id="selectById" parameterType="int" resultType="com.sankai.inside.crm.entity.Department">
+      
+   SELECT
+	ac.id,
+	ac.name,
+	ac.remark,
+	ac.create_time AS createTime,
+	ac.create_id AS createId,
+	`order`,pid
+	FROM
+	sys_detp AS ac 
+	WHERE ac.id = #{value}
+	</select>
+    
+    <update id="update" parameterType="com.sankai.inside.crm.entity.Department" >
+    	UPDATE `sys_detp` SET `name`=#{name}, `remark`=#{remark}  WHERE (`id`=#{id})
+    </update>
+    
+    <select id="selectAll"  resultType="com.sankai.inside.crm.entity.Department">
+      SELECT 
+      id,`name`,pid,`order` 
+      from sys_detp
+      where  `state` = 0
+      ORDER BY
+	  `order`
+	</select>
+	
+    <select id="selectAllTree"  parameterType="String" resultType="com.sankai.inside.crm.entity.Department">
+      SELECT 
+      id,`name`,pid,`order` 
+      from sys_detp
+      where id in (${value}) and `state` = 0
+      ORDER BY `order`
+	</select>
+	
+	<select id="selectAllUserTree"  parameterType="java.lang.Integer" resultType="com.sankai.inside.crm.entity.Department">
+      SELECT
+			id,
+			`name`,
+			sys_dept_id AS pid 
+		FROM
+			sys_account
+		WHERE
+			sys_dept_id = ${value} AND `state`=0
+	</select>
+	
+	 <select id="returnName"  resultType="String">
+      SELECT 
+      `name`
+      from sys_detp 
+      where id=#{value}
+	</select>
+	
+	
+	
+	<select id="selectOrder"  resultType="int">
+      SELECT 
+      COUNT(*) 
+      FROM sys_detp WHERE pid=#{value}
+	</select>
+	
+	<select id="selectOrderById"  resultType="int">
+      SELECT 
+      `order` 
+      FROM sys_detp WHERE id=#{value}
+	</select>
+	
+	<update id="upT"  parameterType="com.sankai.inside.crm.entity.UpDownDTO">
+    	UPDATE `sys_detp` SET `order`=#{order} WHERE (`pid`=#{pid} and `order`=#{order}-1)
+    </update>
+	
+	<update id="up"  parameterType="com.sankai.inside.crm.entity.UpDownDTO" >
+    	UPDATE `sys_detp` SET `order`=#{order}-1 WHERE (`id`=#{id})
+    </update>
+    
+    <update id="downT"  parameterType="com.sankai.inside.crm.entity.UpDownDTO">
+    	UPDATE `sys_detp` SET `order`=#{order} WHERE (`pid`=#{pid} and `order`=#{order}+1)
+    </update>
+	
+	<update id="down"  parameterType="com.sankai.inside.crm.entity.UpDownDTO" >
+    	UPDATE `sys_detp` SET `order`=#{order}+1 WHERE (`id`=#{id})
+    </update>
+    
+    <select id="exectOrder"  parameterType="com.sankai.inside.crm.entity.UpDownDTO" resultType="int">
+      SELECT 
+      COUNT(*) 
+      FROM sys_detp WHERE  ( `order`=#{order} AND `pid`=#{pid})
+	</select>
+    
+    <select id="findDeptById" resultType="com.sankai.inside.crm.entity.Department" parameterType="int">
+    	SELECT 
+      `name`,`state`
+      FROM sys_detp WHERE id=#{value}
+    </select>
+    
+    	<select id="findAuthById" resultType="string" parameterType="int">
+		SELECT module_key AS `value` FROM sys_authority where type = 1 AND
+		quote_id = #{value}
+	</select>
+    
+    <!--修改小于本order的其它所有目标 ，用于删除  start -->
+	<!--查到小于自身ORDER的其他所有目标(用于删除)  -->
+	<select id="findDeptForDelete" parameterType="com.sankai.inside.crm.entity.UpDownDTO" resultType="com.sankai.inside.crm.entity.UpDownDTO">
+		SELECT id,`order` AS `order` FROM sys_detp WHERE `order`>#{order} AND pid=#{pid} AND state=0
+	</select>
+	<!--修改order (用于删除) -->
+	<update id="updateOrderForDelete" parameterType="com.sankai.inside.crm.entity.UpDownDTO" >
+		UPDATE sys_detp SET `order`=#{order} WHERE id=#{id}
+	</update>
+	<!--修改小于本order的其它所有目标 ，用于删除  end -->
+    <!-- 获取部门和部门领导人信息 -->
+    <select id="getDeptAndManager" resultType="com.sankai.inside.crm.entity.DeptAndManagerDTO">
+<!-- 		SELECT a.id AS deptId,a.`name` AS deptName,a.pid AS deptPId,(SELECT id FROM `sys_account` WHERE `state` = 0 AND sys_dept_id = a.id  AND is_dept_manager=1) AS managerId FROM `sys_detp`  AS a
+		WHERE a.`state` = 0  -->
+		SELECT a.id AS deptId,a.`name` AS deptName,a.pid AS deptPId,(SELECT id FROM (SELECT * FROM `sys_account`  WHERE `state` = 0 AND is_dept_manager=1
+		GROUP BY sys_dept_id) AS b WHERE b.sys_dept_id = a.id ) AS managerId FROM `sys_detp`  AS a   WHERE a.`state` = 0
+		
+	</select>
+</mapper>

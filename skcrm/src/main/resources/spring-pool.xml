@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 引入属性文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />	
+	
+	<!-- C3P0数据源【crm项目库】-->
+	 <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"> 
+        <!-- 数据库驱动 --> 
+        <property name="driverClass" value="${jdbc_driver}" />  
+        <!-- 数据库地址 --> 
+        <property name="jdbcUrl" value="${jdbc_url}" />  
+        <property name="user" value="${jdbc_name}" />  
+        <property name="password" value="${jdbc_pwd}" /> 
+        <!-- 数据库池最小连接数 --> 
+        <property name="minPoolSize" value="${jdbc_minPoolSize}" />  
+        <!-- 数据库池最大连接数 --> 
+        <property name="maxPoolSize" value="${jdbc_maxPoolSize}" />  
+        <!-- 每600秒检查所有连接池中的空闲连接。Default: 0  --> 
+        <property name="idleConnectionTestPeriod" value="${jdbc_idleConnectionTestPeriod}" />  
+        <!-- 最大空闲时间,600秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0  --> 
+        <property name="maxIdleTime" value="${jdbc_maxIdleTime}" /> 
+        <!--
+        	JDBC的标准参数，用以控制数据源内加载的PreparedStatements数量。  
+		            但由于预缓存的Statements属于单个connection而不是整个连接池。所以设置这个参数需要考虑到多方面的因素.  
+		            如果maxStatements与maxStatementsPerConnection均为0，则缓存被关闭。Default: 0
+        <property name="maxStatements" value="0" />
+        <property name="maxStatementsPerConnection" value="0" />  
+		--> 
+        <!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+        <property name="acquireIncrement" value="${jdbc_acquireIncrement}" />  
+        <!--定义在从数据库获取新连接失败后重复尝试的次数。Default: 30 -->
+        <property name="acquireRetryAttempts" value="${jdbc_acquireRetryAttempts}" />
+        <!--两次连接中间隔时间，单位毫秒。Default: 1000 -->  
+        <property name="acquireRetryDelay" value="${jdbc_acquireRetryDelay}" />  
+        <!--定义所有连接测试都执行的测试语句。在使用连接测试的情况下这个一显著提高测试速度。注意： 测试的表必须在初始数据源的时候就存在。Default: null--> 
+        <property name="preferredTestQuery" value="SELECT 1 AS VALUE;" />
+    </bean> 
+    
+    <!-- C3P0数据源【采集库 智慧云】-->
+	  <bean id="dataSourceYun" class="com.mchange.v2.c3p0.ComboPooledDataSource"> 
+        <!-- 数据库驱动  -->
+        <property name="driverClass" value="${jdbc_driver}" />  
+        <!-- 数据库地址  -->
+        
+        <property name="jdbcUrl" value="${jdbc_url_yun}" />  
+        <property name="user" value="${jdbc_name_yun}" />  
+        <property name="password" value="${jdbc_pwd_yun}" /> 
+        <!-- 数据库池最小连接数  -->
+        <property name="minPoolSize" value="${jdbc_minPoolSize}" />  
+        <!-- 数据库池最大连接数  -->
+        <property name="maxPoolSize" value="${jdbc_maxPoolSize}" />  
+        <!-- 每600秒检查所有连接池中的空闲连接。Default: 0 -->  
+        <property name="idleConnectionTestPeriod" value="${jdbc_idleConnectionTestPeriod}" />  
+        <!-- 最大空闲时间,600秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->  
+        <property name="maxIdleTime" value="${jdbc_maxIdleTime}" /> 
+        
+        <!-- 	JDBC的标准参数，用以控制数据源内加载的PreparedStatements数量。  
+		            但由于预缓存的Statements属于单个connection而不是整个连接池。所以设置这个参数需要考虑到多方面的因素.  
+		            如果maxStatements与maxStatementsPerConnection均为0，则缓存被关闭。Default: 0 -->
+        <property name="maxStatements" value="0" />
+        <property name="maxStatementsPerConnection" value="0" />  
+		 
+        <!-- 当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+        <property name="acquireIncrement" value="${jdbc_acquireIncrement}" />  
+        <!-- 定义在从数据库获取新连接失败后重复尝试的次数。Default: 30 -->
+        <property name="acquireRetryAttempts" value="${jdbc_acquireRetryAttempts}" />
+        <!-- 两次连接中间隔时间，单位毫秒。Default: 1000 -->  
+        <property name="acquireRetryDelay" value="${jdbc_acquireRetryDelay}" />  
+        <!-- 定义所有连接测试都执行的测试语句。在使用连接测试的情况下这个一显著提高测试速度。注意： 测试的表必须在初始数据源的时候就存在。Default: null --> 
+        <property name="preferredTestQuery" value="SELECT 1 AS VALUE;" />
+    </bean>
+    
+  </beans>
