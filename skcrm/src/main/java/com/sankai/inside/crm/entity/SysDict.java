@@ -1,6 +1,7 @@
 package com.sankai.inside.crm.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class SysDict {
 	private int id;
@@ -14,13 +15,21 @@ public class SysDict {
 	private String remark;
 	private String pycode;
 	private String pyname;
-	
+
 	private String createName;
 	private String createTimeStr;
-	
+
 	private int spendDay;//状态停留时间【20170302 zzc】
-	
-	
+	private List<SysDict> childList;
+
+	public List<SysDict> getChildList() {
+		return childList;
+	}
+
+	public void setChildList(List<SysDict> childList) {
+		this.childList = childList;
+	}
+
 	public int getSpendDay() {
 		return spendDay;
 	}
@@ -112,5 +121,5 @@ public class SysDict {
 				+ remark + ", pycode=" + pycode + ", pyname=" + pyname + ", createName=" + createName
 				+ ", createTimeStr=" + createTimeStr + "]";
 	}
-	
+
 }

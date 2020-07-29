@@ -1,22 +1,15 @@
 package com.sankai.inside.crm.web.controllers;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Resource;
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
+import com.sankai.inside.crm.core.mail.SpringMailSender;
+import com.sankai.inside.crm.core.utils.DateUtil;
+import com.sankai.inside.crm.core.utils.DelHTMLUtil;
+import com.sankai.inside.crm.entity.*;
+import com.sankai.inside.crm.service.*;
+import com.sankai.inside.crm.web.core.UserState;
+import com.sankai.inside.crm.web.model.FormPage;
+import com.sankai.inside.crm.web.model.ValidAdd;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -35,57 +28,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageInfo;
-import com.sankai.inside.crm.core.mail.SpringMailSender;
-import com.sankai.inside.crm.core.utils.DateUtil;
-import com.sankai.inside.crm.core.utils.DelHTMLUtil;
-import com.sankai.inside.crm.entity.Account;
-import com.sankai.inside.crm.entity.AccountOfDept;
-import com.sankai.inside.crm.entity.Address;
-import com.sankai.inside.crm.entity.Contact;
-import com.sankai.inside.crm.entity.ContactSearch;
-import com.sankai.inside.crm.entity.ContactSearchByCusId;
-import com.sankai.inside.crm.entity.ContactShare;
-import com.sankai.inside.crm.entity.Customer;
-import com.sankai.inside.crm.entity.CustomerAutocomplate;
-import com.sankai.inside.crm.entity.CustomerList;
-import com.sankai.inside.crm.entity.CustomerListSearch;
-import com.sankai.inside.crm.entity.CustomerLog;
-import com.sankai.inside.crm.entity.CustomerLogList;
-import com.sankai.inside.crm.entity.CustomerRecord;
-import com.sankai.inside.crm.entity.CustomerRecordDTO;
-import com.sankai.inside.crm.entity.CustomerRemindAdd;
-import com.sankai.inside.crm.entity.CustomerRemindDTO;
-import com.sankai.inside.crm.entity.CustomerRemindEdit;
-import com.sankai.inside.crm.entity.CustomerShare;
-import com.sankai.inside.crm.entity.CustomerShareCusDTO;
-import com.sankai.inside.crm.entity.CustomerShareDTO;
-import com.sankai.inside.crm.entity.CustomerShareTransDTO;
-import com.sankai.inside.crm.entity.CustomerStatueTimeDto;
-import com.sankai.inside.crm.entity.CustomerTransDTO;
-import com.sankai.inside.crm.entity.CustomerTransfer;
-import com.sankai.inside.crm.entity.DeptTable;
-import com.sankai.inside.crm.entity.ServiceResult;
-import com.sankai.inside.crm.entity.ServiceResultBool;
-import com.sankai.inside.crm.entity.SysDict;
-import com.sankai.inside.crm.entity.SysDictListByRecordTypeDTO;
-import com.sankai.inside.crm.entity.UpdateCustomerStatusDTO;
-import com.sankai.inside.crm.entity.UpdateCustomerStatusResponseDTO;
-import com.sankai.inside.crm.service.AccountService;
-import com.sankai.inside.crm.service.ContactService;
-import com.sankai.inside.crm.service.ContactShareService;
-import com.sankai.inside.crm.service.CustomerLogService;
-import com.sankai.inside.crm.service.CustomerRemindService;
-import com.sankai.inside.crm.service.CustomerStatusTimeService;
-import com.sankai.inside.crm.service.IAddressService;
-import com.sankai.inside.crm.service.ICustomerRecordService;
-import com.sankai.inside.crm.service.ICustomerService;
-import com.sankai.inside.crm.service.ICustomerShareService;
-import com.sankai.inside.crm.service.ISysDictService;
-import com.sankai.inside.crm.web.core.UserState;
-import com.sankai.inside.crm.web.model.FormPage;
-import com.sankai.inside.crm.web.model.ValidAdd;
+import javax.annotation.Resource;
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("customer")
@@ -132,11 +83,11 @@ public class CustomerController {
 	@RequiresPermissions(value = "customer_list")
 	@RequestMapping(path = "index", method = RequestMethod.GET)
 	public String index(Model model, @RequestParam(defaultValue = "false", name = "cache") boolean isCache,
-			HttpSession session, HttpServletRequest request) throws Exception {
+						HttpSession session, HttpServletRequest request) throws Exception {
 
 		Integer loginId = UserState.getLoginId();
 		boolean isDeptLeader = accountService.isLeaderById(loginId);// 是否是部门领导人
-		
+
 		String status = request.getParameter("status");//客户状态
 		List<SysDict> xsztList = sysDictService.findAllByPid(36);// 客户状态
 		List<SysDict> khlxList = sysDictService.findAllByPid(37);// 客户类型
@@ -210,7 +161,7 @@ public class CustomerController {
 		}
 		//客户详细页面点击返回按钮后的信息 - start
 		initSearch(request,search,isDeptLeader);
-		
+
 		// 客户列表
 		ServiceResult<Page<CustomerList>> result = customerServiceImpl.getList(search, search.getPage(),
 				search.getPageSize());
@@ -259,9 +210,9 @@ public class CustomerController {
 		int accId = Integer.valueOf(indexAccountId);
 		if(accId>0&&isDeptLeader){
 			search.setAccountId(accId);
-			search.setPrincipalStr(indexAccountId);	
+			search.setPrincipalStr(indexAccountId);
 		}
-		if(!StringUtils.isEmpty(indexOrderType))search.setOrderType(indexOrderType);		
+		if(!StringUtils.isEmpty(indexOrderType))search.setOrderType(indexOrderType);
 		if(!StringUtils.isEmpty(indexOrderField))search.setOrderField(indexOrderField);
 		if(!StringUtils.isEmpty(indexContent))search.setContent(indexContent);
 		if(!StringUtils.isEmpty(indexIsFrom))search.setIsFrom(Integer.valueOf(indexIsFrom));
@@ -480,7 +431,7 @@ public class CustomerController {
 				}
 			}
 		}
-				
+
 		// 列出当前登录人的记录类别
 		List<SysDict> allRecordTypes = this.sysDictServiceImpl.findAllByPid(5);
 		ServiceResult<Account> accountResult = accountService.getEasyAccount(UserState.getLoginId());
@@ -492,12 +443,12 @@ public class CustomerController {
 		/*ServiceResult<Page<CustomerRecordDTO>> result = this.customerRecordServiceImpl.findAllByCustomerIdGet(
 				deptLeader, customerId, (isShare ? accountId : (selfAccountId == 0 ? null : selfAccountId)), null,
 				page.getPage(), 6);*/
-		
+
 		ServiceResult<Page<CustomerRecordDTO>> result = this.customerRecordServiceImpl.findAllByCustomerId(
 				isDeptLeader ? 1 : 0, customerId,
 				((isShare || selfAccountId <= 0 || isDeptLeader) ? accountId : selfAccountId), vo.getType(),
 				page.getPage(), 6);
-		
+
 		// 所有的发布者
 		List<CustomerRecordDTO> allPublishers = this.customerRecordServiceImpl.findAllpublishers(customerId,0);
 		log.error("allPublishers=====" + allPublishers);
@@ -548,18 +499,18 @@ public class CustomerController {
 		Integer val = 0;
 		if(StringUtils.isEmpty(value)){
 			switch (status) {
-			case 38:
-				val = 365;
-				break;
-			case 39:
-				val = 90;
-				break;
-			case 40:
-				val = 30;
-				break;
-			default:
-				val=30;
-				break;
+				case 38:
+					val = 365;
+					break;
+				case 39:
+					val = 90;
+					break;
+				case 40:
+					val = 30;
+					break;
+				default:
+					val=30;
+					break;
 			}
 		}
 		else{
@@ -635,10 +586,14 @@ public class CustomerController {
 
 		try {
 
+			List<SysDict> cpfwList = sysDictService.findAllByPid(9);// 产品及服务
+			List<SysDict> cqxzList = sysDictService.findAllByPid(10);// 客户出钱性质
 			List<SysDict> xsztList = sysDictService.findAllByPid(36);// 客户状态
 			List<SysDict> khlxList = sysDictService.findAllByPid(37);// 客户类型
-			List<SysDict> khkyList = sysDictService.findAllByPid(67);// 客户来源
+			List<SysDict> khkyList = sysDictService.findAllByPid(67);// 客户来源-直销
 			List<SysDict> ptbbList = sysDictService.findAllByPid(83);// 平台版本
+			List<Contact> lxrList = contactService.getList("112");;// 客户来源-渠道
+			List<SysDict> xstjztList = sysDictService.findAllByPid2(11);// 销售推进状态
 
 			List<Address> list = this.addressServiceImpl.listAllProvs();// 地区
 			model.addAttribute("listProvs", list);
@@ -646,14 +601,18 @@ public class CustomerController {
 			model.addAttribute("khlx", khlxList);
 			model.addAttribute("khly", khkyList);
 			model.addAttribute("ptbb", ptbbList);
+			model.addAttribute("cpfw", cpfwList);
+			model.addAttribute("lxr", lxrList);
+			model.addAttribute("cqxz", cqxzList);
+			model.addAttribute("xstjzt", xstjztList);
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		return "customer/add";
 	}
+
+
 
 	@RequiresAuthentication
 	@RequiresPermissions(value = "customer_add")
@@ -692,6 +651,7 @@ public class CustomerController {
 
 		Customer customer = result.getData();
 
+		List<SysDict> cpfwList = sysDictService.findAllByPid(9);// 产品及服务
 		List<SysDict> xsztList = sysDictService.findAllByPid(36);// 客户状态
 		List<SysDict> khlxList = sysDictService.findAllByPid(37);// 客户类型
 		List<SysDict> khkyList = sysDictService.findAllByPid(67);// 客户来源
@@ -700,10 +660,10 @@ public class CustomerController {
 		List<Address> list = this.addressServiceImpl.listAllProvs();// 地区 省
 		model.addAttribute("listProvs", list);
 		List<Address> listCity = this.addressServiceImpl.listCityDicByProv(customer.getProvince());// 地区
-																									// 市
+		// 市
 		model.addAttribute("listCity", listCity);
 		List<Address> listCountry = this.addressServiceImpl.listCityDicByProv(customer.getCity());// 地区
-																									// 县
+		// 县
 		model.addAttribute("listCountry", listCountry);
 
 		model.addAttribute("model", customer);
@@ -711,6 +671,7 @@ public class CustomerController {
 		model.addAttribute("khlx", khlxList);
 		model.addAttribute("khly", khkyList);
 		model.addAttribute("khcgl", khcglList);
+		model.addAttribute("cpfw", cpfwList);
 
 		List<String> types = new ArrayList<String>();
 		if (customer.getType() != null && customer.getType().contains(",")) {
@@ -905,7 +866,7 @@ public class CustomerController {
 		model.setId(customerId);
 		model.setCreateId(UserState.getLoginId());
 		customerServiceImpl.saveCustomerSim(model);
-		
+
 		// 客户转移，将客户关联的联系人转移给允许人
 		ContactShare csDto = new ContactShare();
 		csDto.setCustomerId(customerId);
@@ -958,7 +919,7 @@ public class CustomerController {
 				result.setSuccess(true);
 				result.setMsg("修改失败");
 			}
-		} catch (Exception e) {			
+		} catch (Exception e) {
 			result.setSuccess(true);
 			result.setMsg("修改异常");
 			return result;
@@ -971,7 +932,7 @@ public class CustomerController {
 	@RequiresPermissions(value = { "customer_add", "customer_edit" }, logical = Logical.OR)
 	@RequestMapping(path = "nameCall.ajax", method = RequestMethod.POST)
 	public void existsNameCall(@RequestParam String fieldId, @RequestParam String fieldValue,
-			HttpServletRequest request, HttpServletResponse response) throws IOException {
+							   HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		ServiceResultBool result = customerServiceImpl.existsByName(request.getParameter("fieldValue"));
 		response.getWriter().write("[\"" + fieldId + "\"," + result.isSuccess() + "]");
@@ -983,7 +944,7 @@ public class CustomerController {
 	@RequiresPermissions(value = { "customer_add", "customer_edit" }, logical = Logical.OR)
 	@RequestMapping(path = "shortNameCall.ajax", method = RequestMethod.POST)
 	public void existsShortNameCall(@RequestParam String fieldId, @RequestParam String fieldValue,
-			HttpServletRequest request, HttpServletResponse response) throws IOException {
+									HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		ServiceResultBool result = customerServiceImpl.existsByShortName(request.getParameter("fieldValue"));
 		response.getWriter().write("[\"" + fieldId + "\"," + result.isSuccess() + "]");
@@ -992,7 +953,7 @@ public class CustomerController {
 
 	/**
 	 * 新增客户日志记录
-	 * 
+	 *
 	 * @param customerId
 	 * @param accountIds
 	 * @param type
@@ -1012,7 +973,7 @@ public class CustomerController {
 	// 新增客户提醒
 	/*
 	 * @RequiresAuthentication
-	 * 
+	 *
 	 * @RequiresPermissions(value = "customer_add")
 	 */
 	@RequestMapping(path = "addRemind", method = RequestMethod.GET)
@@ -1023,7 +984,7 @@ public class CustomerController {
 
 	/*
 	 * @RequiresAuthentication
-	 * 
+	 *
 	 * @RequiresPermissions(value = "customer_add")
 	 */
 	@RequestMapping(path = "addRemind", method = RequestMethod.POST)
@@ -1050,7 +1011,7 @@ public class CustomerController {
 
 	/**
 	 * 批量投入公海
-	 * 
+	 *
 	 * @param ids
 	 * @return
 	 */
@@ -1069,7 +1030,7 @@ public class CustomerController {
 	// 新增客户提醒
 	/*
 	 * @RequiresAuthentication
-	 * 
+	 *
 	 * @RequiresPermissions(value = "customer_add")
 	 */
 	@RequestMapping(path = "saveRemind", method = RequestMethod.GET)
@@ -1088,7 +1049,7 @@ public class CustomerController {
 
 	/*
 	 * @RequiresAuthentication
-	 * 
+	 *
 	 * @RequiresPermissions(value = "customer_add")
 	 */
 	@RequestMapping(path = "saveRemind", method = RequestMethod.POST)
@@ -1101,7 +1062,7 @@ public class CustomerController {
 		ServiceResultBool res = customerRemindService.edit(from);
 		return res;
 	}
-	
+
 	@RequestMapping(path="getCustomer",method={RequestMethod.GET,RequestMethod.POST})
 	public String getCustomerLog(CustomerRecord vo, Model model, FormPage page,HttpServletRequest request) throws Exception{
 		ModelAndView mav = new ModelAndView();
@@ -1170,10 +1131,10 @@ public class CustomerController {
 				accListNew = accList;
 			}
 		}
-		
+
 		// 列出所有的客户状态
 		List<SysDict> allStatus = this.sysDictServiceImpl.findAllByPid(36);
-		
+
 		Date startTime=null;
 		Date endTime=null;
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -1201,7 +1162,7 @@ public class CustomerController {
 				isDeptLeader ? 1 : 0, customerId,
 				((isShare || selfAccountId <= 0 || isDeptLeader) ? accountId : selfAccountId), vo.getType(),
 				page.getPage(), 10,startTime,endTime);
-		
+
 		Page<CustomerRecordDTO> data=new Page<CustomerRecordDTO>();
 		for(CustomerRecordDTO r:result.getData()){
 			r.setRemark(DelHTMLUtil.delHTMLTag(r.getRemark()));
@@ -1222,5 +1183,5 @@ public class CustomerController {
 		}
 		return "customer/reply_list";
 	}
-	
+
 }

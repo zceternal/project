@@ -11,15 +11,15 @@ import com.sankai.inside.crm.entity.SysDictListDTO;
 import com.sankai.inside.crm.entity.SysDictSearchDTO;
 
 public interface ISysDictDAO {
-	
-	
+
+
 	/**
 	 * 根据字典类型查询数据
 	 * @param type
 	 * @return
 	 */
 	public List<Dict> findDictAllByType(int type);
-	
+
 	/**
 	 * 根据pid获取所有的内容
 	 * @param pid
@@ -34,6 +34,7 @@ public interface ISysDictDAO {
 	 * @throws Exception
 	 */
 	public List<SysDictListDTO> findAllByPidSearch(SysDictSearchDTO dto) throws Exception;
+	public List<SysDictListDTO> findAllByPidSearch2(SysDictSearchDTO dto) throws Exception;
 	/**
 	 * 增加
 	 * @param vo
@@ -42,12 +43,12 @@ public interface ISysDictDAO {
 	 */
 	public Integer insert(SysDict vo) throws Exception;
 	/**
-	 * 查询，用于修改 
+	 * 查询，用于修改
 	 * @param id
 	 * @return
 	 * @throws Exception
 	 */
-	public SysDict findById(Integer id) throws Exception; 
+	public SysDict findById(Integer id) throws Exception;
 	/**
 	 * 查询，当前登录人的销售记录类型
 	 * @param id
@@ -61,7 +62,7 @@ public interface ISysDictDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	
+
 	public Integer updateDict(SysDict vo) throws Exception;
 	/**
 	 * 删除
@@ -77,7 +78,7 @@ public interface ISysDictDAO {
 	 * @throws Exception
 	 */
 	public Integer getNewOrder(Integer pid) throws Exception;
-	
+
 	/**
 	 * 删除
 	 * @param id
@@ -108,7 +109,7 @@ public interface ISysDictDAO {
 	 * @throws Exception
 	 */
 	public Integer updateBrotherOrder(DictOrderDTO dto) throws Exception;
-	
+
 	/*
 	 * 查询name,value,state,根据id
 	 */

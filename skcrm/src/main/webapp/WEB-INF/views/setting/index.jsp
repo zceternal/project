@@ -67,22 +67,22 @@
 						<c:forEach items="${dictParentList }" var="pDict" varStatus="status">
 							<li ${status.index==0?"class='on'":"" }><a  ${status.index==0?"class='color333'":"" } href="javascript:void(0)"  >${pDict.name }</a></li>
 						</c:forEach>
-						
+
 					</ul>
 					<div class="row" id="site_tab_tab">
 						<c:forEach items="${allDictsMap }" var="dictsMap" varStatus="statusx">
 									<div class="col-xs-12 col-sm-12 div_bordered" ${statusx.index!=0?"style='display: none'":"" }>
 										<div class="panel panel-default">
 											<div class="panel-heading">
-												<form method="post" action="../setting/searchDict?pid=${dictsMap.pid }" class="form-inline"  data-ajax="true"  data-ajax-mode="replace" 
+												<form method="post" action="../setting/searchDict?pid=${dictsMap.pid }" class="form-inline"  data-ajax="true"  data-ajax-mode="replace"
 													 id="dictForm_${dictsMap.pid }" data-ajax-update="#dictList_${dictsMap.pid }" >
 													<div class="form-group">
 														<div class="search fl" style="width: 200px">
 															<input type="text" name="keyWord" value="${param.content }"
 																placeholder="请输入名称/简拼/全拼" style="width: 200px" />
-			
+
 														</div>
-			
+
 													</div>
 													<div class="form-group">
 														<button type="submit" class="btn btn_white20">查找</button>
@@ -92,9 +92,9 @@
 														data-id="dict_add" >+新增 </a>
 												</div>
 												</form>
-												
+
 											</div>
-											
+
 										<div class="myDictList" id="dictList_${dictsMap.pid }">
 											<table class="table table-bordered table-hover" id="table_${dictsMap.pid==null||dictsMap.pid==''?pid:dictsMap.pid }">
 												<thead>
@@ -108,7 +108,7 @@
 														<th width="200px">操作</th>
 													</tr>
 												</thead>
-												
+
 												<tbody>
 													<c:forEach items="${dictsMap.dictList }" var="dict">
 														<tr id="tr_${dict.id }_${dictsMap.pid==null||dictsMap.pid==''?pid:dictsMap.pid }">
@@ -118,10 +118,10 @@
 																 	data-order="${dict.order }" data-move=-1 data-url="../setting/move" class="colorblue edit" href="javascript:void(0)">上移</a>
 																</span>
 																<span>
-																<a data-action="move" data-id="${dict.id }" data-pid="${dict.parentId }" 
+																<a data-action="move" data-id="${dict.id }" data-pid="${dict.parentId }"
 																 	data-order="${dict.order }" data-move=1 data-url="../setting/move" class="colorblue edit" href="javascript:void(0)">下移</a>
 																</span>
-																
+
 															</td>
 															<td id="${dict.id }_${dictsMap.pid==null||dictsMap.pid==''?pid:dictsMap.pid }_name">${dict.name }</td>
 															<td id="${dict.id }_${dictsMap.pid==null||dictsMap.pid==''?pid:dictsMap.pid }_value">${dict.value }</td>
@@ -129,35 +129,37 @@
 															<td>${dict.createName }</td>
 															<td>
 																<fmt:formatDate value="${dict.createTime }" pattern="yyyy-MM-dd" />
-															
+
 															</td>
 															<td>
+																<a class="btn_blueg2 font14" href="javascript:void(0)" data-pid="${dict.id }"
+																   data-id="dict_add" >新增下级 </a>
 																<span>
 																<a data-action="update" data-id="${dict.id }" data-pid="${dict.parentId }" data-url="../setting/updateDict" class="colorblue edit" href="javascript:void(0)">编辑</a></span>
 																<span>
-																 <a data-action="delete" class="colorred delete"  data-id="${dict.id }" data-pid="${dictsMap.pid==null||dictsMap.pid==''?pid:dictsMap.pid }" data-title="${dict.name }" 
+																 <a data-action="delete" class="colorred delete"  data-id="${dict.id }" data-pid="${dictsMap.pid==null||dictsMap.pid==''?pid:dictsMap.pid }" data-title="${dict.name }"
 																 	data-order="${dict.order }"
 																 >删除</a></span>
-															
+
 															</td>
 														</tr>
 													</c:forEach>
 												</tbody>
-										
+
 											</table>
 										</div>
 									</div>
 								</div>
 						</c:forEach>
-						
-						
+
+
 					</div>
 				</div>
 
 			</div>
 		</div>
 	</div>
-	
+
 
 
 	<script>
@@ -173,25 +175,25 @@
 
 			}
 		})
-		
+
 		$(".site_tab_ul li").click(function(){
 			$(this).addClass("on").siblings().removeClass("on");
 			$("#site_tab_tab>div").eq($(this).index()).show().siblings().hide();
-			
+
 		});
 	</script>
-	
+
 <script type="text/javascript"
 		src="../content/js/jquery.unobtrusive-ajax.min.js"></script>
 		 <script type="text/javascript" src="../content/module/setting/dict.js"></script>
-		 
+
 		 	<!--表单验证 s-->
 	<script type="text/javascript"
 		src="../content/js/jquery.validationEngine-zh_CN.js"></script>
 	<script type="text/javascript"
 		src="../content/js/jquery.validationEngine.js"></script>
 	<!--表单验证 e-->
-		 
+
 	<script type="text/javascript" src="../content/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../content/js/sk.core.iniect.js"></script>
 	<script type="text/javascript" src="../content/js/jquery.md5.js"></script>

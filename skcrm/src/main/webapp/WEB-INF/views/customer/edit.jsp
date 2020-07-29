@@ -116,13 +116,13 @@
 							</c:if>
 						</ul>
 					</div>
-					<label for="" class="col-sm-2 dev-col-sm-120 control-label">推荐人：</label>
+					<%--<label for="" class="col-sm-2 dev-col-sm-120 control-label">推荐人：</label>
 					<div class="col-sm-4">
 						<input type="text" data-prompt-position="inline"
 						 class="form-control input200 validate[maxSize[10]]"
 							id="recommender" placeholder="请输入推荐人" value="${model.recommender }"
 							name="recommender">
-					</div>
+					</div>--%>
 				</div>
 
 				<div class="form-group">

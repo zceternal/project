@@ -78,16 +78,18 @@
 
 				</div>
 				<div class="form-group">
-					<label for="lastname" class="col-sm-2 control-label">角色关系：</label>
+					<label for="lastname" class="col-sm-2 control-label">联系人角色：</label>
 					<div class="col-sm-10 favorite">
-						<div>
-							<c:forEach items="${dictLxr }" var="item" varStatus="status">
+						<c:forEach items="${dictLxr }" var="first" varStatus="status">
+							<div>
+							<c:forEach items="${first.childList }" var="item" varStatus="status">
 								<label class="checkbox-inline "> <input type="radio"
 									name="role" value="${item.id }"
 									${status.index==0?'checked':'' }> ${item.name }
 								</label>
 							</c:forEach>
-						</div>
+							</div>
+						</c:forEach>
 					</div>
 				</div>
 				<div class="form-group">

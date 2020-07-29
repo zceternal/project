@@ -45,6 +45,16 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">产品及服务：</label>
+						<ul class="wh_ul">
+							<c:if test="${cpfw != null }">
+								<c:forEach var="item" items="${cpfw }" varStatus="sta">
+									<li><label><input class="dev-cpfw" name="buyService" ${sta.index == 0 ? 'checked':'' } type="radio" value="${item.id }" />${item.name }</label></li>
+								</c:forEach>
+							</c:if>
+						</ul>
+					</div>
+					<%--<div class="form-group">
 						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">客户状态：</label>
 						<ul class="wh_ul">
 								<c:if test="${xszt != null }">
@@ -53,8 +63,8 @@
 									</c:forEach>
 								</c:if>
 						</ul>
-					</div>
-					<div class="form-group">
+					</div>--%>
+					<%--<div class="form-group">
 						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">客户类型：</label>
 						<ul class="wh_ul">
 								<c:if test="${khlx != null }">
@@ -63,20 +73,31 @@
 									</c:forEach>
 								</c:if>
 						</ul>
-					</div>
+					</div>--%>
 					<div class="form-group">
 						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">客户来源：</label>
-						<ul class="wh_ul">
+						<div class="wh_ul">
+							<label class="col-sm-2 control-label wh_lab" style="text-align: left; padding-left:0px; margin-right: -20px;">渠道-</label>
+							<ul class="wh_ul">
+								<c:if test="${lxr != null }">
+									<c:forEach var="item" items="${lxr }">
+										<li><label><input  name="cusSource" class="dev-khly" type="radio" value="${item.id }" />${item.name }</label></li>
+									</c:forEach>
+								</c:if>
+							</ul>
+							<label class="col-sm-2 control-label wh_lab" style="text-align: left; padding-left:0px; margin-right: -20px;">直销-</label>
+							<ul class="wh_ul">
 								<c:if test="${khly != null }">
-								<c:forEach var="item" items="${khly }">
-									<li><label><input  name="source" class="dev-khly" type="checkbox" value="${item.id }" />${item.name }</label></li>
+									<c:forEach var="item" items="${khly }">
+										<li><label><input  name="cusSource" class="dev-khly" type="radio" value="${item.id }" />${item.name }</label></li>
 									</c:forEach>
 								</c:if>
 
-						</ul>
+							</ul>
+						</div>
 					</div>
 					
-					<div class="form-group">
+					<%--<div class="form-group">
 						<label class="col-sm-2 dev-col-sm-120 control-label">平台版本：</label>
 						<div class="col-sm-4">
 							<ul class="wh_ul">
@@ -93,7 +114,7 @@
 								class="form-control input200 validate[maxSize[10]]"
 								id="recommender" placeholder="请输入推荐人" name="recommender" maxLength = 10>
 						</div>
-					</div>
+					</div>--%>
 					
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">客户网站：</label>
@@ -109,15 +130,6 @@
 								id="phone" placeholder="请输入联系方式" name="phone">
 						</div>
 					</div>
-
-					<div class="form-group">
-						<label for="" class="col-sm-2 dev-col-sm-120 control-label">客户简介：</label>
-						<div class="col-sm-10">
-							<textarea class="form-control validate[maxSize[5000]]" id="remark" placeholder="请输入客户简介" name="remark" style="width: 625px" data-prompt-position="inline"
-								rows=4></textarea>
-						</div>
-					</div>
-
 
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">客户地址：</label>
@@ -147,6 +159,102 @@
 						<div id="allmap" style="width:100%;height:300px;"></div>
 						</div>
 						</div>
+
+					<div class="form-group">
+						<label for="" class="col-sm-2 dev-col-sm-120 control-label">客户简介：</label>
+						<div class="col-sm-10">
+							<textarea class="form-control validate[maxSize[500]]" id="synopsis" placeholder="请输入客户简介" name="synopsis" style="width: 625px" data-prompt-position="inline"
+									  rows=4></textarea>
+						</div>
+					</div>
+					<%--<div class="form-group">
+						<label for="" class="col-sm-2 dev-col-sm-120 control-label">客户行业：</label>
+					</div>--%>
+
+					<div class="form-group">
+						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">客户出钱性质：</label>
+						<ul class="wh_ul">
+							<c:if test="${cqxz != null }">
+								<c:forEach var="item" items="${cqxz }">
+									<li><label><input  name="payNature" class="dev-khcqxz" type="radio" value="${item.id }" />${item.name }</label></li>
+								</c:forEach>
+							</c:if>
+						</ul>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">销售推进状态：</label>
+						<ul class="wh_ul">
+							<c:if test="${xstjzt != null }">
+								<c:forEach var="item" items="${xstjzt }">
+									<li><label><input  name="followState" class="dev-cjzt" type="radio" value="${item.id }" />${item.name }</label></li>
+									<c:if test="${item.childList != null }">
+										<c:forEach var="child" items="${item.childList }">
+											<li><label><input  name="followStateDetails" class="dev-cjztmx" type="checkbox" value="${child.id }" />${child.name }</label></li>
+										</c:forEach>
+									</c:if>
+								</c:forEach>
+							</c:if>
+						</ul>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">人际关系图：</label>
+						<div class="col-sm-12">
+							<table class="table table-bordered table-hover" border="1" cellspacing="0" cellpadding="0">
+							<thead>
+							</thead>
+
+							<tbody>
+							<tr>
+								<td>负责人</td>
+								<td>渠道伙伴</td>
+								<td>客户信任人</td>
+								<td>客户决策人</td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>自己</td>
+								<td><a>+</a></td>
+								<td><a>+</a></td>
+								<td><a>+</a></td>
+								<td>客户管理人</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td><a>+</a></td>
+								<td>客户办事人</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td><a>+</a></td>
+								<td>客户业务人</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td><a>+</a></td>
+							</tr>
+							</tbody>
+						</table>
+						</div>
+					</div>
 				</form>
 
 		</div>

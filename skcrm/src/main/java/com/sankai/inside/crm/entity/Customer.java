@@ -28,6 +28,195 @@ public class Customer {
 	private String contactPhone;
 	private int salesSuccessRate;
 	private int sex;
+	/**推荐人姓名*/
+	private String recommender;
+
+	/**产品及服务*/
+	private String buyService;
+
+	/**客户来源*/
+	private String cusSource;
+
+	/**客户来源类型：1渠道；2直销*/
+	private String cusSourceType;
+
+	/**客户简介*/
+	private String synopsis;
+
+	/**客户行业*/
+	private String business;
+
+	/**客户出钱性质*/
+	private String payNature;
+
+	/**销售推进状态*/
+	private String followState;
+
+	/**销售推进状态-明细（多个之间用 逗号 分割）*/
+	private String followStateDetails;
+
+	/**渠道伙伴*/
+	private String channelPartner;
+
+	/**客户信任人*/
+	private String trustPerson;
+
+	/**客户决策人*/
+	private String decisionPerson;
+
+	/**客户管理人*/
+	private String managePerson;
+
+	/**客户办事人*/
+	private String handlePerson;
+
+	/**客户业务人*/
+	private String professionalPerson;
+
+	public String getRecommender() {
+		return recommender;
+	}
+
+	public void setRecommender(String recommender) {
+		this.recommender = recommender;
+	}
+
+	public String getBuyService() {
+		return buyService;
+	}
+
+	public void setBuyService(String buyService) {
+		this.buyService = buyService;
+	}
+
+	public String getCusSource() {
+		return cusSource;
+	}
+
+	public void setCusSource(String cusSource) {
+		this.cusSource = cusSource;
+	}
+
+	public String getCusSourceType() {
+		return cusSourceType;
+	}
+
+	public void setCusSourceType(String cusSourceType) {
+		this.cusSourceType = cusSourceType;
+	}
+
+	public String getSynopsis() {
+		return synopsis;
+	}
+
+	public void setSynopsis(String synopsis) {
+		this.synopsis = synopsis;
+	}
+
+	public String getBusiness() {
+		return business;
+	}
+
+	public void setBusiness(String business) {
+		this.business = business;
+	}
+
+	public String getPayNature() {
+		return payNature;
+	}
+
+	public void setPayNature(String payNature) {
+		this.payNature = payNature;
+	}
+
+	public String getFollowState() {
+		return followState;
+	}
+
+	public void setFollowState(String followState) {
+		this.followState = followState;
+	}
+
+	public String getFollowStateDetails() {
+		return followStateDetails;
+	}
+
+	public void setFollowStateDetails(String followStateDetails) {
+		this.followStateDetails = followStateDetails;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public void setProvince(int province) {
+		this.province = province;
+	}
+
+	public void setCity(int city) {
+		this.city = city;
+	}
+
+	public void setCountry(int country) {
+		this.country = country;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public void setCreateId(int createId) {
+		this.createId = createId;
+	}
+
+	public String getChannelPartner() {
+		return channelPartner;
+	}
+
+	public void setChannelPartner(String channelPartner) {
+		this.channelPartner = channelPartner;
+	}
+
+	public String getTrustPerson() {
+		return trustPerson;
+	}
+
+	public void setTrustPerson(String trustPerson) {
+		this.trustPerson = trustPerson;
+	}
+
+	public String getDecisionPerson() {
+		return decisionPerson;
+	}
+
+	public void setDecisionPerson(String decisionPerson) {
+		this.decisionPerson = decisionPerson;
+	}
+
+	public String getManagePerson() {
+		return managePerson;
+	}
+
+	public void setManagePerson(String managePerson) {
+		this.managePerson = managePerson;
+	}
+
+	public String getHandlePerson() {
+		return handlePerson;
+	}
+
+	public void setHandlePerson(String handlePerson) {
+		this.handlePerson = handlePerson;
+	}
+
+	public String getProfessionalPerson() {
+		return professionalPerson;
+	}
+
+	public void setProfessionalPerson(String professionalPerson) {
+		this.professionalPerson = professionalPerson;
+	}
+
 	public int getSex() {
 		return sex;
 	}

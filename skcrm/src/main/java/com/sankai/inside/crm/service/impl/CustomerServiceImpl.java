@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.sankai.inside.crm.entity.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,25 +26,6 @@ import com.sankai.inside.crm.dao.ICustomerDAO;
 import com.sankai.inside.crm.dao.ICustomerLogDAO;
 import com.sankai.inside.crm.dao.ICustomerShareDAO;
 import com.sankai.inside.crm.dao.ICustomerTransferDAO;
-import com.sankai.inside.crm.entity.AutocomplateEntity;
-import com.sankai.inside.crm.entity.Contact;
-import com.sankai.inside.crm.entity.ContactShareRequestDTO;
-import com.sankai.inside.crm.entity.Customer;
-import com.sankai.inside.crm.entity.CustomerAutocomplate;
-import com.sankai.inside.crm.entity.CustomerList;
-import com.sankai.inside.crm.entity.CustomerListSearch;
-import com.sankai.inside.crm.entity.CustomerLog;
-import com.sankai.inside.crm.entity.CustomerOwnCheckDTO;
-import com.sankai.inside.crm.entity.CustomerShare;
-import com.sankai.inside.crm.entity.CustomerShareTransDTO;
-import com.sankai.inside.crm.entity.CustomerStatueTimeDto;
-import com.sankai.inside.crm.entity.CustomerStatus;
-import com.sankai.inside.crm.entity.CustomerTransDTO;
-import com.sankai.inside.crm.entity.CustomerTransfer;
-import com.sankai.inside.crm.entity.HomeCount;
-import com.sankai.inside.crm.entity.ServiceResult;
-import com.sankai.inside.crm.entity.ServiceResultBool;
-import com.sankai.inside.crm.entity.UpdateCustomerStatusDTO;
 import com.sankai.inside.crm.service.ContactService;
 import com.sankai.inside.crm.service.CustomerStatusTimeService;
 import com.sankai.inside.crm.service.ICustomerService;
@@ -171,12 +154,19 @@ public class CustomerServiceImpl implements ICustomerService {
 		 customerDAO.insertCustomer(model);
 		// 新增id
 		int newId = model.getId();
-		// 2新增客户日志
-		opeCustomerLog(newId,UserState.getLoginId()+"",0);
-		// 3新增客户状态时间表
-		opeCustomerStatus(model);
-		// 4新增客户共享表
 		if (newId > 0) {
+			// 新增人际关系
+			SysCustomerRelations customerRelations = new SysCustomerRelations();
+			BeanUtils.copyProperties(model, customerRelations);
+			customerRelations.setCustomerId(newId);
+			customerRelations.setId(null);
+			customerDAO.insertCustomerRelations(customerRelations);
+
+			// 2新增客户日志
+			opeCustomerLog(newId,UserState.getLoginId()+"",0);
+			// 3新增客户状态时间表
+			opeCustomerStatus(model);
+			// 4新增客户共享表
 
 			int allowAccountId = model.getCreateId();
 

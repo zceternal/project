@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
 <mapper namespace="com.sankai.inside.crm.dao.ICustomerDAO">
+
+
+	<resultMap id="BaseResultMap" type="com.sankai.inside.crm.entity.SysCustomerRelations" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="customer_id" property="customerId" jdbcType="INTEGER" />
+		<result column="channel_partner" property="channelPartner" jdbcType="VARCHAR" />
+		<result column="trust_person" property="trustPerson" jdbcType="VARCHAR" />
+		<result column="decision_person" property="decisionPerson" jdbcType="VARCHAR" />
+		<result column="manage_person" property="managePerson" jdbcType="VARCHAR" />
+		<result column="handle_person" property="handlePerson" jdbcType="VARCHAR" />
+		<result column="professional_person" property="professionalPerson" jdbcType="VARCHAR" />
+		<result column="create_id" property="createId" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
 	<!--根据ID查询客户信息 -->
 	<select id="findCustomerInfoById" parameterType="java.lang.Integer"
-		resultType="com.sankai.inside.crm.entity.CustomerTransDTO">
+			resultType="com.sankai.inside.crm.entity.CustomerTransDTO">
 		SELECT id,name,short_name AS
 		shortName,status,type,source,url,phone,province,city,country,address,x_coord
 		AS xCoord,
@@ -25,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!--根据客户ID查询客户的共享信息 -->
 	<select id="findAllows" parameterType="java.lang.Integer"
-		resultType="com.sankai.inside.crm.entity.CustomerShareTransDTO">
+			resultType="com.sankai.inside.crm.entity.CustomerShareTransDTO">
 		SELECT
 		(SELECT NAME FROM sys_account WHERE
 		id=scs.allow_account_id) AS allowName,
@@ -50,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!--查找销售第一负责人 -->
 	<select id="findFirstAllow" parameterType="java.lang.Integer"
-		resultType="com.sankai.inside.crm.entity.CustomerShareTransDTO">
+			resultType="com.sankai.inside.crm.entity.CustomerShareTransDTO">
 		SELECT scs.allow_account_id as allowAccountId,
 		(SELECT NAME
 		FROM sys_account WHERE id=scs.allow_account_id) AS allowName,
@@ -65,16 +80,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!--查询客户联系人 -->
 	<select id="findContactInfoByCustoemrId" parameterType="java.lang.Integer"
-		resultType="com.sankai.inside.crm.entity.Contact">
+			resultType="com.sankai.inside.crm.entity.Contact">
 		SELECT `name`,`position`,phone,customer_id,id FROM sys_contact WHERE
 		customer_id=#{customerId}
 	</select>
 	<!-- 客户管理列表 -->
 	<select id="selectList" resultType="com.sankai.inside.crm.entity.CustomerList"
-		parameterType="com.sankai.inside.crm.entity.CustomerListSearch">
+			parameterType="com.sankai.inside.crm.entity.CustomerListSearch">
 		SELECT *,(SELECT `name` FROM sys_account WHERE tb2.accountId = id ) AS optName
- 		FROM (
- 		select * from (
+		FROM (
+		select * from (
 		select * from (SELECT
 		a.id AS shareId,b.id AS
 		customerId,a.`state`,b.name,b.phone,
@@ -85,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		a.`is_from` AS isFrom,
 		a.`account_id` AS accountId,
 		(SELECT ac.`name` from sys_account ac WHERE ac.id=b.`create_id`) AS createName,
-		a.`allow_account_id` AS allowAccountId,		
+		a.`allow_account_id` AS allowAccountId,
 		(SELECT
 		e.name FROM sys_customer_share AS f
 		LEFT JOIN sys_account e ON
@@ -131,51 +146,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			)
 		</if>
 
-			<if test="traceType>0">
-				<![CDATA[ and TO_DAYS(NOW()) - TO_DAYS(tb.finalTime) >= #{traceType} ]]>
-			</if>
-			<if test="traceType==-2">
-				and tb.finalTime is null
-			</if>
+		<if test="traceType>0">
+			<![CDATA[ and TO_DAYS(NOW()) - TO_DAYS(tb.finalTime) >= #{traceType} ]]>
+		</if>
+		<if test="traceType==-2">
+			and tb.finalTime is null
+		</if>
 
 		<if test="status>0">
-				and tb.status = #{status}
+			and tb.status = #{status}
 		</if>
 		<if test="isFrom>=0">
-				and tb.isFrom=#{isFrom } 
-		</if>		
+			and tb.isFrom=#{isFrom }
+		</if>
 		<if test="customerType>-1">
 			and <![CDATA[ locate(concat(",",concat(#{customerType},",")),concat(",",concat(tb.type,","))) ]]>
 		</if>
 		<if test="salesSuccessRate>-1">
 			and <![CDATA[ locate(concat(",",concat(#{salesSuccessRate},",")),concat(",",concat(tb.salesSuccessRate,","))) ]]>
 		</if>
-		<!-- <if test="customerType!=null"> and tb.`type` in <foreach collection="customerType" 
-			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach> 
+		<!-- <if test="customerType!=null"> and tb.`type` in <foreach collection="customerType"
+			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach>
 			</if> -->
-		<!-- <if test="principal!=null"> and tb.`allowAccountId` in <foreach collection="principal" 
-			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach> 
+		<!-- <if test="principal!=null"> and tb.`allowAccountId` in <foreach collection="principal"
+			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach>
 			</if> -->
 		<if test="principalStr!=null and principalStr!=''">
 			<!-- and tb.`allowAccountId` = #{principalStr} -->
-				<![CDATA[ and locate(concat(",",concat(tb.allowAccountId,",")),concat(",",concat(#{principalStr},","))) ]]>
+			<![CDATA[ and locate(concat(",",concat(tb.allowAccountId,",")),concat(",",concat(#{principalStr},","))) ]]>
 		</if>
-			<![CDATA[ order by tb.`isOwn` desc ]]>
-			) as tb1
-			) as tb2 
-			<![CDATA[ group by tb2.`customerId` ]]>
-			<if test="orderField==null or orderField==''">
+		<![CDATA[ order by tb.`isOwn` desc ]]>
+		) as tb1
+		) as tb2
+		<![CDATA[ group by tb2.`customerId` ]]>
+		<if test="orderField==null or orderField==''">
 			<![CDATA[ order by tb2.`order` desc ]]>
-			</if>
-			<if test="orderField!=null and orderField!=''">
+		</if>
+		<if test="orderField!=null and orderField!=''">
 			<![CDATA[ order by tb2.`${orderField}` ${orderType} ]]>
-			</if>
-			
+		</if>
+
 	</select>
-	
+
 	<!-- 客户管理列表 -->
 	<select id="selectListForExcel" resultType="com.sankai.inside.crm.entity.CustomerList"
-		parameterType="com.sankai.inside.crm.entity.CustomerListSearch">
+			parameterType="com.sankai.inside.crm.entity.CustomerListSearch">
 		select * from (
 		select * from (SELECT
 		a.id AS shareId,b.id AS
@@ -212,13 +227,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		typeName,b.create_time AS createTime
 
 		FROM sys_customer_share AS a
-		
+
 		LEFT JOIN sys_customer AS b ON a.customer_id =b.id
-		
+
 		LEFT JOIN sys_contact AS h ON a.customer_id =h.customer_id
-		
-		LEFT JOIN sys_account AS g ON a.`allow_account_id` = g.id 
-		
+
+		LEFT JOIN sys_account AS g ON a.`allow_account_id` = g.id
+
 		WHERE
 		a.`state`=0 AND
 		b.`state` = 0 ) <!--  AND (a.account_id = a.allow_account_id OR a.account_id!=#{accountId}) -->
@@ -239,15 +254,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			)
 		</if>
 
-			<if test="traceType>0">
-				<![CDATA[ and TO_DAYS(NOW()) - TO_DAYS(tb.finalTime) >= #{traceType} ]]>
-			</if>
-			<if test="traceType==-2">
-				and tb.finalTime is null
-			</if>
+		<if test="traceType>0">
+			<![CDATA[ and TO_DAYS(NOW()) - TO_DAYS(tb.finalTime) >= #{traceType} ]]>
+		</if>
+		<if test="traceType==-2">
+			and tb.finalTime is null
+		</if>
 
 		<if test="status>0">
-				and tb.status = #{status}
+			and tb.status = #{status}
 		</if>
 		<if test="customerType>-1">
 			and <![CDATA[ locate(concat(",",concat(#{customerType},",")),concat(",",concat(tb.type,","))) ]]>
@@ -255,59 +270,59 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="salesSuccessRate>-1">
 			and <![CDATA[ locate(concat(",",concat(#{salesSuccessRate},",")),concat(",",concat(tb.salesSuccessRate,","))) ]]>
 		</if>
-		<!-- <if test="customerType!=null"> and tb.`type` in <foreach collection="customerType" 
-			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach> 
+		<!-- <if test="customerType!=null"> and tb.`type` in <foreach collection="customerType"
+			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach>
 			</if> -->
-		<!-- <if test="principal!=null"> and tb.`allowAccountId` in <foreach collection="principal" 
-			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach> 
+		<!-- <if test="principal!=null"> and tb.`allowAccountId` in <foreach collection="principal"
+			item="item" index="index" separator="," open="(" close=")"> #{item} </foreach>
 			</if> -->
 		<if test="principalStr!=null and principalStr!=''">
 			<!-- and tb.`allowAccountId` = #{principalStr} -->
-				<![CDATA[ and locate(concat(",",concat(tb.allowAccountId,",")),concat(",",concat(#{principalStr},","))) ]]>
+			<![CDATA[ and locate(concat(",",concat(tb.allowAccountId,",")),concat(",",concat(#{principalStr},","))) ]]>
 		</if>
-			<![CDATA[ order by tb.`isOwn` desc ]]>
-			) as tb1 
-			<![CDATA[ group by tb1.`customerId` ]]>
-			<if test="orderField==null or orderField==''">
+		<![CDATA[ order by tb.`isOwn` desc ]]>
+		) as tb1
+		<![CDATA[ group by tb1.`customerId` ]]>
+		<if test="orderField==null or orderField==''">
 			<![CDATA[ order by tb1.`order` desc ]]>
-			</if>
-			<if test="orderField!=null and orderField!=''">
+		</if>
+		<if test="orderField!=null and orderField!=''">
 			<![CDATA[ order by tb1.`${orderField}` ${orderType} ]]>
-			</if>
-			
+		</if>
+
 	</select>
-	
+
 	<!-- 客户管理列表  自动填充-->
 	<select id="selectListForAutoComplate" parameterType="com.sankai.inside.crm.entity.AutocomplateEntity" resultType="com.sankai.inside.crm.entity.CustomerAutocomplate">
-		SELECT 
-		 a.`name` 
-		 ,a.short_name AS shortName, 
-		b.`name` AS createName  
-		FROM sys_customer a 
-		INNER JOIN sys_account b ON a.create_id=b.id  
-		where a.state=0 
+		SELECT
+		a.`name`
+		,a.short_name AS shortName,
+		b.`name` AS createName
+		FROM sys_customer a
+		INNER JOIN sys_account b ON a.create_id=b.id
+		where a.state=0
 		<if test="type==1">
 			AND a.`name` LIKE CONCAT(CONCAT('%', #{value}),'%')
 		</if>
 		<if test="type==2">
 			AND a.`short_name` LIKE CONCAT(CONCAT('%', #{value}),'%')
 		</if>
-		
+
 	</select>
-	
-	
-	
+
+
+
 	<select id="selectCustomerById" resultType="com.sankai.inside.crm.entity.Customer">
 		SELECT `id`, `name`,
 		`short_name`, `status`, `type`, `source`, `url`,
 		`phone`, `province`,
 		`city`, `country`, `address`, `x_coord`,
 		`y_coord`, `remark`, `state`,
-		`create_id`, `create_time`,sales_success_rate 
+		`create_id`, `create_time`,sales_success_rate
 		FROM sys_customer WHERE id=#{id}
 
 	</select>
-	
+
 	<select id="selectCustomerByCreateTIme" resultType="com.sankai.inside.crm.entity.Customer">
 		SELECT
 			id AS contactId,
@@ -319,11 +334,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			create_time = #{createTime}
 
 	</select>
-	
-	
+
+
 	<!-- 新增客户信息 -->
 	<insert id="insertCustomer" parameterType="com.sankai.inside.crm.entity.Customer"
-		useGeneratedKeys="true" keyProperty="id">
+			useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO `sys_customer`
 		(`name`, `short_name`, `status`, `type`,
 		`source`, `url`, `phone`,
@@ -339,14 +354,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{namePy},#{salesSuccessRate})
 
 	</insert>
-	
+
 	<select id="selectCustomerId" parameterType="java.lang.String" resultType="java.lang.Integer">
-		select id from 
-		sys_customer 
-		where 
+		select id from
+		sys_customer
+		where
 		`name`=#{value}
 	</select>
-	
+
 
 	<!-- 新增客户共享信息 -->
 	<insert id="insertCustomerShare" parameterType="com.sankai.inside.crm.entity.CustomerShare">
@@ -361,7 +376,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	<!-- 获取最大排序 -->
 	<select id="selectMaxOrder" parameterType="java.lang.Integer"
-		resultType="java.lang.Integer">
+			resultType="java.lang.Integer">
 		select max(`order`) from
 		sys_customer_share
 		where
@@ -393,7 +408,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		`remark`=#{remark},name_simple_py=#{nameSimplePy},
 		name_py=#{namePy},sales_success_rate=#{salesSuccessRate} WHERE `id`=#{id}
 	</update>
-		<update id="updateCustomerSim" parameterType="com.sankai.inside.crm.entity.Customer">
+	<update id="updateCustomerSim" parameterType="com.sankai.inside.crm.entity.Customer">
 		UPDATE `sys_customer`
 		SET create_id=#{createId} WHERE `id`=#{id}
 	</update>
@@ -414,7 +429,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	<!-- 搜索的客户列表 -->
 	<select id="searchCustomerList" resultType="com.sankai.inside.crm.entity.SearchCustomerList"
-		parameterType="com.sankai.inside.crm.entity.ConCusterSearch">
+			parameterType="com.sankai.inside.crm.entity.ConCusterSearch">
 		select * from (SELECT b.id,a.`state`,b.name,b.create_time AS
 		create_time,b.phone,
 		a.`order`,b.short_name as
@@ -450,13 +465,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!--判断客户的负责人是不是这个登录人 -->
 	<select id="checkIsOwn" parameterType="com.sankai.inside.crm.entity.CustomerOwnCheckDTO"
-		resultType="java.lang.Integer">
+			resultType="java.lang.Integer">
 		SELECT COUNT(1) FROM sys_customer_share WHERE
 		customer_id=#{customerId} AND allow_account_id=#{loginId} AND is_own=1
 	</select>
 	<!--修改客户状态 -->
 	<update id="updateStatus"
-		parameterType="com.sankai.inside.crm.entity.UpdateCustomerStatusDTO">
+			parameterType="com.sankai.inside.crm.entity.UpdateCustomerStatusDTO">
 		UPDATE sys_customer SET status=#{status} WHERE
 		id=#{customerId}
 	</update>
@@ -472,7 +487,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!--查询共享的客户联系人 -->
 	<select id="findContactShared" parameterType="com.sankai.inside.crm.entity.ContactShareRequestDTO"
-		resultType="com.sankai.inside.crm.entity.Contact">
+			resultType="com.sankai.inside.crm.entity.Contact">
 		SELECT
 		(SELECT `name`FROM sys_contact WHERE
 		id=ss.contact_id) AS `name`,
@@ -489,12 +504,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 判断客户名称是否存在 -->
 	<select id="existsByName" parameterType="java.lang.String"
-		resultType="boolean">
+			resultType="boolean">
 		SELECT COUNT(id) FROM sys_customer WHERE `name` = #{value} and `state` = 0
 	</select>
 	<!-- 判断客户简称是否存在 -->
 	<select id="existsByShortName" parameterType="java.lang.String"
-		resultType="boolean">
+			resultType="boolean">
 		SELECT COUNT(id) FROM sys_customer WHERE `short_name` =
 		#{value} and `state` = 0
 	</select>
@@ -533,34 +548,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE id = (SELECT customer_id FROM sys_customer_share WHERE id = #{value})
 		AND `state` = 0
 	</select>
-	
+
 	<!-- 获取客户总量【不包含掉入公海的】 -->
 	<select id="selectTotalCustomerByAccountId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
 		select count(0) from sys_customer_share  where allow_account_id=#{value} and `state`=0
 		and customer_id NOT IN (SELECT id FROM sys_customer WHERE state = 1)
 	</select>
-	
+
 	<select id="selectTotalContactByAccountId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-		select count(0) from sys_contact_share  where allow_account_id=#{value} and `state`=0 
+		select count(0) from sys_contact_share  where allow_account_id=#{value} and `state`=0
 	</select>
-	
+
 	<select id="selectTotalTraceBy" resultType="java.lang.Integer">
 		<if test="param2 == null or param3 == null">
-		select count(0) from  (select DISTINCT customer_id from sys_customer_share  where allow_account_id=#{param1} and `state`=0
-		AND customer_id NOT IN (SELECT id FROM sys_customer WHERE state = 1)) a  
-		where a.customer_id not in (select DISTINCT customer_id from sys_customer_record)
+			select count(0) from  (select DISTINCT customer_id from sys_customer_share  where allow_account_id=#{param1} and `state`=0
+			AND customer_id NOT IN (SELECT id FROM sys_customer WHERE state = 1)) a
+			where a.customer_id not in (select DISTINCT customer_id from sys_customer_record)
 		</if>
-			<if test="param2 != null and param3 != null">
-		<![CDATA[
+		<if test="param2 != null and param3 != null">
+			<![CDATA[
 		select count(0) from (select customer_id,max(communication_time) communication_time from sys_customer_record  where customer_id in (select DISTINCT customer_id from sys_customer_share  where allow_account_id=#{param1} and `state`=0
-		AND customer_id NOT IN (SELECT id FROM sys_customer WHERE state = 1)) 
+		AND customer_id NOT IN (SELECT id FROM sys_customer WHERE state = 1))
 		group by customer_id) tb
 		where TO_DAYS(NOW()) - TO_DAYS(tb.communication_time) >= #{param2} and TO_DAYS(NOW()) - TO_DAYS(tb.communication_time) < #{param3}
 		]]>
 		</if>
 	</select>
 	<select id="selectStatusNo" parameterType="Integer" resultType="com.sankai.inside.crm.entity.CustomerStatus">
-	SELECT `status`,COUNT(id) AS `statusNo` FROM sys_customer 
+	SELECT `status`,COUNT(id) AS `statusNo` FROM sys_customer
 	WHERE `state` = 0 AND id IN (SELECT customer_id FROM  sys_customer_share WHERE allow_account_id = #{value})
 	GROUP BY `status` ORDER BY `status`
 	</select>
@@ -576,8 +591,81 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SET state = 1
 		WHERE id IN
 		<foreach collection="list" index="index" item="cusId" separator="," open="(" close=")">
-			 #{cusId}
+			#{cusId}
 		</foreach>
 	</update>
+	<select id="getCustomerRelations" parameterType="int" resultMap="BaseResultMap">
+	select id, customer_id, channel_partner, trust_person, decision_person, manage_person, handle_person,
+    professional_person, create_id, create_time from sys_customer_relations
+    where customer_id = #{customerId}
+	</select>
+	<insert id="insertCustomerRelations" parameterType="com.sankai.inside.crm.entity.SysCustomerRelations" >
+		insert into sys_customer_relations
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				id,
+			</if>
+			<if test="customerId != null" >
+				customer_id,
+			</if>
+			<if test="channelPartner != null" >
+				channel_partner,
+			</if>
+			<if test="trustPerson != null" >
+				trust_person,
+			</if>
+			<if test="decisionPerson != null" >
+				decision_person,
+			</if>
+			<if test="managePerson != null" >
+				manage_person,
+			</if>
+			<if test="handlePerson != null" >
+				handle_person,
+			</if>
+			<if test="professionalPerson != null" >
+				professional_person,
+			</if>
+			<if test="createId != null" >
+				create_id,
+			</if>
+			<if test="createTime != null" >
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null" >
+				#{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="channelPartner != null" >
+				#{channelPartner,jdbcType=VARCHAR},
+			</if>
+			<if test="trustPerson != null" >
+				#{trustPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="decisionPerson != null" >
+				#{decisionPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="managePerson != null" >
+				#{managePerson,jdbcType=VARCHAR},
+			</if>
+			<if test="handlePerson != null" >
+				#{handlePerson,jdbcType=VARCHAR},
+			</if>
+			<if test="professionalPerson != null" >
+				#{professionalPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="createId != null" >
+				#{createId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null" >
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
 
 </mapper>

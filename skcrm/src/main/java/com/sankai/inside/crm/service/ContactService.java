@@ -38,10 +38,14 @@ public class ContactService {
 	private ICustomerDAO customerDAO;
 	@Autowired
 	private IContactShareDAO contactShareDAO;
-	
+
 
 	@Autowired
 	private ContactShareService contactShareService;
+
+	public List<Contact> getList(String relationId){
+		return contactDAO.getContactList(relationId);
+	}
 
 	public ServiceResult<Page<Contact>> list(ContactSearch content, int page, int pageSize) {
 
@@ -49,7 +53,7 @@ public class ContactService {
 		Page<Contact> list = (Page<Contact>) contactDAO.list(content);
 		return new ServiceResult<Page<Contact>>(list);
 	}
-	
+
 	/*
 	 * 联系人    自动填充
 	 * */
@@ -63,7 +67,7 @@ public class ContactService {
 
 	/**
 	 * 根据登录id获取当前人创建的客户Id
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -75,7 +79,7 @@ public class ContactService {
 
 	/**
 	 * 根据登录id获取联系人--双击客户列表
-	 * 
+	 *
 	 * @param content
 	 * @return
 	 */
@@ -114,7 +118,7 @@ public class ContactService {
 			throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Contact contact = new Contact();
 
-        	
+
 		BeanUtils.copyProperties( model,contact);
 		contact.setNameSimplePy(Pinyin4jUtil.getPinYinHeadChar(model.getName()));
 		contact.setNamePy(Pinyin4jUtil.getPinYin(model.getName()));
@@ -126,7 +130,7 @@ public class ContactService {
 		if (contactEntity!=null) {
 			return new ServiceResultBool("此联系人已存在");
 		}
-		
+
 		contactDAO.insert(contact);
 
 		// 联系人分享表添加数据
@@ -139,38 +143,38 @@ public class ContactService {
 
 		return new ServiceResultBool();
 	}
-	
+
 	/**
 	 * 联系人  导入    李肖
-	 * 
-	 * 
+	 *
+	 *
 	 * */
 	public ServiceResultBool addImport(ContactForm model) {
 		Contact contact = new Contact();
-		
+
 		Integer loginId = model.getCreateId();
 		if(loginId==null)
 			loginId = UserState.getLoginId();
-		
+
 		BeanUtils.copyProperties(model, contact);
 		contact.setNameSimplePy(Pinyin4jUtil.getPinYinHeadChar(model.getName()));
 		contact.setNamePy(Pinyin4jUtil.getPinYin(model.getName()));
 		//contact.setCreateTime(new Date());
 		contact.setCreateId(loginId);// 登录人id
-		
+
 		contact.setBirthday(new Date());
 		contact.setSort(getMaxOrder() + 1); // 设置置顶最大值
 		Contact contactEntity = contactDAO.insertExit(contact);
 		if (contactEntity!=null) {
 			return new ServiceResultBool("此联系人已存在");
 		}
-		
+
 		contactDAO.insert(contact);
 
 		// 联系人分享表添加数据
 		ContactShare contactShare = new ContactShare();
-		
-			contactShare.setAccountId(loginId);// 登录人id
+
+		contactShare.setAccountId(loginId);// 登录人id
 		contactShare.setCustomerId(model.getCustomerId());// 客户Id
 		contactShare.setContactId(contact.getId());// 联系人Id
 		contactShare.setAllowAccountId(loginId);// 分享某人的Id（默认自己共享给自己）
@@ -178,15 +182,15 @@ public class ContactService {
 
 		return new ServiceResultBool();
 	}
-	
-	
+
+
 
 	public ServiceResultBool update(ContactForm model) {
 
 		Contact contact = new Contact();
 		ServiceResultBool result = new ServiceResultBool();
 		int customerId = model.getCustomerId();
-		
+
 		model.setCustomerId(UserState.getLoginId());
 		BeanUtils.copyProperties(model, contact);
 		contact.setNameSimplePy(Pinyin4jUtil.getPinYinHeadChar(model.getName()));
@@ -194,20 +198,20 @@ public class ContactService {
 		contact.setCustomerId(customerId);
 		Contact contactEntity = contactDAO.insertExit(contact);
 
-if (contactEntity!=null&&(!contactEntity.getName().equals(model.getName())&&!contactEntity.getPhone().equals(model.getPhone()))) {
-	Contact tempModel = new Contact();
+		if (contactEntity!=null&&(!contactEntity.getName().equals(model.getName())&&!contactEntity.getPhone().equals(model.getPhone()))) {
+			Contact tempModel = new Contact();
 			tempModel.setName(model.getName());
 			tempModel.setPhone(model.getPhone());
 			tempModel.setId(null);
-	Contact a = contactDAO.insertExit(tempModel);
-	if (a!=null) {
-		return new ServiceResultBool("此联系人已存在");
-	}
-			
+			Contact a = contactDAO.insertExit(tempModel);
+			if (a!=null) {
+				return new ServiceResultBool("此联系人已存在");
+			}
+
 		}
 		Integer i = contactDAO.update(contact);
 		if (i > 0) {
-			
+
 			// 同时修改联系人共享表
 			ContactShare contactShare = new ContactShare();
 			contactShare.setAccountId(UserState.getLoginId());// 登录人id
@@ -256,7 +260,7 @@ if (contactEntity!=null&&(!contactEntity.getName().equals(model.getName())&&!con
 		Integer i = contactDAO.minusOperate(sort);
 		return i;
 	}
-	
+
 	public ServiceResultBool injectHighSeasByCusId(Integer customerId,int state){
 		ContactShare dto = new ContactShare();
 		dto.setCustomerId(customerId);

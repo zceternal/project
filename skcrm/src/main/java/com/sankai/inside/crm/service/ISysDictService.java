@@ -19,7 +19,8 @@ public interface ISysDictService {
 	 * @throws Exception
 	 */
 	public List<SysDict> findAllByPid(Integer pid) throws Exception;
-	
+	public List<SysDict> findAllByPid2(Integer pid) throws Exception;
+
 	/**
 	 * 根据pid列表+查询
 	 * @param dto
@@ -35,7 +36,7 @@ public interface ISysDictService {
 	 */
 	public boolean Insert(SysDict vo) throws Exception;
 	/**
-	 * 查询，用于修改 
+	 * 查询，用于修改
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -48,7 +49,7 @@ public interface ISysDictService {
 	 * @throws Exception
 	 */
 	public List<SysDictListByRecordTypeDTO> findByRecordType(String recordType) throws Exception;
-	
+
 	/**
 	 * 修改
 	 * @param vo
@@ -65,7 +66,7 @@ public interface ISysDictService {
 	 */
 	@CacheEvict(value="dictCache",key="#id")
 	public boolean doRemove(Integer id,Integer iOrder,Integer pid) throws Exception;
-	
+
 	/**
 	 * 获取信的排序值
 	 * @param pid
@@ -98,15 +99,15 @@ public interface ISysDictService {
 	 * @throws Exception
 	 */
 	public boolean updateOrder(Integer id,Integer iOrder,Integer pid,Integer move) throws Exception;
-	
 
-	
+
+
 	public List<Dict> getDictByType(int type);
-	
-	
+
+
 	@Cacheable(value="dictCache")
 	public Dict getDictById(int id);
-	
+
 	/**
 	 * 根据父级Id 获取所有子项集合
 	 * @return

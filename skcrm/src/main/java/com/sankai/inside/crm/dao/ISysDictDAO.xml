@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
 <mapper namespace="com.sankai.inside.crm.dao.ISysDictDAO">
 	<!--根据pid获取所有的内容 -->
 	<select id="findAllByPid" parameterType="java.lang.Integer"
-		resultType="com.sankai.inside.crm.entity.SysDict">
+			resultType="com.sankai.inside.crm.entity.SysDict">
 		SELECT id,`value`,`name` FROM sys_dict sd
 		WHERE
 		parent_id=#{pid} AND state!=-1
@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!--根据pid列表+查询 -->
 	<select id="findAllByPidSearch" parameterType="com.sankai.inside.crm.entity.SysDictSearchDTO"
-		resultType="com.sankai.inside.crm.entity.SysDictListDTO">
+			resultType="com.sankai.inside.crm.entity.SysDictListDTO">
 		SELECT id,`value`,`name`,remark,create_time,
 		(SELECT `name` FROM
 		sys_account WHERE id=sd.`create_id`) AS createName,
@@ -30,22 +30,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		ORDER BY sd.`order` ASC
 	</select>
+
+	<select id="findAllByPidSearch2" parameterType="com.sankai.inside.crm.entity.SysDictSearchDTO"
+			resultType="com.sankai.inside.crm.entity.SysDictListDTO">
+		select * from (
+		select id,parent_id,`value`,`name`,remark,create_time,pycode,pyname,state,`order`,
+		(SELECT `name` FROM sys_account WHERE id=t3.`create_id`) AS createName,
+		(SELECT `name` FROM sys_dict WHERE id=t3.`parent_id`) AS parentName
+		from (select
+		id,parent_id,`value`,`name`,remark,create_time,pycode,state,pyname,`order`,create_id,if(find_in_set(parent_id, @pid) >
+		0, @pid := concat(@pid, ',', id), 0) as childId
+		from ( select id,parent_id,`value`,`name`,remark,pycode,pyname,create_time,state,create_id,`order` from sys_dict t order
+		by id) t1,
+		(select @pid := #{pid} ) t2) t3 where childId != 0
+		) t4 where 1=1
+		ORDER BY `order` ASC
+	</select>
 	<!--增加 -->
 	<insert id="insert" parameterType="com.sankai.inside.crm.entity.SysDict"
-		useGeneratedKeys="true" keyProperty="id">
+			useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO
 		sys_dict(`value`,`name`,parent_id,`order`,create_id,create_time,state,remark,pycode,pyname)
 		VALUES(#{value},#{name},#{parentId},#{order},#{createId},#{createTime},0,#{remark},#{pycode},#{pyname})
 	</insert>
 	<!--查询，用于修改 -->
 	<select id="findById" parameterType="java.lang.Integer"
-		resultType="com.sankai.inside.crm.entity.SysDict">
+			resultType="com.sankai.inside.crm.entity.SysDict">
 		SELECT `value`,`name`,`order`,remark,parent_id AS parentId
 		FROM sys_dict WHERE id=#{id}
 	</select>
 	<!-- 查询，当前登录人的销售记录类型 -->
 	<select id="findByRecordType" parameterType="java.lang.String"
-		resultType="com.sankai.inside.crm.entity.SysDictListByRecordTypeDTO">
+			resultType="com.sankai.inside.crm.entity.SysDictListByRecordTypeDTO">
 		SELECT `id`,`name`,remark,parent_id AS parentId
 		FROM sys_dict WHERE id in(${value})
 	</select>
@@ -62,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	<!--获取新的排序 -->
 	<select id="getNewOrder" parameterType="java.lang.Integer"
-		resultType="java.lang.Integer">
+			resultType="java.lang.Integer">
 		SELECT MAX(`order`)+1 AS `order` FROM sys_dict sd
 		WHERE
 		parent_id=#{pid} and state!=-1
@@ -75,7 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	<!--判断是否存在，用于修改删除 -->
 	<select id="checkExists" parameterType="com.sankai.inside.crm.entity.CheckDictExistsDTO"
-		resultType="java.lang.Integer">
+			resultType="java.lang.Integer">
 		SELECT COUNT(1) FROM sys_dict WHERE `name`=#{name} AND
 		parent_id=#{pid} AND state=0
 		<if test="id!=null and id!=''">
@@ -86,7 +102,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!--上移/下移 start -->
 	<!--1. 获取移动目标的前一个/后一个目标的ID -->
 	<select id="getBrotherId" parameterType="com.sankai.inside.crm.entity.DictOrderDTO"
-		resultType="java.lang.Integer">
+			resultType="java.lang.Integer">
 		SELECT id FROM sys_dict WHERE parent_id=#{pid} AND
 		`order`=#{newOrder} AND state=0
 	</select>
@@ -104,7 +120,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!--修改小于本order的其它所有目标 ，用于删除 start -->
 	<!--查到大于自身ORDER的其他所有目标(用于删除) -->
 	<select id="findDictForDelete" parameterType="com.sankai.inside.crm.entity.DictOrderDTO"
-		resultType="com.sankai.inside.crm.entity.DictOrderDTO">
+			resultType="com.sankai.inside.crm.entity.DictOrderDTO">
 		SELECT id,`order` AS iOrder FROM sys_dict WHERE
 		`order`>#{iOrder} AND parent_id=#{pid} AND state=0
 	</select>
@@ -115,15 +131,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!--修改小于本order的其它所有目标 ，用于删除 end -->
 
 	<select id="findDictAllByType" resultType="com.sankai.inside.crm.entity.Dict"
-		parameterType="int">
-		SELECT id,`value`,`name`
+			parameterType="int">
+		SELECT id,`value`,`name`,`order`
 		FROM sys_dict
 		WHERE parent_id=#{value} AND state!=-1
 		ORDER BY `order` ASC
 	</select>
 
 	<select id="findDictById" resultType="com.sankai.inside.crm.entity.Dict"
-		parameterType="int">
+			parameterType="int">
 		SELECT `value`,`name`,`state`
 		FROM sys_dict
 		WHERE id=#{value}

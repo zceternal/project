@@ -15,7 +15,7 @@
 						class="colorred">*</em>：</label>
 						<div class="col-sm-20">
 							<input type="text"
-								class="form-control input300 validate[maxSize[10],required]"
+								class="form-control input300 validate[maxSize[20],required]"
 								id="name" name="name" placeholder="字典名称">
 						</div>
 					</div>
