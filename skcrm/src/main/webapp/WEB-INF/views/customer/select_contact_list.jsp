@@ -71,7 +71,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 				<!-- Default panel contents -->
 				<div class="panel-heading">
 
-					<form method="post" action="index" class="form-inline pl20" role="form"
+					<form method="post" action="select_contact_list" class="form-inline pl20" role="form"
 						id="contactIndex" data-ajax="true" data-ajax-mode="replace"
 						data-ajax-update="#contactDv">
 						<input id="contactRole" name="contactRole" type="hidden"
@@ -182,31 +182,14 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 										placeholder="请输入联系人姓名/客户名称/简拼/全拼" style="width: 280px !important" />
 								</div>
 								<button type="submit" class="btn btn_white20 dev-search-page">查找</button>
-								<div class="pull-right text-right mr15">
 
-									<!-- <div class="pull-right text-right mr5">
-										<a class="btn_blueg2 " href="#.html">发邮件</a>
-									</div> -->
-									<div class="pull-right text-right mr5">
-										<shiro:hasPermission name="contact_share">
-											<a class="btn_blueg2 font14" href="javascript:void(0)"
-												data-url="contactShare" data-id="contact_share"><i  class="icon_array_b"></i>共享</a>
-										</shiro:hasPermission>
-									</div>
-									<div class="pull-right text-right mr5">
-										<shiro:hasPermission name="contact_add">
-											<a class="btn_blueg2 font14" href="javascript:void(0)"
-												data-id="contact_add"><i  class="icon_array_a"></i>新增联系人</a>
-										</shiro:hasPermission>
-									</div>
-								</div>
 							</div>
 						</div>
 					</form>
 				</div>
 			</div>
 			<div id="contactDv">
-				<jsp:include page="_list.jsp"></jsp:include>
+				<jsp:include page="../contact/_list.jsp"></jsp:include>
 			</div>
 
 		</div>
@@ -225,7 +208,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 		src="../content/js/jquery.JPlaceholder.js"></script>
 
 	<script type="text/javascript"
-		src="../content/module/contact/contact.index.js"></script>
+		src="../content/module/customer/select.contact.js"></script>
 	<!--表单验证 s-->
 	<script type="text/javascript"
 		src="../content/js/jquery.validationEngine-zh_CN.js"></script>

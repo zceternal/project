@@ -8,6 +8,7 @@ import com.sankai.inside.crm.core.utils.DelHTMLUtil;
 import com.sankai.inside.crm.entity.*;
 import com.sankai.inside.crm.service.*;
 import com.sankai.inside.crm.web.core.UserState;
+import com.sankai.inside.crm.web.model.ContactSearchForm;
 import com.sankai.inside.crm.web.model.FormPage;
 import com.sankai.inside.crm.web.model.ValidAdd;
 import org.apache.shiro.authz.annotation.Logical;
@@ -652,10 +653,14 @@ public class CustomerController {
 		Customer customer = result.getData();
 
 		List<SysDict> cpfwList = sysDictService.findAllByPid(9);// 产品及服务
+		List<SysDict> khcglList = sysDictService.findAllByPid(83);// 客户成功率
+		List<SysDict> cqxzList = sysDictService.findAllByPid(10);// 客户出钱性质
 		List<SysDict> xsztList = sysDictService.findAllByPid(36);// 客户状态
 		List<SysDict> khlxList = sysDictService.findAllByPid(37);// 客户类型
-		List<SysDict> khkyList = sysDictService.findAllByPid(67);// 客户来源
-		List<SysDict> khcglList = sysDictService.findAllByPid(83);// 客户成功率
+		List<SysDict> khkyList = sysDictService.findAllByPid(67);// 客户来源-直销
+		List<SysDict> ptbbList = sysDictService.findAllByPid(83);// 平台版本
+		List<Contact> lxrList = contactService.getList("112");;// 客户来源-渠道
+		List<SysDict> xstjztList = sysDictService.findAllByPid2(11);// 销售推进状态
 
 		List<Address> list = this.addressServiceImpl.listAllProvs();// 地区 省
 		model.addAttribute("listProvs", list);
@@ -672,6 +677,11 @@ public class CustomerController {
 		model.addAttribute("khly", khkyList);
 		model.addAttribute("khcgl", khcglList);
 		model.addAttribute("cpfw", cpfwList);
+		model.addAttribute("ptbb", ptbbList);
+		model.addAttribute("cpfw", cpfwList);
+		model.addAttribute("lxr", lxrList);
+		model.addAttribute("cqxz", cqxzList);
+		model.addAttribute("xstjzt", xstjztList);
 
 		List<String> types = new ArrayList<String>();
 		if (customer.getType() != null && customer.getType().contains(",")) {
@@ -1183,5 +1193,152 @@ public class CustomerController {
 		}
 		return "customer/reply_list";
 	}
+
+
+	@RequiresAuthentication
+	@RequiresPermissions(value = "contact_list")
+	@RequestMapping(path = "select_contact_list", method = RequestMethod.GET)
+	public String selectContactList(Model model, FormPage page,HttpServletRequest request) {
+
+		/*
+		 * List<SysDict> xsztList = sysDictService.findAllByPid(36);//销售状态
+		 * List<SysDict> khlxList = sysDictService.findAllByPid(37);//客户类型
+		 */
+		ContactSearch search = new ContactSearch();
+		int loginId = UserState.getLoginId();
+
+		search.setAccountId(loginId);// 当前登录人
+		search.setContactRole("0");
+		search.setOrderField(null);
+		search.setOrderType("");
+		search.setIsqq(false);
+		search.setIsemail(false);
+		search.setIsphone(false);
+		search.setIswechat(false);
+		search.setOrderField("sort");
+		search.setOrderType("desc");
+		search.setCustomerType("-1");
+		search.setContent("");
+		search.setIsGetValue(0);
+		ServiceResult<Page<Contact>> result = null;
+
+
+		List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id
+		List<AccountOfDept> accListNew = new ArrayList<AccountOfDept>();
+		// 不是领导人查询自己创建的联系人，是否执行
+		boolean isSelect = true;
+		// 加载列表显示
+		List<String> accountIdList = new ArrayList<String>();
+		String myself = request.getParameter("myself");
+		if(myself!=null)
+		{
+			search.setIsGetValue(loginId);
+		}
+		if (accList != null) {
+			AccountOfDept first = accList.get(0);
+			// 是否是部门领导人
+			if (first.isMySelf() && first.getIsDeptManager() == 0) {
+				isSelect = false;
+				accListNew.add(first);
+				accountIdList.add(first.getId() + "");
+			} else {
+				for (AccountOfDept accountOfDept : accList) {
+					accountIdList.add(accountOfDept.getId() + "");
+				}
+				accListNew = accList;
+
+			}
+		}
+
+
+		if(StringUtils.isEmpty(myself))myself = "";
+		else accountIdList.add(String.valueOf(loginId));// 当前登录人
+		search.setPrincipal(accountIdList);
+		// 查询列表
+		if (isSelect) {
+			result = contactService.list(search, page.getPage(), page.getPageSize());
+		}
+		else{
+			// 根据登录id查询创建的客户-查询联系人
+			result = contactService.getConByLoginId(search, page.getPage(), page.getPageSize());
+		}
+		model.addAttribute("model", result.getData());
+		model.addAttribute("pager", new PageInfo<>(result.getData()));
+		model.addAttribute("dictLxr", sysDictService.getDictByType(33));
+		model.addAttribute("accList", accListNew);
+		model.addAttribute("myself", myself);//首页点击 联系人总数
+		model.addAttribute("isShowTop", false);// 是否显示置顶列
+
+		return "customer/select_contact_list";
+	}
+
+	@RequiresAuthentication
+	@RequiresPermissions(value = "contact_list")
+	@RequestMapping(path = "select_contact_list", method = RequestMethod.POST)
+	public String selectContactList(ContactSearchForm form, HttpServletRequest request, Model model, FormPage page) {
+
+		ContactSearch search = new ContactSearch();
+		search.setAccountId(UserState.getLoginId());// 当前登录人
+		search.setContactRole(request.getParameter("contactRole"));// 联系人角色
+
+		String customerType = request.getParameter("customerType") == "" ? "-1" : request.getParameter("customerType");
+		search.setCustomerType(customerType);// -1默认，1已关联客户,0未关联客户
+		search.setContent(request.getParameter("content"));
+		search.setOrderField(request.getParameter("orderField"));
+		search.setOrderType(request.getParameter("orderType"));
+		// 联系人详情
+		search.setIsqq(form.isQq());
+		search.setIsemail(form.isEmail());
+		search.setIsphone(form.isPhone());
+		search.setIswechat(form.isWechat());
+		search.setIsGetValue(0);
+		if (request.getParameter("orderField").contains("customerNameOrder"))
+			search.setOrderField("customerName");
+
+		ServiceResult<Page<Contact>> result = null;
+		// 不是领导人查询自己创建的联系人，是否执行
+		boolean isSelect = true;
+		// 销售负责人
+		int loginId = UserState.getLoginId();
+		boolean isDeptLeader = accountService.isLeaderById(loginId);// 是否是部门领导人
+		List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id
+		String[] accId = request.getParameterValues("accId");
+		List<String> accountIdList = new ArrayList<String>();
+
+		if (accId != null && accId.length > 0) {
+			for (String str : accId) {
+				accountIdList.add(str);
+			}
+
+		} else {
+			if (isDeptLeader) {
+				for (AccountOfDept accountOfDept : accList) {
+					accountIdList.add(accountOfDept.getId() + "");
+				}
+			} else {
+				accountIdList.add(String.valueOf(UserState.getLoginId()));
+				isSelect = false;
+			}
+		}
+		search.setPrincipal(accountIdList);
+		if (isSelect) {
+			search.setDeptManaer(accountService.isLeaderById(loginId));
+			result = contactService.list(search, page.getPage(), page.getPageSize());
+		}
+		else{
+			// 根据登录id查询创建的客户-查询联系人
+			result = contactService.getConByLoginId(search, page.getPage(), page.getPageSize());
+		}
+		model.addAttribute("model", result.getData());
+		model.addAttribute("pager", new PageInfo<>(result.getData()));
+		if (accId == null || accId.length == accList.size())
+			model.addAttribute("isShowTop", false);// 是否显示置顶列
+		else
+			model.addAttribute("isShowTop", true);// 是否显示置顶列
+
+		return "contact/_list";
+
+	}
+
 
 }

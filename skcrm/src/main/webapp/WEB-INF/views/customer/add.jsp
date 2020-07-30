@@ -217,9 +217,21 @@
 							</tr>
 							<tr>
 								<td>自己</td>
-								<td><a>+</a></td>
-								<td><a>+</a></td>
-								<td><a>+</a></td>
+								<td>
+									<span id="sp_channelPartner"></span>
+									<input type="hidden" name="channelPartner" id="hid_channelPartner">
+									<a href="javascript:void(0)" data-id="contact_list" data-bz="channelPartner">+</a>
+								</td>
+								<td>
+                                    <span id="sp_trustPerson"></span>
+                                    <input type="hidden" name="trustPerson" id="hid_trustPerson">
+                                    <a href="javascript:void(0)" data-id="contact_list" data-bz="trustPerson">+</a>
+                                </td>
+								<td>
+                                    <span id="sp_decisionPerson"></span>
+                                    <input type="hidden" name="decisionPerson" id="hid_decisionPerson">
+                                    <a href="javascript:void(0)" data-id="contact_list" data-bz="decisionPerson">+</a>
+                                </td>
 								<td>客户管理人</td>
 								<td></td>
 								<td></td>
@@ -229,7 +241,11 @@
 								<td></td>
 								<td></td>
 								<td></td>
-								<td><a>+</a></td>
+								<td>
+                                    <span id="sp_managePerson"></span>
+                                    <input type="hidden" name="managePerson" id="hid_managePerson">
+                                    <a href="javascript:void(0)" data-id="contact_list" data-bz="managePerson">+</a>
+                                </td>
 								<td>客户办事人</td>
 								<td></td>
 							</tr>
@@ -239,7 +255,11 @@
 								<td></td>
 								<td></td>
 								<td></td>
-								<td><a>+</a></td>
+								<td>
+                                    <span id="sp_handlePerson"></span>
+                                    <input type="hidden" name="handlePerson" id="hid_handlePerson">
+                                    <a href="javascript:void(0)" data-id="contact_list" data-bz="handlePerson">+</a>
+                                </td>
 								<td>客户业务人</td>
 							</tr>
 							<tr>
@@ -249,7 +269,11 @@
 								<td></td>
 								<td></td>
 								<td></td>
-								<td><a>+</a></td>
+								<td>
+                                    <span id="sp_professionalPerson"></span>
+                                    <input type="hidden" name="professionalPerson" id="hid_professionalPerson">
+                                    <a href="javascript:void(0)" data-id="contact_list" data-bz="professionalPerson">+</a>
+                                </td>
 							</tr>
 							</tbody>
 						</table>
@@ -265,7 +289,36 @@
 	<script type="text/javascript" src="../content/module/util/baidu_map_util.js"></script>
 <script type="text/javascript">
 
-
+	$("a[data-id=contact_list]").click(function() {
+		var $this = $(this);
+        var bz = $this.data("bz");
+		dialog = $.sk.open({
+			url : "select_contact_list",
+			width : 1000,
+			height : 600,
+			overflow:scroll,
+			title : "选择关系人",
+			buttons : [ {
+				html : "确定",
+				"class" : "btn btn-minier btn-success delay",
+				click : function() {
+					var ids = "";
+					var names = "";
+					$(":checkbox[class=sk_checkbox]:checked").each(function() {
+						var ck = $(this);
+						ids += ck.val() + ",";
+						names += ck.data("name") + ",";
+					});
+					if (names) {
+						names = names.substr(0, names.length - 1);
+						ids = ids.substr(0, ids.length - 1);
+					}
+					$("#sp_"+bz).text(names);
+					$("#hid_"+bz).val(ids);
+				}
+			} ]
+		});
+	});
 
 	$("#myformAdd").validationEngine({
 		ajaxFormValidationMethod : 'post',

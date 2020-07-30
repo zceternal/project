@@ -344,14 +344,19 @@
 		`source`, `url`, `phone`,
 		`province`, `city`, `country`, `address`,
 		`x_coord`, `y_coord`,
-		`remark`, `state`, `create_id`, `create_time`,name_simple_py,name_py,sales_success_rate)
+		`remark`, `state`, `create_id`, `create_time`,name_simple_py,name_py,sales_success_rate,
+		recommender,buy_service,cus_source,cus_source_type, synopsis,
+    business, pay_nature, follow_state, follow_state_details)
 		VALUES (#{name},
 		#{shortName}, #{status}, #{type}, #{source}, #{url},
 		#{phone},
 		#{province}, #{city}, #{country}, #{address}, #{xCoord},
 		#{yCoord},
 		#{remark}, '0', #{createId}, #{createTime},#{nameSimplePy},
-		#{namePy},#{salesSuccessRate})
+		#{namePy},#{salesSuccessRate}, #{recommender,jdbcType=VARCHAR},
+      #{buyService,jdbcType=VARCHAR}, #{cusSource,jdbcType=VARCHAR}, #{cusSourceType,jdbcType=VARCHAR},
+      #{synopsis,jdbcType=VARCHAR}, #{business,jdbcType=VARCHAR}, #{payNature,jdbcType=VARCHAR},
+      #{followState,jdbcType=VARCHAR}, #{followStateDetails,jdbcType=VARCHAR})
 
 	</insert>
 

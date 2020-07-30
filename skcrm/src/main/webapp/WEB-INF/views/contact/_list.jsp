@@ -42,7 +42,7 @@
 				<tr ondblclick="showDetails(${item.id })">
 					<td><label class="control-label check_home"> <label
 							class="label_check"> <input type="checkbox"
-								value=${item.id } name="id" data-customerid=${item.customerId } data-client="selectOption"
+								value=${item.id } data-name=${item.name} name="id" data-customerid=${item.customerId } data-client="selectOption"
 								class="sk_checkbox" />
 						</label>
 					</label></td>
