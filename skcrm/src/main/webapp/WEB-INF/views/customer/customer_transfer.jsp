@@ -16,6 +16,7 @@
 					<thead>
 						<tr>
 							<th width="20%">客户名称</th>
+							<th width="10%">产品及服务</th>
 							<th>地区</th>
 							<th width="10%">类型</th>
 							<th width="8%">操作</th>
@@ -35,6 +36,7 @@
 									<input type="hidden" name="customerShareId"
 									value="${cus.customerShareId }">
 								<td title="${cus.name }">${extf:subStr(cus.name,9) }</td>
+								<td >${cus.buyService }</td>
 								<td>${cus.address }</td>
 								<td>${cus.typeName==null?"暂无": cus.typeName}</td>
 								<td><a class="colorred delete" data-removeshare="${cus.customerId }" href="javascript:void(0)">移除</a></td>

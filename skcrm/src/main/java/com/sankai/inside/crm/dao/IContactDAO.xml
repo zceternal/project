@@ -32,7 +32,9 @@
 		c.hobby,
 		c.visiting_card AS visitingCard,
 		c.create_id AS createId,
-		c.create_time AS createTime
+		c.create_time AS createTime,
+		c.source,
+		c.referrer_person as referrerPerson
 		FROM
 		sys_contact AS c
 		where
@@ -67,7 +69,9 @@
 		c.visiting_card AS
 		visitingCard,
 		c.create_id AS createId,
-		c.create_time AS createTime
+		c.create_time AS createTime,
+		c.source,
+		c.referrer_person as referrerPerson
 		FROM
 		sys_contact AS c
 		LEFT JOIN sys_customer u ON c.customer_id = u.id
@@ -95,7 +99,9 @@
 		c.customer_id AS customerId,
 		c.wechat AS wechat,
 		c.name_simple_py,
-		c.name_py
+		c.name_py,
+		c.source,
+		c.referrer_person as referrerPerson
 		FROM
 		sys_contact c
 		LEFT JOIN sys_customer t ON c.customer_id =
@@ -124,7 +130,9 @@
 		sort,
 		c.customer_id AS customerId, c.wechat AS wechat,
 		c.name_simple_py, c.name_py,
-		c.create_id, cs.allow_account_id
+		c.create_id, cs.allow_account_id,
+		c.source,
+		c.referrer_person as referrerPerson
 		FROM
 		sys_contact c LEFT JOIN sys_customer t ON c.customer_id = t.id LEFT
 		JOIN sys_account a ON c.create_id = a.id
@@ -502,7 +510,9 @@
 		create_time,
 		sort,
 		name_simple_py,
-		name_py)
+		name_py,
+		source,
+		referrer_person)
 		VALUES(
 		#{name},
 		#{sex},
@@ -528,7 +538,9 @@
 		#{createTime},
 		#{sort},
 		#{nameSimplePy},
-		#{namePy})
+		#{namePy},
+		#{source},
+		#{referrerPerson})
 	</insert>
 
 

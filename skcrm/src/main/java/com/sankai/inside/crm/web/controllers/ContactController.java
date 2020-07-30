@@ -259,6 +259,7 @@ public class ContactController {
 	@RequestMapping(path = "add", method = RequestMethod.GET)
 	public String add(Model model) {
 		model.addAttribute("dictLxr", dictService.getDictByType(33));
+		model.addAttribute("dictLxrly", dictService.getDictByType(12));// 联系人来源
 		return "contact/add";
 	}
 

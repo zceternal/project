@@ -20,9 +20,10 @@
 					<thead>
 						<tr>
 							<th width="20%">客户名称</th>
+							<th width="10%">产品及服务</th>
 							<th>地区</th>
 							<th width="10%">类型</th>
-							<th width="20%">分享跟踪记录</th>
+							<th width="15%">分享跟踪记录</th>
 							<th width="8%">操作</th>
 						</tr>
 					</thead>
@@ -38,6 +39,7 @@
 								<input type="hidden" name="customerId" value="${cus.customerId }">
 								
 								<td title="${cus.name }">${extf:subStr(cus.name,9) }</td>
+								<td >${cus.buyService }</td>
 								<td>${cus.address }</td>
 								<td>${cus.typeName==null?"暂无": cus.typeName}</td>
 								<td>

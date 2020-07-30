@@ -15,8 +15,16 @@ public class CustomerShareCusDTO {
 	private Integer customerId;
 	private String address;
 	private String typeName;
-	
-	
+	private String buyService;
+
+	public String getBuyService() {
+		return buyService;
+	}
+
+	public void setBuyService(String buyService) {
+		this.buyService = buyService;
+	}
+
 	private List<CustomerContact> contacts;
 	
 	public String getName() {

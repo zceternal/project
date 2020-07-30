@@ -8,9 +8,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!--根据ID查找要共享的客户信息 -->
 	<select id="findCusById" parameterType="java.lang.Integer"
 		resultType="com.sankai.inside.crm.entity.CustomerShareCusDTO">
-		SELECT id AS customerId,`name`,(SELECT `name` FROM
+		SELECT id AS customerId,`name`,buy_service as buyService,(SELECT `name` FROM
 		`sys_prov_city_area_street` WHERE `code`=sc.province) AS
-		address,(SELECT `name` FROM sys_dict WHERE id=sc.type) AS typeName
+		address,(SELECT `name` FROM sys_dict WHERE id=sc.type) AS typeName,
+		(SELECT `name` FROM sys_dict WHERE id=sc.buy_service) AS buyService
 		FROM sys_customer AS sc WHERE id=#{cusid}
 	</select>
 	<!-- -->
