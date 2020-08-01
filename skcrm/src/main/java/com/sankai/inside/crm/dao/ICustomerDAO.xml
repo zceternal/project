@@ -26,7 +26,8 @@
 		SELECT id,name,short_name AS
 		shortName,status,type,source,url,phone,province,city,country,address,x_coord
 		AS xCoord,
-		y_coord AS yCoord,remark,
+		y_coord AS yCoord,remark,buy_service as buyService,follow_state as followState
+		,follow_state_details as followStateDetails,
 
 		(SELECT name FROM
 		sys_prov_city_area_street WHERE code=province) AS provinceName,

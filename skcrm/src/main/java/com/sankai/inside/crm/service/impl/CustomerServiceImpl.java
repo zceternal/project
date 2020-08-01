@@ -1,9 +1,7 @@
 package com.sankai.inside.crm.service.impl;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.Resource;
 
@@ -617,6 +615,38 @@ public class CustomerServiceImpl implements ICustomerService {
 		}
 		return new ServiceResultBool(false,"投入公海失败");
 		
+	}
+
+	@Override
+	public SysCustomerRelations getCustomerRelations(Integer cusId) {
+		SysCustomerRelations customerRelations = customerDAO.getCustomerRelations(cusId);
+		if (!Objects.isNull(customerRelations)) {
+			if (!Objects.isNull(customerRelations.getChannelPartner())) {
+				List<String> ids = Arrays.asList(customerRelations.getChannelPartner().split(","));
+				customerRelations.setChannelPartner(contactDAO.getNames(ids));
+			}
+			if (!Objects.isNull(customerRelations.getDecisionPerson())) {
+				List<String> ids = Arrays.asList(customerRelations.getDecisionPerson().split(","));
+				customerRelations.setDecisionPerson(contactDAO.getNames(ids));
+			}
+			if (!Objects.isNull(customerRelations.getHandlePerson())) {
+				List<String> ids = Arrays.asList(customerRelations.getHandlePerson().split(","));
+				customerRelations.setHandlePerson(contactDAO.getNames(ids));
+			}
+			if (!Objects.isNull(customerRelations.getManagePerson())) {
+				List<String> ids = Arrays.asList(customerRelations.getManagePerson().split(","));
+				customerRelations.setManagePerson(contactDAO.getNames(ids));
+			}
+			if (!Objects.isNull(customerRelations.getProfessionalPerson())) {
+				List<String> ids = Arrays.asList(customerRelations.getProfessionalPerson().split(","));
+				customerRelations.setProfessionalPerson(contactDAO.getNames(ids));
+			}
+			if (!Objects.isNull(customerRelations.getTrustPerson())) {
+				List<String> ids = Arrays.asList(customerRelations.getTrustPerson().split(","));
+				customerRelations.setTrustPerson(contactDAO.getNames(ids));
+			}
+		}
+		return customerRelations;
 	}
 
 	@Override

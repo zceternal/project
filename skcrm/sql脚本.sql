@@ -7,7 +7,14 @@ INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`,
 -- 1.3销售推进状态
 INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (11, '0', '销售推进状态', 0, 2, 53, sysdate(), 0, '销售推进状态', NULL, NULL);
 -- 1.4联系人来源
-INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (12, ''0'', ''联系人来源'', 0, 2, 53, sysdate(), 0, ''联系人来源'', NULL, NULL);
+INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (12, '0', '联系人来源', 0, 2, 53, sysdate(), 0, '联系人来源', NULL, NULL);
+-- 1.5任务象限
+INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (13, ''0'', ''任务象限'', 0, 2, 53, sysdate(), 0, ''任务象限'', NULL, NULL);
+-- 1.6任务状态
+INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (14, ''0'', ''任务状态'', 0, 2, 53, sysdate(), 0, ''任务状态'', NULL, NULL);
+-- 1.7任务性质
+INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (15, ''0'', ''任务性质'', 0, 2, 53, sysdate(), 0, ''任务性质'', NULL, NULL);
+
 -- 2、客户表新增字段
 ALTER TABLE `sys_customer`
 ADD COLUMN `buy_service` varchar(20) NULL COMMENT '产品及服务' AFTER `recommender`,
@@ -37,5 +44,56 @@ ALTER TABLE `sys_contact`
 ADD COLUMN `source` varchar(10) NULL COMMENT '联系人来源' ,
 ADD COLUMN `referrer_person` varchar(20) NULL COMMENT '推荐人名称',
 ADD COLUMN `buy_service` varchar(20) NULL COMMENT '产品及服务';
+-- 5、新增表结构-任务表
+CREATE TABLE `task` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_type` varchar(10) DEFAULT NULL COMMENT ''客户类型'',
+  `customer_id` int(11) DEFAULT NULL COMMENT ''现有客户id'',
+  `company_interior` varchar(20) DEFAULT NULL COMMENT ''公司内部'',
+  `supplier` varchar(50) DEFAULT NULL COMMENT ''供应商'',
+  `next_plan` varchar(500) DEFAULT NULL COMMENT ''下一步工作计划'',
+  `plan_standard` varchar(200) DEFAULT NULL COMMENT ''计划标准'',
+  `plan_executor` varchar(20) DEFAULT NULL COMMENT ''计划执行人'',
+  `execute_way` varchar(20) DEFAULT NULL COMMENT ''告知执行人方式'',
+  `quadrant` varchar(20) DEFAULT NULL COMMENT ''任务象限'',
+  `back_time` timestamp NULL DEFAULT NULL COMMENT ''计划反馈时间'',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT ''创建时间'',
+  `create_name` varchar(20) DEFAULT NULL COMMENT ''创建人'',
+  `modify_time` timestamp NULL DEFAULT NULL COMMENT ''最后修改时间'',
+  `modify_name` varchar(20) DEFAULT NULL COMMENT ''最后修改人'',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=''任务表'';
+-- 6、新增表结构-任务反馈表
+CREATE TABLE `task_feedback` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `task_id` int(11) DEFAULT NULL COMMENT ''任务id'',
+  `content` varchar(500) DEFAULT NULL COMMENT ''反馈内容'',
+  `summary` varchar(200) DEFAULT NULL COMMENT ''小结'',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT ''创建时间'',
+  `create_name` varchar(20) DEFAULT NULL COMMENT ''创建人'',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=''任务反馈表'';
+-- 7、新增表结构-任务反馈附件表
+CREATE TABLE `task_feedback_file` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `task_feedback_id` int(11) DEFAULT NULL COMMENT ''任务反馈id'',
+  `file_name` varchar(50) DEFAULT NULL COMMENT ''附件名称'',
+  `file_path` varchar(50) DEFAULT NULL COMMENT ''附件路径'',
+  `del_flag` int(2) DEFAULT NULL COMMENT ''删除标记：0正常；-1删除；'',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT ''创建时间'',
+  `create_name` varchar(20) DEFAULT NULL COMMENT ''创建人'',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=''任务反馈记录附件表'';
+-- 8、任务共享表
+CREATE TABLE `task_share` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `task_id` int(11) DEFAULT NULL COMMENT '任务id',
+  `account_id` int(11) DEFAULT NULL COMMENT '分享人id',
+  `allow_account_id` int(11) DEFAULT NULL COMMENT '允许人id',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `create_name` varchar(20) DEFAULT NULL COMMENT '创建人',
+  `del_flag` int(2) DEFAULT NULL COMMENT '删除标记：0正常，-1删除；',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务共享表';
 
 

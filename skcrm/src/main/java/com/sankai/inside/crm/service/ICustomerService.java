@@ -2,23 +2,10 @@ package com.sankai.inside.crm.service;
 
 import java.util.List;
 
+import com.sankai.inside.crm.entity.*;
 import org.apache.ibatis.javassist.runtime.Inner;
 
 import com.github.pagehelper.Page;
-import com.sankai.inside.crm.entity.Contact;
-import com.sankai.inside.crm.entity.Customer;
-import com.sankai.inside.crm.entity.CustomerAutocomplate;
-import com.sankai.inside.crm.entity.CustomerList;
-import com.sankai.inside.crm.entity.CustomerListSearch;
-import com.sankai.inside.crm.entity.CustomerShare;
-import com.sankai.inside.crm.entity.CustomerShareTransDTO;
-import com.sankai.inside.crm.entity.CustomerTransDTO;
-import com.sankai.inside.crm.entity.CustomerTransfer;
-import com.sankai.inside.crm.entity.HomeCount;
-import com.sankai.inside.crm.entity.UpdateCustomerStatusDTO;
-
-import com.sankai.inside.crm.entity.ServiceResult;
-import com.sankai.inside.crm.entity.ServiceResultBool;
 
 
 public interface ICustomerService {
@@ -265,6 +252,11 @@ public interface ICustomerService {
 	 * @return
 	 */
 	public ServiceResultBool injectHighSeasBatch(List<Integer> ids);
-	
-	
+
+	/**
+	 * 获取人际关系图
+	 * @param cusId
+	 * @return
+	 */
+	SysCustomerRelations getCustomerRelations(Integer cusId);
 }

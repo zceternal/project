@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib uri="/sankai-ext" prefix="elf"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -83,8 +82,8 @@
 			<div class="panel panel-default choose_block"
 				style="padding-top: 13px;">
 				<div class="panel-heading color333 mb0">
-				<%--	<em style="font-weight: bold; font-size: 22px;">${customerInfo.shortName}<span class="color999 font14 "
-					style="padding-bottom: 10px; display: inline-block;">(${customerInfo.name})</span></em>--%>
+					<em style="font-weight: bold; font-size: 22px;">${customerInfo.shortName}<span class="color999 font14 "
+					style="padding-bottom: 10px; display: inline-block;">(${customerInfo.name})</span></em>
 					<a class="btn btn_blueg2 font14 pull-right"  id="backIndex" 
 						style="margin-top: 10px" href="javascript:void(0);" onclick="goIndex();return false;">&lt;&lt;返回</a>
 				</div>
@@ -151,9 +150,10 @@
 								<div class="choose_block echart_block">
 
 									<h4 align="center" style="margin-top: 0px;">
-										客户信息
+										项目负责人
 										<div class="pull-right mr15">
-											<c:if test="${firstCustomerShare.allowAccountId==selfAccountId }">
+											<c:if
+												test="${firstCustomerShare.allowAccountId==selfAccountId }">
 												<a href="javascript:void(0)"
 													onclick="goShare('${customerId }')"> <span
 													class="glyphicon glyphicon-edit" aria-hidden="true"></span>
@@ -162,13 +162,29 @@
 										</div>
 									</h4>
 									<div style="padding-top: 10px; text-align: left;">
-										<em style="font-weight: bold; font-size: 22px;">${customerInfo.shortName}<%--<span class="color999 font14 " style="padding-bottom: 10px; display: inline-block;">${customerInfo.name}</span>--%></em>
+										<label class="color999 font12">销售第一负责人：</label>
+										<div style="overflow: hidden">
+											<div class="pull-left color333" style="">${firstCustomerShare.allowName}&nbsp;&nbsp;${firstCustomerShare.phone==null?"":firstCustomerShare.phone }</div>
+											<%-- <div class="pull-left">
+										   <label class="color999">电话：</label> ${firstCustomerShare.phone==null?"":firstCustomerShare.phone }
+										    </div> --%>
+										</div>
+
+									</div>
+									<form method="post" action="../cusRecord/refreshAllow"
+										data-ajax="true" data-ajax-mode="replace"
+										class="form-inline pl20" data-ajax-update="#allowList"
+										role="form" id="form_allow_search" method="post">
+										<input name="customerId" type="hidden" value="${customerId }" />
+									</form>
+									<div id="allowList" style="padding-top: 0px; text-align: left;">
+										<jsp:include page="allow_list.jsp"></jsp:include>
 									</div>
 									<div style="padding-top: 0px; text-align: left;">
-										<label class="color999 font12">产品及服务：${elf:getDictName(customerInfo.buyService)}</label>
-									</div>
-									<div style="padding-top: 0px; text-align: left;">
-										<label class="color999 font12">客户推进状态：${elf:getDictName(customerInfo.followState)}</label>
+										<label class="color999 font12">推荐人：</label>
+<%--										<div style="overflow: hidden">--%>
+<%--											<div class="pull-left color333" style="">${customerInfo.recommender}</div>--%>
+<%--										</div>--%>
 									</div>
 								</div>
 								<form method="post" action="../cusRecord/refreshContact"
@@ -177,10 +193,28 @@
 									role="form" id="form_contact_search" method="post">
 									<input name="customerId" type="hidden" value="${customerId }" />
 								</form>
-
 								<div class="choose_block echart_block" style="margin-top: 10px">
 									<h4 align="center" style="margin-top: 0px;">
-										人际关系图
+										客户联系人
+										<div class="pull-right mr15">
+											<a href="javascript:void(0)" id="addContactX"
+												data-cusname="${customerInfo.name}"
+												data-cusid="${customerId }"> <span
+												class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+											</a>
+										</div>
+									</h4>
+
+									<div id="contactList">
+										<jsp:include page="contact_list.jsp"></jsp:include>
+									</div>
+
+								</div>
+
+								<div class="choose_block echart_block" style="margin-top: 10px">
+
+									<h4 align="center" style="margin-top: 0px;">
+										客户基本信息
 										<div class="pull-right mr15">
 											<a href="javascript:void(0)" id="updateCusInfo"
 												data-cusid="${customerId }"> <c:if
@@ -190,10 +224,26 @@
 											</a>
 										</div>
 									</h4>
+									<form method="post" action="../cusRecord/refreshCusInfo"
+										data-ajax="true" data-ajax-mode="replace"
+										class="form-inline pl20" data-ajax-update="#cusInfoList"
+										role="form" id="form_cusInfo_search" method="post">
+										<input name="customerId" type="hidden" value="${customerId }" />
+									</form>
 									<div id="cusInfoList">
-										<jsp:include page="customer_relations.jsp"></jsp:include>
+										<jsp:include page="cusinfo_list.jsp"></jsp:include>
 									</div>
 								</div>
+
+								<div class="choose_block echart_block" style="margin-top: 10px">
+									<h4 align="center" style="margin-top: 0px;">客户日志</h4>
+
+									<div id="contactList">
+										<jsp:include page="customerlog_list.jsp"></jsp:include>
+									</div>
+
+								</div>
+
 							</div>
 
 							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12"

@@ -125,5 +125,12 @@ import org.apache.ibatis.annotations.Param;
 	 * @return
 	 */
 	 Integer DeleteBatchShare(Integer customerId);
-	
+
+	 /**
+	  * 获取名称，多个用逗号分隔
+	  * @param ids
+	  * @return
+	  */
+	 String getNames(@Param("ids") List<String> ids);
+
 }

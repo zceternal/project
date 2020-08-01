@@ -452,8 +452,12 @@ public class CustomerController {
 
 		// 所有的发布者
 		List<CustomerRecordDTO> allPublishers = this.customerRecordServiceImpl.findAllpublishers(customerId,0);
+		// 人际关系图
+		SysCustomerRelations customerRelations = this.customerServiceImpl.getCustomerRelations(customerId);
+
 		log.error("allPublishers=====" + allPublishers);
 		mav.addObject("customerInfo", customerInfo);
+		mav.addObject("customerRelations", customerRelations);
 		mav.addObject("customerShares", customerShares);
 		mav.addObject("firstCustomerShare", firstCustomerShare);
 		mav.addObject("contacts", contacts);
