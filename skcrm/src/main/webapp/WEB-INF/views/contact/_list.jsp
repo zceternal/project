@@ -20,12 +20,15 @@
 				<th width="5%">置顶<div id="top" class="empty" ></div></th>
 				</c:if>
 				<th width="6%">姓名<div id="name" class="dev-order up"></div></th>
-				<th width="9%">职务<div id="position" class="dev-order up"></div></th>
+				<th width="6%">性别<div id="sex" class="dev-order up"></div></th>
 				<th width="5%">手机<div id="phone" class="empty" ></div></th>
+				<th width="7%">联系人角色<div id="role" class="dev-order up"></div></th>
+				<th width="7%">联系人来源<div id="source" class="dev-order up"></div></th>
 				<!-- <th width="4%">QQ</th> -->
-				<th width="200px;">邮箱<div id="email" class="empty" ></div></th>	
-				<th width="15%">所属客户<div id="customerNameOrder" class="dev-order up"></div></th>
-				<th width="7%">角色<div id="role" class="dev-order up"></div></th>
+<%--				<th width="200px;">邮箱<div id="email" class="empty" ></div></th>	--%>
+				<th width="15%">单位名称<div id="customerNameOrder" class="dev-order up"></div></th>
+				<th width="9%">职务<div id="position" class="dev-order up"></div></th>
+				<th width="9%">产品与服务<div id="buyService" class="dev-order up"></div></th>
 				<!-- <th width="8%">创建人</th> -->
 				<th width="10%">创建日期<div id="createTime" class="dev-order up"></div></th>
 				<th >操作<div id="opeator" class="empty" ></div></th>
@@ -52,33 +55,27 @@
 							data-sort="${item.sort }" class="colorblue">置顶</a></span></td>
 								</c:if>
 					<td>${item.name }</td>
-					<td title="${item.position }">${extf:subStr(item.position,5) }</td>
+					<td>${item.sex }</td>
 					<td>${item.phone }</td>
-					<%-- <td>${item.qq }</td> --%>
-					<td>${item.email }</td>
-					<td title="${item.customerName }">${extf:subStr(item.customerName,9)}</td>
 					<td>${elf:getDictName(item.role) }</td>
-					<%-- <td>${item.CName }</td> --%>
+					<td>${elf:getDictName(item.source) }
+						<c:if test="${item.source == '150'}">
+							-${item.referrerPerson}</td>
+						</c:if>
+					<%-- <td>${item.qq }</td> --%>
+<%--					<td>${item.email }</td>--%>
+					<td title="${item.customerName }">${extf:subStr(item.customerName,9)}</td>
+					<td title="${item.position }">${extf:subStr(item.position,5) }</td>
+					<td title="${elf:getDictName(item.buyService) }">${elf:getDictName(item.buyService) }</td>
 					<td><fmt:formatDate value="${item.createTime}"
 							pattern="yyyy-MM-dd" /></td>
-
 					<td>
-					<%-- <span> <shiro:hasPermission name="contact_details">
-								<a href="javascript:void(0)" data-details-id="${item.id }"
-									data-title="${item.name }" class="colorblue" title="查看详情" >查看</a>
-							</shiro:hasPermission>
-					</span> --%>
 					 <span class="colorblue edit"> <shiro:hasPermission
 								name="contact_edit">
 								<a href="javascript:void(0)" data-edit-id="${item.id }"
 									data-title="${item.name }" class="colorblue">修改</a>
 							</shiro:hasPermission>
-					</span> 
-					<%-- <shiro:hasPermission name="contact_remove">
-							<span class="colorred delete" data-delete-id="${item.id }"
-								data-title="${item.name }">删除</span>
-						</shiro:hasPermission> --%>
-						
+					</span>
 						</td>
 				</tr>
 			</c:forEach>

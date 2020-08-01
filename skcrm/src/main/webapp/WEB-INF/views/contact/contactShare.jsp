@@ -19,8 +19,8 @@
 								<thead>
 									<tr>
 										<th width="12%">姓名</th>
+										<th width="32%">单位名称</th>
 										<th >职务</th>
-										<th width="32%">所属客户</th>
 										<th width="10%">手机</th>
 										<th width="8%">操作</th>
 									</tr>
@@ -35,8 +35,8 @@
 										<tr>
 										    <input type="hidden" name="contactId" value="${item.id}|${item.customerId }">										    
 											<td>${item.name }</td>
-											<td>${item.position }</td>
 											<td>${item.customerName }</td>
+											<td>${item.position }</td>
 											<td>${item.phone }</td>
 											<td style="display: none;">${item.customerId }</td>
 											<td><span class="colorred delete"

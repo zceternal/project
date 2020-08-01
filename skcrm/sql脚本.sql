@@ -35,6 +35,7 @@ CREATE TABLE `sys_customer_relations` (
 -- 4、联系人表新增字段
 ALTER TABLE `sys_contact`
 ADD COLUMN `source` varchar(10) NULL COMMENT '联系人来源' ,
-ADD COLUMN `referrer_person` varchar(20) NULL COMMENT '推荐人名称';
+ADD COLUMN `referrer_person` varchar(20) NULL COMMENT '推荐人名称',
+ADD COLUMN `buy_service` varchar(20) NULL COMMENT '产品及服务';
 
 

@@ -34,7 +34,8 @@
 		c.create_id AS createId,
 		c.create_time AS createTime,
 		c.source,
-		c.referrer_person as referrerPerson
+		c.referrer_person as referrerPerson,
+		c.buy_service
 		FROM
 		sys_contact AS c
 		where
@@ -71,7 +72,8 @@
 		c.create_id AS createId,
 		c.create_time AS createTime,
 		c.source,
-		c.referrer_person as referrerPerson
+		c.referrer_person as referrerPerson,
+		c.buy_service
 		FROM
 		sys_contact AS c
 		LEFT JOIN sys_customer u ON c.customer_id = u.id
@@ -101,7 +103,8 @@
 		c.name_simple_py,
 		c.name_py,
 		c.source,
-		c.referrer_person as referrerPerson
+		c.referrer_person as referrerPerson,
+		c.buy_service
 		FROM
 		sys_contact c
 		LEFT JOIN sys_customer t ON c.customer_id =
@@ -132,7 +135,8 @@
 		c.name_simple_py, c.name_py,
 		c.create_id, cs.allow_account_id,
 		c.source,
-		c.referrer_person as referrerPerson
+		c.referrer_person as referrerPerson,
+		c.buy_service
 		FROM
 		sys_contact c LEFT JOIN sys_customer t ON c.customer_id = t.id LEFT
 		JOIN sys_account a ON c.create_id = a.id
@@ -220,9 +224,12 @@
 		customerName,
 		td.CName AS CName,
 		td.createTime AS createTime,
-		td.role AS
-		role,
-		td.sort AS sort
+		td.role AS role,
+		td.sort AS sort,
+		td.source,
+		td.referrerPerson,
+		td.buyService,
+		td.sex
 		FROM
 		sys_contact_share
 		cs
@@ -265,7 +272,10 @@
 		c.name_simple_py,
 		t.name as tname,
 		t.name_py as tname_py,
-		t.name_simple_py as tname_simple_py
+		t.name_simple_py as tname_simple_py,
+		c.source,
+		c.referrer_person as referrerPerson,
+		c.buy_service as buyService
 		FROM
 		sys_contact c
 		LEFT JOIN
@@ -486,9 +496,9 @@
 			useGeneratedKeys="true" keyProperty="id">
 		INSERT into
 		sys_contact(
-		name,
+		`name`,
 		sex,
-		position,
+		`position`,
 		department,
 		customer_id,
 		role,
@@ -512,7 +522,8 @@
 		name_simple_py,
 		name_py,
 		source,
-		referrer_person)
+		referrer_person,
+		buy_service)
 		VALUES(
 		#{name},
 		#{sex},
@@ -540,7 +551,8 @@
 		#{nameSimplePy},
 		#{namePy},
 		#{source},
-		#{referrerPerson})
+		#{referrerPerson},
+		#{buyService})
 	</insert>
 
 
@@ -587,7 +599,10 @@
 		visiting_card=#{visitingCard},
 		create_id=#{createId},
 		name_simple_py=#{nameSimplePy},
-		name_py=#{namePy}
+		name_py=#{namePy},
+		source=#{source},
+		referrer_person=#{referrerPerson},
+		buy_service=#{buyService}
 		where id=#{id}
 	</update>
 	<!-- 获取最大的排序ID -->

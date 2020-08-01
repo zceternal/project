@@ -88,7 +88,7 @@
 
 
 				<div class="form-group">
-					<label for="lastname" class="col-sm-2 control-label">角色关系：</label>
+					<label for="lastname" class="col-sm-2 control-label">联系人角色：</label>
 					<div class="col-sm-10 favorite">
 						<div>
 							<c:forEach items="${dictLxr }" var="item">
@@ -103,6 +103,50 @@
 										</c:otherwise>
 									</c:choose>
 
+								</label>
+							</c:forEach>
+
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="lastname" class="col-sm-2 control-label">联系人来源：</label>
+					<div class="col-sm-10 favorite">
+						<div>
+							<c:forEach items="${dictLxrly }" var="item">
+								<label class="checkbox-inline "> <c:choose>
+									<c:when test="${model.source==item.id}">
+										<input type="radio" name="source" value="${item.id }" checked>
+										${item.name }
+									</c:when>
+									<c:otherwise>
+										<input type="radio" name="source" value="${item.id }">
+										${item.name }
+									</c:otherwise>
+								</c:choose>
+								</label>
+								<c:if test="${item.id==150}">
+									<input type="text" id="referrerPerson" name="referrerPerson" value="${model.referrerPerson}" class="form-control input100 validate[maxSize[10]]">
+								</c:if>
+							</c:forEach>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="lastname" class="col-sm-2 control-label">产品与服务：</label>
+					<div class="col-sm-10 favorite">
+						<div>
+							<c:forEach items="${cpfwList }" var="item">
+								<label class="checkbox-inline "> <c:choose>
+									<c:when test="${model.buyService==item.id}">
+										<input type="radio" name="buyService" value="${item.id }" checked>
+										${item.name }
+									</c:when>
+									<c:otherwise>
+										<input type="radio" name="buyService" value="${item.id }">
+										${item.name }
+									</c:otherwise>
+								</c:choose>
 								</label>
 							</c:forEach>
 

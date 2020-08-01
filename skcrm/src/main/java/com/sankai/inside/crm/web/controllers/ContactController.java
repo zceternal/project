@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
+import com.sankai.inside.crm.entity.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -37,15 +38,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.mchange.v2.async.StrandedTaskReporting;
-import com.sankai.inside.crm.entity.AccountOfDept;
-import com.sankai.inside.crm.entity.Contact;
-import com.sankai.inside.crm.entity.ContactAutocomplate;
-import com.sankai.inside.crm.entity.ContactSearch;
-import com.sankai.inside.crm.entity.CustomerAutocomplate;
-import com.sankai.inside.crm.entity.DeptTable;
-import com.sankai.inside.crm.entity.SearchCustomerList;
-import com.sankai.inside.crm.entity.ServiceResult;
-import com.sankai.inside.crm.entity.ServiceResultBool;
 import com.sankai.inside.crm.service.AccountService;
 import com.sankai.inside.crm.service.ContactService;
 import com.sankai.inside.crm.service.ICustomerShareService;
@@ -76,10 +68,6 @@ public class ContactController {
 	@RequestMapping(path = "index", method = RequestMethod.GET)
 	public String index(Model model, FormPage page,HttpServletRequest request) {
 
-		/*
-		 * List<SysDict> xsztList = sysDictService.findAllByPid(36);//销售状态
-		 * List<SysDict> khlxList = sysDictService.findAllByPid(37);//客户类型
-		 */
 		ContactSearch search = new ContactSearch();
 		int loginId = UserState.getLoginId();
 		
@@ -96,23 +84,8 @@ public class ContactController {
 		search.setCustomerType("-1");
 		search.setContent("");
 		search.setIsGetValue(0);
-		// 获取部门的所有成员
-		/*
-		 * int loginId = UserState.getLoginId(); boolean isDeptLeader =
-		 * accountService.isLeaderById(loginId);// 是否是部门领导人 List<AccountOfDept>
-		 * accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id
-		 * List<AccountOfDept> accListNew = new ArrayList<AccountOfDept>();
-		 * //加载列表显示 if (accList != null) { AccountOfDept first = accList.get(0);
-		 * if (first.isMySelf() && first.getIsDeptManager() == 0)
-		 * accListNew.add(first); else accListNew = accList; }
-		 * //判断是否是领导，用来显示列表数据 if (isDeptLeader) { search.setPrincipal(null); }
-		 * else { List<String> accountIdList = new ArrayList<String>();
-		 * accountIdList.add(String.valueOf(loginId));
-		 * search.setPrincipal(accountIdList); }
-		 */
 		ServiceResult<Page<Contact>> result = null;
 
-		
 		List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id
 		List<AccountOfDept> accListNew = new ArrayList<AccountOfDept>();
 		// 不是领导人查询自己创建的联系人，是否执行
@@ -136,11 +109,9 @@ public class ContactController {
 					accountIdList.add(accountOfDept.getId() + "");
 				}
 				accListNew = accList;
-
 			}
 		}
-		
-		
+
 		if(StringUtils.isEmpty(myself))myself = "";
 		else accountIdList.add(String.valueOf(loginId));// 当前登录人
 		search.setPrincipal(accountIdList);
@@ -260,6 +231,7 @@ public class ContactController {
 	public String add(Model model) {
 		model.addAttribute("dictLxr", dictService.getDictByType(33));
 		model.addAttribute("dictLxrly", dictService.getDictByType(12));// 联系人来源
+		model.addAttribute("cpfwList", dictService.getDictByType(9));// 产品及服务
 		return "contact/add";
 	}
 
@@ -308,6 +280,8 @@ public class ContactController {
 		model.addAttribute("birthday", birthday);
 		model.addAttribute("age", age);
 		model.addAttribute("dictLxr", dictService.getDictByType(33));
+		model.addAttribute("dictLxrly", dictService.getDictByType(12));// 联系人来源
+		model.addAttribute("cpfwList", dictService.getDictByType(9));// 产品及服务
 		model.addAttribute("model", result.getData());
 		model.addAttribute("type", type);
 		return "contact/edit";

@@ -36,7 +36,34 @@ public class Contact {
 	private Integer sort;
 	private String nameSimplePy;
 	private String namePy;
-	
+	private String source;
+	private String referrerPerson;
+	/**产品及服务*/
+	private String buyService;
+
+	public String getBuyService() {
+		return buyService;
+	}
+
+	public void setBuyService(String buyService) {
+		this.buyService = buyService;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getReferrerPerson() {
+		return referrerPerson;
+	}
+
+	public void setReferrerPerson(String referrerPerson) {
+		this.referrerPerson = referrerPerson;
+	}
 	public String getNameSimplePy() {
 		return nameSimplePy;
 	}

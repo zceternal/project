@@ -89,15 +89,24 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="lastname" class="col-sm-2 control-label">联系人来源：</label>
+				<label for="lastname" class="col-sm-2 control-label">联系人来源：</label>
+				<div class="col-sm-10 favorite">
+					<c:forEach items="${dictLxrly }" var="item" varStatus="status">
+						<label class="checkbox-inline ">
+							<input type="radio" name="source" value="${item.id }" ${status.index==0?'checked':'' }> ${item.name }
+							<c:if test="${item.id==150}">
+								<input type="text" id="referrerPerson" name="referrerPerson" class="form-control input100 validate[maxSize[10]]">
+							</c:if>
+						</label>
+					</c:forEach>
+				</div>
+			</div>
+				<div class="form-group">
+					<label for="lastname" class="col-sm-2 control-label">产品与服务：</label>
 					<div class="col-sm-10 favorite">
-						<c:forEach items="${dictLxrly }" var="item" varStatus="status">
-							<label class="checkbox-inline "> <input type="radio"
-																	name="role" value="${item.id }"
-								${status.index==0?'checked':'' }> ${item.name }
-								<c:if test="${item.id==150}">
-									<input type="text" id="referrerPerson" class="form-control input100 validate[maxSize[10]]">
-								</c:if>
+						<c:forEach items="${cpfwList }" var="item" varStatus="status">
+							<label class="checkbox-inline ">
+								<input type="radio" name="buyService" value="${item.id }" ${status.index==0?'checked':'' }> ${item.name }
 							</label>
 						</c:forEach>
 					</div>
