@@ -48,6 +48,75 @@ public class Task {
     /**最后修改人*/
     private String modifyName;
 
+    /**任务状态*/
+    private String status;
+    /**是否置顶：0否；1是*/
+    private Integer top;
+    private Integer source;
+    /**创建人id*/
+    private Integer createId;
+    /**任务性质*/
+    private String taskNature;
+    /**指派者*/
+    private String assignPerson;
+    /**指派时间*/
+    private Date assignTime;
+
+    public String getTaskNature() {
+        return taskNature;
+    }
+
+    public void setTaskNature(String taskNature) {
+        this.taskNature = taskNature;
+    }
+
+    public String getAssignPerson() {
+        return assignPerson;
+    }
+
+    public void setAssignPerson(String assignPerson) {
+        this.assignPerson = assignPerson;
+    }
+
+    public Date getAssignTime() {
+        return assignTime;
+    }
+
+    public void setAssignTime(Date assignTime) {
+        this.assignTime = assignTime;
+    }
+
+    public Integer getSource() {
+        return source;
+    }
+
+    public void setSource(Integer source) {
+        this.source = source;
+    }
+
+    public Integer getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Integer createId) {
+        this.createId = createId;
+    }
+
+    public Integer getTop() {
+        return top;
+    }
+
+    public void setTop(Integer top) {
+        this.top = top;
+    }
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     /**
      * 
      * @return id 
@@ -287,4 +356,6 @@ public class Task {
     public void setModifyName(String modifyName) {
         this.modifyName = modifyName == null ? null : modifyName.trim();
     }
+
+
 }

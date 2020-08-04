@@ -1,6 +1,6 @@
 package com.sankai.inside.crm.dao;
 
-import com.sankai.inside.crm.entity.Task;
+import com.sankai.inside.crm.entity.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -43,4 +43,6 @@ public interface ITaskDAO {
      * @mbggenerated 2020-08-01
      */
     int updateByPrimaryKey(Task record);
+
+    List<Task> selectList(TaskListSearch search);
 }

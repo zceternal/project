@@ -17,69 +17,17 @@
     <result column="create_name" property="createName" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_name" property="modifyName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="top" property="top" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="task_nature" property="taskNature" jdbcType="VARCHAR" />
+    <result column="assign_person" property="assignPerson" jdbcType="VARCHAR" />
+    <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
   <sql id="Base_Column_List" >
     id, customer_type, customer_id, company_interior, supplier, next_plan, plan_standard, 
     plan_executor, execute_way, quadrant, back_time, create_time, create_name, modify_time, 
-    modify_name
+    modify_name,status,top,create_id,source,task_nature,assign_person,assign_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -96,13 +44,16 @@
       company_interior, supplier, next_plan, 
       plan_standard, plan_executor, execute_way, 
       quadrant, back_time, create_time, 
-      create_name, modify_time, modify_name
+      create_name, modify_time, modify_name,status,top,create_id,source
+      ,task_nature,assign_person,assign_time
       )
     values (#{id,jdbcType=INTEGER}, #{customerType,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER}, 
       #{companyInterior,jdbcType=VARCHAR}, #{supplier,jdbcType=VARCHAR}, #{nextPlan,jdbcType=VARCHAR}, 
       #{planStandard,jdbcType=VARCHAR}, #{planExecutor,jdbcType=VARCHAR}, #{executeWay,jdbcType=VARCHAR}, 
       #{quadrant,jdbcType=VARCHAR}, #{backTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createName,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyName,jdbcType=VARCHAR}
+      #{createName,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyName,jdbcType=VARCHAR},-
+      #{createName,jdbcType=VARCHAR},#{createId,jdbcType=INTEGER},#{source,jdbcType=INTEGER}
+      , #{taskNature,jdbcType=VARCHAR}, #{assignPerson,jdbcType=VARCHAR}, #{assignTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.sankai.inside.crm.entity.Task" >
@@ -153,6 +104,27 @@
       <if test="modifyName != null" >
         modify_name,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="top != null" >
+        top,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="taskNature != null" >
+        task_nature,
+      </if>
+      <if test="assignPerson != null" >
+        assign_person,
+      </if>
+      <if test="assignTime != null" >
+        assign_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -199,6 +171,27 @@
       </if>
       <if test="modifyName != null" >
         #{modifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="top != null" >
+        #{top,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null" >
+        #{create_id,jdbcType=INTEGER},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="taskNature != null" >
+        #{taskNature,jdbcType=VARCHAR},
+      </if>
+      <if test="assignPerson != null" >
+        #{assignPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="assignTime != null" >
+        #{assignTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -247,6 +240,27 @@
       <if test="modifyName != null" >
         modify_name = #{modifyName,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="top != null" >
+        top = #{top,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="taskNature != null" >
+        task_nature = #{taskNature,jdbcType=VARCHAR},
+      </if>
+      <if test="assignPerson != null" >
+        assign_person = #{assignPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="assignTime != null" >
+        assign_time = #{assignTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -261,11 +275,39 @@
       plan_executor = #{planExecutor,jdbcType=VARCHAR},
       execute_way = #{executeWay,jdbcType=VARCHAR},
       quadrant = #{quadrant,jdbcType=VARCHAR},
+      source = #{source,jdbcType=INTEGER},
       back_time = #{backTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_name = #{createName,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      modify_name = #{modifyName,jdbcType=VARCHAR}
+      modify_name = #{modifyName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      top = #{top,jdbcType=INTEGER},
+      create_id = #{createId,jdbcType=INTEGER},
+      task_nature = #{taskNature,jdbcType=VARCHAR},
+      assign_person = #{assignPerson,jdbcType=VARCHAR},
+      assign_time = #{assignTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.sankai.inside.crm.entity.TaskListSearch" >
+    select
+    <include refid="Base_Column_List" />
+    from task
+   <where>
+
+    <if test="accountId != '-1'">
+      create_id = #{accountId}
+    </if>
+     <if test="quadrant != '-1'">
+      and quadrant = #{quadrant}
+     </if>
+     <if test="status != '-1'">
+       and status = #{status}
+     </if>
+     <if test="source != '-1'">
+       and source = #{source}
+     </if>
+   </where>
+  </select>
 </mapper>

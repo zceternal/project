@@ -46,7 +46,12 @@
 			<li class="center"><a href="javascript:;" data-id="contact"
 				data-link="contact/index"><i class="icon_multisite"></i><span>联系人管理</span></a></li>
 		</shiro:hasPermission>
-		
+
+	<shiro:hasPermission name="task_index">
+		<li class="center"><a href="javascript:;" data-id="setting"
+		data-link="task/index"><i class="icon_invoice"></i><span>任务管理</span></a></li>
+	</shiro:hasPermission>
+
 		 <shiro:hasPermission name="highseas_list">
 			<li class="center"><a href="javascript:;" data-id="highSeas"
 				data-link="highseas/index.html"><i class="icon_livemanage"></i><span>公海管理</span></a></li>

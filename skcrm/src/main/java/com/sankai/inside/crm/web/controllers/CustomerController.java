@@ -617,8 +617,6 @@ public class CustomerController {
 		return "customer/add";
 	}
 
-
-
 	@RequiresAuthentication
 	@RequiresPermissions(value = "customer_add")
 	@RequestMapping(path = "add", method = RequestMethod.POST)

@@ -79,6 +79,14 @@
         key: "highseas_transfer"
     }
     ]
+},
+{
+    groupName: "任务管理",
+    items: [{
+        name: "任务列表",
+        key: "task_index"
+    }
+    ]
 }
 ]
 
