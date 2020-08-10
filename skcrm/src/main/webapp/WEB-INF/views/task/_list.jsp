@@ -6,6 +6,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <%@ taglib uri="/sankai-fun" prefix="extf"%>
+<%@ taglib uri="/sankai-ext" prefix="elf"%>
 
 
 <table class="table table-hover ">
@@ -57,10 +58,10 @@
 			</tr>
 		</c:if>
 		<c:forEach var="item" items="${model }">
-			<tr ondblclick="showDetail('${item.taskId }','${item.allowAccountName==loginName }')">
+			<tr >
 				<td><label class="control-label check_home">
 					<label class="label_check">
-					<input type="checkbox" data-client="checkbox_share" data-shareid="${item.shareId }" id="check_${item.id }" class="sk_checkbox" />
+					<input type="checkbox" data-client="checkbox_share" data-shareid="${item.id }" id="check_${item.id }" class="sk_checkbox" />
 					</label>
 				</label></td>
 				<c:if test="${isShowTop || myself.equals('1')}">
@@ -70,13 +71,13 @@
 						data-order="${item.order }"
 							class="colorblue">置顶</a></span></td>
 				</c:if>
-				<td  data-taskid="${item.id }">${item.quadrant }</td>
-				<td  data-taskid="${item.id }">${item.nextPlan }</td>
-				<td  data-taskid="${item.id }">${item.planStandard}</td>
-				<td  data-taskid="${item.id }">${item.planExecutor }</td>
+				<td  data-taskid="${item.id }">${elf:getDictName(item.quadrant) }</td>
+				<td  data-taskid="${item.id }" title="${item.nextPlan}">${extf:subStr(item.nextPlan,9) }</td>
+				<td  data-taskid="${item.id }" title="${item.planStandard}">${extf:subStr(item.planStandard,9)}</td>
+				<td  data-taskid="${item.id }">${item.planExecutorAll }</td>
 				<td  data-taskid="${item.id }"><fmt:formatDate value="${item.backTime }" pattern="yyyy-MM-dd" /></td>
-				<td  data-taskid="${item.id }">${item.taskNature}</td>
-				<td  data-taskid="${item.id }">${item.assignPerson}</td>
+				<td  data-taskid="${item.id }">${elf:getDictName(item.taskNature)}</td>
+				<td  data-taskid="${item.id }">${item.assignPerson==null?"自己":item.assignPerson}</td>
 				<td  data-taskid="${item.id }"><fmt:formatDate value="${item.assignTime }" pattern="yyyy-MM-dd" /></td>
 				<td  data-taskid="${item.id }">${item.status}</td>
 			</tr>

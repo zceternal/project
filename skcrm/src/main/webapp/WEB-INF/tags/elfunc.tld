@@ -12,7 +12,25 @@
 		<function-signature>java.lang.String sex(java.lang.Integer)</function-signature>
 		<example>${elf:sex(val)}</example>
 	</function>
-	
+
+	<function>
+		<description>提醒方式</description>
+		<name>backWay</name>
+		<function-class>com.sankai.inside.crm.web.core.ELFuncUtil
+		</function-class>
+		<function-signature>java.lang.String backWay(java.lang.String))</function-signature>
+		<example>${elf:backWay(val)}</example>
+	</function>
+
+	<function>
+		<description>告知执行人方式</description>
+		<name>executeWay</name>
+		<function-class>com.sankai.inside.crm.web.core.ELFuncUtil
+		</function-class>
+		<function-signature>java.lang.String executeWay(java.lang.String))</function-signature>
+		<example>${elf:executeWay(val)}</example>
+	</function>
+
 	<function>
 		<description>获取用户姓名</description>
 		<name>getAccountName</name>

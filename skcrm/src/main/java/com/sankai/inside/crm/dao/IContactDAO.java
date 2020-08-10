@@ -133,4 +133,11 @@ import org.apache.ibatis.annotations.Param;
 	  */
 	 String getNames(@Param("ids") List<String> ids);
 
+	 /**
+	  * 获取联系人集合，根据角色关系和创建人
+	  * @param roleId
+	  * @param userId
+	  * @return
+	  */
+	 public List<Map<String,String>> getListForRole(@Param("roleId") int roleId,@Param("userId") int userId);
 }

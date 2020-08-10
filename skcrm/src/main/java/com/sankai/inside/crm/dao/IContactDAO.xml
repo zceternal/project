@@ -658,4 +658,9 @@
         </foreach>
     </select>
 
+
+	<select id="getListForRole" resultType="map" >
+	select id,name from sys_contact where role = #{roleId} and create_id = #{userId}
+	</select>
+
 </mapper>

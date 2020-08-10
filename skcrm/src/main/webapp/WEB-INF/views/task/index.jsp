@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="../content/css/jquery-ui.css" />
 <link rel="stylesheet" href="../content/css/site.css" />
 <link rel="stylesheet" href="../content/css/glyphicon.css" />
+	<link rel="stylesheet" href="../content/css/jquery.ptTimeSelect.css" />
 <link rel="stylesheet" href="../content/css/validationEngine.jquery.css" />
 <script type="text/javascript" src="../content/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="../content/js/jquery.pager.js"></script>
@@ -26,6 +27,8 @@
 	href="../content/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css" />
 <script type="text/javascript"
 	src="../content/bootstrap-switch-master/dist/js/bootstrap-switch.min.js"></script>
+	<!-- 上传文件 -->
+	<script type="text/javascript" src="../content/js/ajaxfileupload.js"></script>
 
 <style type="text/css">
 .member_list .form-group {
@@ -121,9 +124,9 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<ul class="tab_button search_sk"
 									style="margin-bottom: 0px; margin-top: 3px">
-									<li id="dev-khcgl-all" class="${search.source == -1 ? "on":"" } dev-khcgl" data-value="-1" />全选</li>
-									<li class="dev-khcgl ${search.source == 1 ? "on":"" }" data-value="1">我指派的</li>
-									<li class="dev-khcgl ${search.source == 2 ? "on":"" }" data-value="2">被指派的</li>
+									<li id="dev-rwly-all" class="${search.source == -1 ? "on":"" } dev-rwly" data-value="-1" />全选</li>
+									<li class="dev-rwly ${search.source == 1 ? "on":"" }" data-value="1">我指派的</li>
+									<li class="dev-rwly ${search.source == 2 ? "on":"" }" data-value="2">被指派的</li>
 								</ul>
 							</div>
 						</div>
@@ -140,8 +143,8 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 										data-id="task_add" data-href="task/add"><i class="icon_array_a"></i>新增任务</a>
 										</shiro:hasPermission>
 									<shiro:hasPermission name="task_index">
-										<span class="btn_blueg2 font14" style="cursor: pointer" href="javascript:void(0)" data-id="task_transfer"
-											data-href="transfer"><i  class="icon_array_c"></i>任务反馈</span>
+										<span class="btn_blueg2 font14" style="cursor: pointer" href="javascript:void(0)" data-id="task_back"
+											data-href="task/back"><i  class="icon_array_c"></i>任务反馈</span>
 									</shiro:hasPermission>
 										<shiro:hasPermission name="task_index">
 											<span class="btn_blueg2 font14 " style="cursor: pointer" href="javascript:void(0)" data-id="task_sharex"
@@ -169,7 +172,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 		<script type="text/javascript" src="../content/js/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="../content/js/sk.core.iniect.js"></script>
 		<script type="text/javascript" src="../content/js/sk.dialog.iniect.js"></script>
-	
+		<script type="text/javascript" src="../content/js/jquery.ptTimeSelect.js"></script>
 		<!--表单验证 s-->
 		<script type="text/javascript"
 			src="../content/js/jquery.validationEngine-zh_CN.js"></script>
@@ -177,15 +180,15 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 			src="../content/js/jquery.validationEngine.js"></script>
 	
 		<!--表单验证 e-->
-		<script type="text/javascript"
-			src="../content/js/jquery.JPlaceholder.js"></script>
-		<script type="text/javascript"
-			src="../content/js/jquery.unobtrusive-ajax.min.js"></script>
-		<script type="text/javascript"
-			src="../content/module/task/task.index.js"></script>
+		<script type="text/javascript" src="../content/js/jquery.JPlaceholder.js"></script>
+		<script type="text/javascript" src="../content/js/jquery.unobtrusive-ajax.min.js"></script>
+		<script type="text/javascript" src="../content/module/task/task.index.js"></script>
+		<script type="text/javascript" src="../content/module/task/task.share.js"></script>
+		<script type="text/javascript" src="../content/module/task/task.back.js"></script>
+
 	<script type="text/javascript">
 
-</script>
+	</script>
 
 </body>
 </html>

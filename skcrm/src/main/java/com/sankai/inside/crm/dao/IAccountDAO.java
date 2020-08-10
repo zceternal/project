@@ -6,6 +6,7 @@ import com.sankai.inside.crm.entity.Account;
 import com.sankai.inside.crm.entity.AccountHaveCustomer;
 import com.sankai.inside.crm.entity.AccountOfDept;
 import com.sankai.inside.crm.entity.AccountPwd;
+import org.apache.ibatis.annotations.Param;
 
 public interface IAccountDAO {
 
@@ -162,5 +163,7 @@ public interface IAccountDAO {
 	 * @return
 	 */
 	public List<Account> selectaAllowByName(Account account);
+
+	String getNames(@Param("ids") String ids);
 
 }

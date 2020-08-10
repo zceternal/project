@@ -1,5 +1,7 @@
 package com.sankai.inside.crm.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Task {
@@ -24,8 +26,11 @@ public class Task {
     /**计划标准*/
     private String planStandard;
 
-    /**计划执行人*/
-    private String planExecutor;
+    /**计划执行人（内部员工）*/
+    private String planExecutorUser;
+    /**计划执行人（联系人）*/
+    private String planExecutorContact;
+    private String planExecutorAll;
 
     /**告知执行人方式*/
     private String executeWay;
@@ -34,15 +39,18 @@ public class Task {
     private String quadrant;
 
     /**计划反馈时间*/
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date backTime;
 
     /**创建时间*/
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date createTime;
 
     /**创建人*/
     private String createName;
 
     /**最后修改时间*/
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date modifyTime;
 
     /**最后修改人*/
@@ -60,7 +68,19 @@ public class Task {
     /**指派者*/
     private String assignPerson;
     /**指派时间*/
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date assignTime;
+
+    /**反馈方式*/
+    private Integer backWay;
+
+    public Integer getBackWay() {
+        return backWay;
+    }
+
+    public void setBackWay(Integer backWay) {
+        this.backWay = backWay;
+    }
 
     public String getTaskNature() {
         return taskNature;
@@ -229,20 +249,28 @@ public class Task {
         this.planStandard = planStandard == null ? null : planStandard.trim();
     }
 
-    /**
-     * 计划执行人
-     * @return plan_executor 计划执行人
-     */
-    public String getPlanExecutor() {
-        return planExecutor;
+    public String getPlanExecutorUser() {
+        return planExecutorUser;
     }
 
-    /**
-     * 计划执行人
-     * @param planExecutor 计划执行人
-     */
-    public void setPlanExecutor(String planExecutor) {
-        this.planExecutor = planExecutor == null ? null : planExecutor.trim();
+    public void setPlanExecutorUser(String planExecutorUser) {
+        this.planExecutorUser = planExecutorUser;
+    }
+
+    public String getPlanExecutorContact() {
+        return planExecutorContact;
+    }
+
+    public void setPlanExecutorContact(String planExecutorContact) {
+        this.planExecutorContact = planExecutorContact;
+    }
+
+    public String getPlanExecutorAll() {
+        return planExecutorAll;
+    }
+
+    public void setPlanExecutorAll(String planExecutorAll) {
+        this.planExecutorAll = planExecutorAll;
     }
 
     /**

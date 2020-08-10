@@ -32,7 +32,7 @@ $(function() {
 
 	// 新增
 	$("a[data-id=task_add]").live("click", function() {
-		
+
 		var $this = $(this);
 		dialog = $.sk.open({
 			url : "add",
@@ -49,47 +49,40 @@ $(function() {
 		});
 	});
 
-	// 修改
-	$("a[data-id=task_edit]").live("click", function() {
+	// 任务反馈
+/*
+	$("a[data-id=task_back]").live("click", function() {
+
 		var $this = $(this);
 		dialog = $.sk.open({
-			url : "edit",
+			url : "back",
 			width : 900,
 			height:600,
-			data : {
-				id : $this.data("edit-id")
-			},
-			title : "修改任务",
+			title : "任务反馈",
 			buttons : [ {
 				html : "确定",
 				"class" : "btn btn-minier btn-success delay",
 				click : function() {
-					$("#myformEdit").submit();
-
+					$("#myformBack").submit();
 				}
 			} ]
 		});
 	});
+*/
 
-	
-
-	// 点击跟 踪 状 态,即可提交
-	$(".dev-trace").click(function() {
+	// 点击任务来源,即可提交
+	$(".dev-rwly").click(function() {
 		var $this = $(this);
-		$("#traceType").val($this.data("value"));
 		$this.addClass("on").siblings().removeClass("on");
+		if ($this.attr("id")) {//清空所有选中的项
+			$("input[class=dev-rwly]:checked").removeAttr("checked");
+		}
+
+		$("#source").val($this.data("value"));
 		$("#myform").submit();
 	});
 
-	// 点击销售 状 态,即可提交
-	$(".dev-xszt").click(function() {
-		var $this = $(this);
-		$("#status").val($this.data("value"));
-		$this.addClass("on").siblings().removeClass("on");
-		$("#myform").submit();
-	});
-
-	// 点击任务类型,即可提交
+	// 点击任务象限,即可提交
 	$(".dev-khlx").click(function() {
 		var $this = $(this);
 		$this.addClass("on").siblings().removeClass("on");
@@ -97,11 +90,11 @@ $(function() {
 			 $("input[class=dev-khlx]:checked").removeAttr("checked");
 		}
 		
-		$("#customerType").val($this.data("value"));
+		$("#quadrant").val($this.data("value"));
 		$("#myform").submit();
 	});
 	
-	// 点击任务成功率,即可提交
+	// 点击任务状态,即可提交
 	$(".dev-khcgl").click(function() {
 		var $this = $(this);
 		$this.addClass("on").siblings().removeClass("on");
@@ -109,7 +102,7 @@ $(function() {
 			 $("input[class=dev-khcgl]:checked").removeAttr("checked");
 		}
 		
-		$("#salesSuccessRate").val($this.data("value"));
+		$("#status").val($this.data("value"));
 		$("#myform").submit();
 	});
 

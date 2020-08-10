@@ -1,11 +1,13 @@
 package com.sankai.inside.crm.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sankai.inside.crm.entity.ContactShare;
 import com.sankai.inside.crm.entity.ContactShareExistsCheck;
 import com.sankai.inside.crm.entity.CustomerShareDTO;
 import com.sankai.inside.crm.entity.UpdateCustomerShare;
+import org.apache.ibatis.annotations.Param;
 
 public interface IContactShareDAO {
 
@@ -56,5 +58,6 @@ public interface IContactShareDAO {
 	 * @return
 	 */
 	public Integer updateTran(ContactShare dto);
+
 	
 }

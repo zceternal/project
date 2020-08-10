@@ -350,4 +350,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND NAME like CONCAT(CONCAT('%', #{name}),'%')
 		</if>
 	</select>
+
+	<select id="getNames" parameterType="String" resultType="String">
+		select GROUP_CONCAT(name) from sys_account where id in (${ids})
+	</select>
+
 </mapper>

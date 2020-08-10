@@ -53,23 +53,25 @@ CREATE TABLE `task` (
   `supplier` varchar(50) DEFAULT NULL COMMENT '供应商',
   `next_plan` varchar(500) DEFAULT NULL COMMENT '下一步工作计划',
   `plan_standard` varchar(200) DEFAULT NULL COMMENT '计划标准',
-  `plan_executor` varchar(20) DEFAULT NULL COMMENT '计划执行人',
-  `execute_way` varchar(20) DEFAULT NULL COMMENT '告知执行人方式',
+  `plan_executor_user` varchar(30) DEFAULT NULL COMMENT '计划执行人（内部员工），多个用逗号分隔',
+  `plan_executor_contact` varchar(30) DEFAULT NULL COMMENT '计划执行人（联系人），多个用逗号分隔',
+  `execute_way` varchar(20) DEFAULT NULL COMMENT '告知执行人方式，多个用逗号分隔',
   `quadrant` varchar(20) DEFAULT NULL COMMENT '任务象限',
   `status` varchar(20) DEFAULT NULL COMMENT '任务状态',
   `source` int(2) DEFAULT NULL COMMENT '任务来源：1我指派的；2被指派的',
+  `back_time` timestamp NULL DEFAULT NULL COMMENT '计划反馈时间',
+  `back_way` int(2) DEFAULT NULL COMMENT '反馈方式',
+  `top` int(2) DEFAULT '0' COMMENT '是否置顶：0否；1是',
   `task_nature` varchar(20) DEFAULT NULL COMMENT '任务性质',
   `assign_person` varchar(20) DEFAULT NULL COMMENT '指派者',
   `assign_time` timestamp NULL DEFAULT NULL COMMENT '指派时间',
-  `back_time` timestamp NULL DEFAULT NULL COMMENT '计划反馈时间',
-  `top` int(2) DEFAULT '0' COMMENT '是否置顶：0否；1是',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `create_id` int(11) DEFAULT NULL COMMENT '创建人id',
   `create_name` varchar(20) DEFAULT NULL COMMENT '创建人',
   `modify_time` timestamp NULL DEFAULT NULL COMMENT '最后修改时间',
   `modify_name` varchar(20) DEFAULT NULL COMMENT '最后修改人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='任务表';
 -- 6、新增表结构-任务反馈表
 CREATE TABLE `task_feedback` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -84,8 +86,8 @@ CREATE TABLE `task_feedback` (
 CREATE TABLE `task_feedback_file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `task_feedback_id` int(11) DEFAULT NULL COMMENT '任务反馈id',
-  `file_name` varchar(50) DEFAULT NULL COMMENT '附件名称',
-  `file_path` varchar(50) DEFAULT NULL COMMENT '附件路径',
+  `file_name` varchar(150) DEFAULT NULL COMMENT '附件名称',
+  `file_path` varchar(200) DEFAULT NULL COMMENT '附件路径',
   `del_flag` int(2) DEFAULT NULL COMMENT '删除标记：0正常；-1删除；',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `create_name` varchar(20) DEFAULT NULL COMMENT '创建人',

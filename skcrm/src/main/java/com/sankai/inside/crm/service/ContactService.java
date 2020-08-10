@@ -269,5 +269,9 @@ public class ContactService {
 		if(i==null) return new ServiceResultBool("投入公海失败");
 		return new ServiceResultBool();
 	}
+
+	public List<Map<String,String>> getListForRole(int roleId,int userId){
+		return contactDAO.getListForRole(roleId, userId);
+	}
 }
 

@@ -98,5 +98,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	UPDATE sys_contact_share SET account_id = #{allowAccountId},allow_account_id = #{allowAccountId} 
 	WHERE customer_id = #{customerId} AND account_id = allow_account_id
 	</update>
-	
+
 </mapper>
