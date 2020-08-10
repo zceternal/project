@@ -8,6 +8,8 @@ public class Task {
     /***/
     private Integer id;
 
+    /**任务名称*/
+    private String name;
     /**客户类型*/
     private String customerType;
 
@@ -73,6 +75,14 @@ public class Task {
 
     /**反馈方式*/
     private Integer backWay;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Integer getBackWay() {
         return backWay;

@@ -75,7 +75,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 						<input id="quadrant" name="quadrant" type="hidden" title="任务象限" value="${search.quadrant }" />
 						<input id="accountId" name="accountId" type="hidden" title="负责人" value="${search.accountId }" />
 						<input id="source" name="source" type="hidden" title="任务来源" value="${search.source }" />
-						
+
 						<div class="form-group form-inline" style="padding: 5px 0px;">
 							<label class="col-sm-1 control-label dev-col-sm-1">负责人：</label>
 							<div class="col-sm-11 favorite dev-col-sm-11">
@@ -134,7 +134,9 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 						<div class="divider" style="width:100%;margin:15px 0px 15px -10px"></div>
 						<div class="form-group">
 							<div class="col-sm-11 favorite dev-col-sm-11">
-
+								<div class="search fl" style="width: 280px; margin-left: 15px;">
+									<input type="text" name="content" value="${search.content }" placeholder="请输入任务名称" style="width: 280px !important" />
+								</div>
 								<button type="submit" style="margin-left:20px" class="btn btn_white20 dev-search-page">查找</button>
 
 								<div class="pull-right text-right mr15">
@@ -174,10 +176,8 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 		<script type="text/javascript" src="../content/js/sk.dialog.iniect.js"></script>
 		<script type="text/javascript" src="../content/js/jquery.ptTimeSelect.js"></script>
 		<!--表单验证 s-->
-		<script type="text/javascript"
-			src="../content/js/jquery.validationEngine-zh_CN.js"></script>
-		<script type="text/javascript"
-			src="../content/js/jquery.validationEngine.js"></script>
+		<script type="text/javascript" src="../content/js/jquery.validationEngine-zh_CN.js"></script>
+		<script type="text/javascript" src="../content/js/jquery.validationEngine.js"></script>
 	
 		<!--表单验证 e-->
 		<script type="text/javascript" src="../content/js/jquery.JPlaceholder.js"></script>

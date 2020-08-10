@@ -21,32 +21,35 @@
 					<div id="top" class="empty"></div>
 				</th>
 			</c:if>
+			<th width="10%">任务名称
+				<div id="name" class="dev-order up"></div>
+			</th>
 			<th width="10%">任务象限
-				<div id="shortNameOrder" class="dev-order up"></div>
+				<div id="quadrant" class="dev-order up"></div>
 			</th>
 			<th width="8%">下一步工作计划
-				<div id="statusName" class="dev-order up"></div>
+				<div id="nextPlan" class="dev-order up"></div>
 			</th>
 			<th width="12%">计划标准
-				<div id="finalTime" class="dev-order up"></div>
+				<div id="planStandard" class="dev-order up"></div>
 			</th>
 			<th width="8%">计划执行人
-				<div id="provinceName" class="dev-order up"></div>
+				<div id="planExecutorAll" class="dev-order up"></div>
 			</th>
 			<th width="10%">计划反馈时间
-				<div id="typeName" class="dev-order up"></div>
+				<div id="backTime" class="dev-order up"></div>
 			</th>
 			<th width="9%">任务性质
-				<div id="allowAccountName" class="dev-order up"></div>
+				<div id="taskNature" class="dev-order up"></div>
 			</th>
 			<th width="9%">指派者
-				<div id="createTime" class="dev-order up"></div>
+				<div id="assignPerson" class="dev-order up"></div>
 			</th>
 			<th width="10%">指派时间
-			<div id="opeartor" class="empty"></div>
+			<div id="assignTime" class="empty"></div>
 			</th>
 			<th>任务状态
-				<div id="opeartor" class="empty"></div>
+				<div id="status" class="empty"></div>
 			</th>
 		</tr>
 	</thead>
@@ -71,6 +74,7 @@
 						data-order="${item.order }"
 							class="colorblue">置顶</a></span></td>
 				</c:if>
+				<td  data-taskid="${item.id }" title="${item.name}">${extf:subStr(item.name,9) }</td>
 				<td  data-taskid="${item.id }">${elf:getDictName(item.quadrant) }</td>
 				<td  data-taskid="${item.id }" title="${item.nextPlan}">${extf:subStr(item.nextPlan,9) }</td>
 				<td  data-taskid="${item.id }" title="${item.planStandard}">${extf:subStr(item.planStandard,9)}</td>

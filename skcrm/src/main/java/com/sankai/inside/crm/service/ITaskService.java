@@ -3,6 +3,8 @@ package com.sankai.inside.crm.service;
 import com.github.pagehelper.Page;
 import com.sankai.inside.crm.entity.*;
 
+import java.util.List;
+
 public interface ITaskService {
 
     /** 获取任务列表 */
@@ -15,4 +17,8 @@ public interface ITaskService {
     ServiceResultBool addTaskBack(TaskFeedback model);
     /** 新增任务反馈附件 */
     ServiceResultBool addTaskBackFile(TaskFeedbackFile model);
+    /** 任务不可重复共享 */
+    Integer checkExists(int taskId, int allowAccountId) ;
+    /** 共享任务，批量新增 */
+    Integer insertContactShare(List<TaskShare> list);
 }

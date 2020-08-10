@@ -120,9 +120,9 @@ $(function() {
 
 });
 
-function onCustomerSuccessAdd(data) {
+function onTaskSuccessAdd(data) {
 	if (data.success) {
-		$.sk.success("任务新增成功", function() {
+		$.sk.success("新增成功", function() {
 			$("#content").val("");
 			$page.val("1");
 			$formsearch.submit();
@@ -132,7 +132,6 @@ function onCustomerSuccessAdd(data) {
 		$.sk.error(data.msg);
 		$formsearch.submit();
 	}
-
 }
 
 function onCustomerSuccessEdit(data) {

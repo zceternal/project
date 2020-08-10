@@ -34,6 +34,21 @@ public class TaskServiceImpl implements ITaskService {
     @Resource
     private ITaskFeedbackFileDAO taskFeedbackFileDAO;
 
+    @Override
+    public Integer insertContactShare(List<TaskShare> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return 1;
+        }
+        return taskDAO.insertTaskShare(list);
+    }
+
+    @Override
+    public Integer checkExists(int taskId, int allowAccountId) {
+        TaskShareExistsCheck check = new TaskShareExistsCheck();
+        check.setTaskId(taskId);
+        check.setAllowAccountId(allowAccountId);
+        return taskDAO.checkExists(check);
+    }
 
     @Override
     public ServiceResultBool addTaskBack(TaskFeedback model) {

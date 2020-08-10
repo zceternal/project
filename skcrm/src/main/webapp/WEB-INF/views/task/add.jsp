@@ -8,8 +8,15 @@
 </style>
 	<div class="main_content dialog">
 			<div class="panel panel-default">
-				<form class="form-horizontal old_block" role="form" id="myformAdd"
-					action="add" method="post" data-ajax="true" data-ajax-success="onCustomerSuccessAdd">
+				<form class="form-horizontal old_block" id="myformAdd"
+					action="add" method="post" role="form" data-ajax="true" data-ajax-success="onTaskSuccessAdd">
+
+					<div class="form-group">
+						<label for="" class="col-sm-2 dev-col-sm-120 control-label">任务名称：</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control validate[maxSize[100]]" id="name" placeholder="请输入任务名称" name="name" style="width: 625px" data-prompt-position="inline" >
+						</div>
+					</div>
 
                     <div class="form-group">
                         <label class="col-sm-2 dev-col-sm-120 control-label">任务性质：</label>

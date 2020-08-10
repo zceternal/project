@@ -11,9 +11,15 @@
 			<div class="panel panel-default">
 			<%--	<form class="form-horizontal old_block" role="form" id="myformBack"
 					action="back" method="post" data-ajax="true" data-ajax-success="onCustomerSuccessAdd" enctype="multipart/form-data">--%>
-                <form class="form-horizontal old_block" id="myformBack" action="back" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal old_block" id="myformBack" action="back" method="post" enctype="multipart/form-data"
+					  role="form" data-ajax="true" data-ajax-success="onTaskBackSuccessAdd">
 					<input id="taskId" name="taskId" type="hidden" value="${task.id }" />
-
+					<div class="form-group">
+						<label for="" class="col-sm-2 dev-col-sm-120 control-label">任务名称：</label>
+						<div class="col-sm-10">
+							${task.name}
+						</div>
+					</div>
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label " >任务性质：</label>
 						<div class="col-sm-4">

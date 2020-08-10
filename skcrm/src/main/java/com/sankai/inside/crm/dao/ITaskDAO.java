@@ -44,5 +44,10 @@ public interface ITaskDAO {
      */
     int updateByPrimaryKey(Task record);
 
+    /** 任务列表 */
     List<Task> selectList(TaskListSearch search);
+    /** 任务是否已经分享过某人 */
+    Integer checkExists(TaskShareExistsCheck ckeck);
+    /** 批量新增任务共享 */
+    Integer insertTaskShare(List<TaskShare> list);
 }

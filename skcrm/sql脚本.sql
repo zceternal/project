@@ -47,6 +47,7 @@ ADD COLUMN `buy_service` varchar(20) NULL COMMENT '产品及服务';
 -- 5、新增表结构-任务表
 CREATE TABLE `task` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL COMMENT '任务名称',
   `customer_type` varchar(10) DEFAULT NULL COMMENT '客户类型',
   `customer_id` int(11) DEFAULT NULL COMMENT '现有客户id',
   `company_interior` varchar(20) DEFAULT NULL COMMENT '公司内部',

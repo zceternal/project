@@ -1,6 +1,5 @@
 var dialog;
 $(function() {
-
 	$("span[data-id=task_back]").click(function() {
 		var taskid = '';
 	
@@ -39,6 +38,7 @@ $(function() {
 		}
 	});
 
+
 	$("a[data-removeshare]").live("click", function() {
 		$(this).parent().parent().remove();
 		if ($("#tr_contact_" + $(this).data("removeshare")).length > 0) {
@@ -47,6 +47,21 @@ $(function() {
 	});
 
 });
+
+
+function onTaskBackSuccessAdd(data) {
+	if (data.success) {
+		$.sk.success("新增成功", function() {
+			// $("#content").val("");
+			// $page.val("1");
+			// $formsearch.submit();
+			$.sk.close(dialog);
+		});
+	} else {
+		$.sk.error(data.msg);
+		//$formsearch.submit();
+	}
+}
 
 function pushChecked() {
 	selectIds=[];

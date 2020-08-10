@@ -13,6 +13,15 @@ public class TaskListSearch extends FormPage{
 	private String status;//任务状态
 	private String source;//任务来源
 	private int accountId;//负责人
+	private String content;//查询条件(任务名称)
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
 
 	public String getQuadrant() {
 		return quadrant;

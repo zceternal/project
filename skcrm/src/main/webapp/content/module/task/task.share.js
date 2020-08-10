@@ -1,59 +1,43 @@
 var dialog;
 $(function() {
-
-	$("span[data-id=customer_sharex]").click(function() {
-		var cusids = '';
-		var cusnames = '';
-	
+	$("span[data-id=task_sharex]").click(function() {
+		var ids = '';
 		if(pushChecked()){
 			if (selectIds.length == 0) {
-				$.sk.error("请选择要共享的客户");
+				$.sk.error("请选择要共享的任务");
 				return;
 			}
 			for (var x = 0; x < selectIds.length; x++) {
-				cusids = cusids + selectIds[x] + ",";
-				cusnames = cusnames + selectNames[x] + ",";
+				ids = ids + selectIds[x] + ",";
+			}
+			if(ids){
+				ids = ids.substr(0, ids.length - 1);
 			}
 			clearChecked();
 			dialog = $.sk.open({
-				url : "../customer_share/share",
+				url : "taskShare",
 				data : {
-					cusids : cusids,
-					cusnames : cusnames
+					ids : ids,
 				},
 				width : 900,
 				height : 600,
-				title : "客户共享",
+				title : "任务共享",
 				buttons : [ {
 					html : "确定",
 					"class" : "btn btn-minier btn-success delay",
 					click : function() {
-						$("#shareAddForm").submit();
+						$("#taskShareForm").submit();
 					}
 				} ]
 			});
 		}else{
 			if (selectIds.length == 0) {
-				$.sk.error("请选择要共享的客户");
+				$.sk.error("请选择要共享的任务");
 				return;
 			}
 		}
 	});
 
-	$("td[xyz=z]").live("click", function() {
-
-		/*
-		 * var csid=$(this).data("customerid"); var $this = $("#check_"+csid);
-		 * var state = $this.attr("checked") == undefined ? false : true;
-		 * $this.attr("checked",!state); if (state) {
-		 * $this.parent('label').addClass('c_on'); $(":checkbox[data-client='" +
-		 * $this.data("for") + "']") .parent('label').addClass('c_on');
-		 *  } else { $this.parent('label').removeClass('c_on');
-		 * $(":checkbox[data-client='" + $this.data("for") + "']")
-		 * .parent('label').removeClass('c_on');
-		 *  }
-		 */
-	})
 
 	$("a[data-removeshare]").live("click", function() {
 		$(this).parent().parent().remove();
@@ -64,6 +48,19 @@ $(function() {
 
 });
 
+function onTaskShareSuccessAdd(data) {
+	if (data.success) {
+		$.sk.success("共享成功", function() {
+			// $("#content").val("");
+			// $page.val("1");
+			// $formsearch.submit();
+			$.sk.close(dialog);
+		});
+	} else {
+		$.sk.error(data.msg);
+		//$formsearch.submit();
+	}
+}
 function pushChecked() {
 	
 	var isT = false;
@@ -71,18 +68,7 @@ function pushChecked() {
 	$(":checkbox[data-client=checkbox_share]:checked").each(function() {
 
 		var $this = $(this);
-	    
-		/*if(!$($this).data("isfirst"))
-			{
-			$.sk.error("对不起,您不是共享客户的负责人");
-			return false;
-			}*/
-		if (selectIds.indexOf($this.val()) != -1)
-			{
-			return false;
-			}
-		selectIds.push($this.val());
-		selectNames.push($this.data("cusname"));
+		selectIds.push($this.data("value"));
 		isT = true;
 	});
 	return isT;
@@ -90,7 +76,6 @@ function pushChecked() {
 
 function clearChecked() {
 	selectIds = [];
-	selectNames = [];
 	$(":checkbox[data-client=checkbox_share]").attr("checked", false).parent(
 			'label').removeClass('c_on');
 	$(":checkbox[data-for=checkbox_share]").attr("checked", false).parent(
@@ -100,10 +85,8 @@ function clearChecked() {
 function cuscheck(obj) {
 	if (obj.checked) {
 		selectIds.push(obj.value);
-		selectIds.push(obj.data("cusname"));
 	} else {
 		selectIds.remove(obj.value);
-		selectIds.remove(obj.data("cusname"));
 	}
 }
 
@@ -113,7 +96,6 @@ function onCustomerShareSuccess(obj) {
 		$("#myform").submit();
 		$.sk.close(dialog);
 		selectIds = []
-		selectNames = []
 	} else {
 		$.sk.error(obj.msg);
 		// $.sk.close(dialog);
