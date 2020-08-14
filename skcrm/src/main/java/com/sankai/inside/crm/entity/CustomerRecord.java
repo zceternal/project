@@ -20,6 +20,15 @@ public class CustomerRecord {
 	private String endTime;//结束时间
 	private String betweenTime;//时间区间
 	private String backType;//返回界面类型
+	private String communicationWay;//沟通方式
+
+	public String getCommunicationWay() {
+		return communicationWay;
+	}
+
+	public void setCommunicationWay(String communicationWay) {
+		this.communicationWay = communicationWay;
+	}
 
 	public String getBackType() {
 		return backType;

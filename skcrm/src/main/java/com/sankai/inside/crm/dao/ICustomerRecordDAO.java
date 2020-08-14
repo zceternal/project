@@ -56,7 +56,7 @@ public interface ICustomerRecordDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer insertRecord(CustomerRecord dto) throws Exception;
+	public Integer insertRecord(CustomerRecord dto);
 	/**
 	 * 获取所有的发布记录人  
 	 * @param customerId

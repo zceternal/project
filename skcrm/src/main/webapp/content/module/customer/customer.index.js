@@ -123,6 +123,46 @@ $(function() {
 		$("#accountId").val($this.data("value"));
 		$("#myform").submit();
 	});
+	// 点击客户来源(销售形式),即可提交
+	$(".dev-cusSourceList").click(function() {
+		var $this = $(this);
+		if ($this.attr("id")) {//清空所有选中的项
+			$("input[class=dev-cusSourceList]:checked").removeAttr("checked");
+		}
+		$this.addClass("on").siblings().removeClass("on");
+		$("#cusSource").val($this.data("value"));
+		$("#myform").submit();
+	});
+	// 点击产品及服务,即可提交
+	$(".dev-buyServiceList").click(function() {
+		var $this = $(this);
+		if ($this.attr("id")) {//清空所有选中的项
+			$("input[class=dev-buyServiceList]:checked").removeAttr("checked");
+		}
+		$this.addClass("on").siblings().removeClass("on");
+		$("#buyService").val($this.data("value"));
+		$("#myform").submit();
+	});
+	// 点击销售推进状态,即可提交
+	$(".dev-followStateList").click(function() {
+		var $this = $(this);
+		if ($this.attr("id")) {//清空所有选中的项
+			$("input[class=dev-followStateList]:checked").removeAttr("checked");
+		}
+		$this.addClass("on").siblings().removeClass("on");
+		$("#followState").val($this.data("value"));
+		$("#myform").submit();
+	});
+	// 点击下一步计划状态,即可提交
+	$(".dev-nextPlanStateList").click(function() {
+		var $this = $(this);
+		if ($this.attr("id")) {//清空所有选中的项
+			$("input[class=dev-nextPlanStateList]:checked").removeAttr("checked");
+		}
+		$this.addClass("on").siblings().removeClass("on");
+		$("#nextPlanState").val($this.data("value"));
+		$("#myform").submit();
+	});
 
 
 });

@@ -5,9 +5,11 @@ import java.util.*;
 
 import javax.annotation.Resource;
 
+import com.sankai.inside.crm.dao.*;
 import com.sankai.inside.crm.entity.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,12 +20,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sankai.inside.crm.core.utils.DateUtil;
 import com.sankai.inside.crm.core.utils.Pinyin4jUtil;
-import com.sankai.inside.crm.dao.IAccountDAO;
-import com.sankai.inside.crm.dao.IContactDAO;
-import com.sankai.inside.crm.dao.ICustomerDAO;
-import com.sankai.inside.crm.dao.ICustomerLogDAO;
-import com.sankai.inside.crm.dao.ICustomerShareDAO;
-import com.sankai.inside.crm.dao.ICustomerTransferDAO;
 import com.sankai.inside.crm.service.ContactService;
 import com.sankai.inside.crm.service.CustomerStatusTimeService;
 import com.sankai.inside.crm.service.ICustomerService;
@@ -49,16 +45,64 @@ public class CustomerServiceImpl implements ICustomerService {
 	private IContactDAO contactDAO;
 	@Resource
 	private CustomerStatusTimeService customerStatusTimeService;//客户状态停留时间
-		
+	@Resource
+	private ICustomerRecordDAO customerRecordDAO;// 跟踪记录
+	@Autowired
+	private ITaskDAO taskDAO;// 任务
+
+	@Transactional
+	@Override
+	public ServiceResultBool saveCommunication(CommunicationForm model) {
+		Date date = new Date();
+		// 修改客户信息
+		Customer customer = new Customer();
+		BeanUtils.copyProperties(model, customer);
+		customerDAO.updateByPrimaryKeySelective(customer);
+
+		// 新增跟踪日志(type=6 [默认销售记录]，source=1 [默认PC])
+		CustomerRecord customerRecord = new CustomerRecord();
+		customerRecord.setRemark(model.getReportRemark());
+		customerRecord.setCommunicationWay(model.getCommunicationWay());
+		customerRecord.setCommunicationTime(model.getCommunicationTime());
+		customerRecord.setType(6);
+		customerRecord.setSource(1);
+		customerRecord.setAccountId(model.getUserId());
+		customerRecord.setCustomerId(model.getId());
+		customerRecord.setCreateTime(date);
+		customerRecordDAO.insertRecord(customerRecord);
+
+		// 新增任务(任务名称=“新增沟通记录任务”)
+		Task task = new Task();
+		task.setName("新增沟通记录任务");
+		task.setCustomerType("167");// 现有客户
+		task.setCustomerId(model.getId());
+		task.setNextPlan(model.getNextPlan());
+		task.setPlanStandard(model.getPlanStandard());
+		task.setPlanExecutorUser(model.getPlanExecutorUser());
+		task.setPlanExecutorContact(model.getPlanExecutorContact());
+		task.setExecuteWay(model.getExecuteWay());
+		task.setQuadrant(model.getQuadrant());
+		task.setBackTime(model.getBackTime());
+		task.setBackWay(model.getBackWay());
+		task.setAssignTime(date);
+		task.setAssignPerson(String.valueOf(model.getUserId()));
+		task.setCreateId(model.getUserId());
+		task.setCreateName(model.getUserName());
+		task.setCreateTime(date);
+		task.setSource(1);
+
+		taskDAO.insert(task);
+
+		return new ServiceResultBool();
+	}
+
 	@Override
 	public CustomerTransDTO findCustomerInfoById(Integer id) throws Exception {
-		// TODO Auto-generated method stub
 		return this.customerDAO.findCustomerInfoById(id);
 	}
 
 	@Override
 	public List<CustomerShareTransDTO> findAllows(Integer customerId) throws Exception {
-		// TODO Auto-generated method stub
 		return this.customerDAO.findAllows(customerId);
 	}
 
@@ -83,7 +127,6 @@ public class CustomerServiceImpl implements ICustomerService {
 	
 
 	public List<Contact> findContactInfoByCustoemrId(Integer customerId) throws Exception {
-		// TODO Auto-generated method stub
 		return this.customerDAO.findContactInfoByCustoemrId(customerId);
 	}
 	
@@ -92,11 +135,22 @@ public class CustomerServiceImpl implements ICustomerService {
 		PageHelper.startPage(page, pageSize, true);
 		Page<CustomerList> list = (Page<CustomerList>) customerDAO.selectList(val);
 		for (CustomerList tmp : list) {
+			//联系人转换
+			if (Objects.equals(tmp.getCusSourceType(), "1")) {
+				ServiceResult<Contact> contactServiceResult = contactService.selectById(Integer.valueOf(tmp.getCusSource()));
+				if (contactServiceResult.isSuccess()) {
+					tmp.setCusSource(contactServiceResult.getData().getName());
+				}
+			}
+
+			//日期格式化
 			if (tmp.getFinalTime() == null)
 				continue;
 			SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
 			String myDate = dateFormater.format(tmp.getFinalTime());
 			tmp.setTraceName(TraceType.CalcValue(myDate).getName());
+
+
 		}
 		return new ServiceResult<Page<CustomerList>>(list);
 	}
@@ -132,6 +186,12 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public ServiceResultBool addCustomer(Customer model){
+		String cusSource = model.getCusSource();
+		if (!StringUtils.isEmpty(cusSource)) {
+			String[] cs = cusSource.split("_");
+			model.setCusSource(cs[0]);
+			model.setCusSourceType(cs[1]);
+		}
 
 		if (customerDAO.existsByName(model.getName()))
 			return new ServiceResultBool("客户名称已存在");
@@ -623,27 +683,27 @@ public class CustomerServiceImpl implements ICustomerService {
 		if (!Objects.isNull(customerRelations)) {
 			if (!Objects.isNull(customerRelations.getChannelPartner())) {
 				List<String> ids = Arrays.asList(customerRelations.getChannelPartner().split(","));
-				customerRelations.setChannelPartner(contactDAO.getNames(ids));
+				customerRelations.setChannelPartnerName(contactDAO.getNames(ids));
 			}
 			if (!Objects.isNull(customerRelations.getDecisionPerson())) {
 				List<String> ids = Arrays.asList(customerRelations.getDecisionPerson().split(","));
-				customerRelations.setDecisionPerson(contactDAO.getNames(ids));
+				customerRelations.setDecisionPersonName(contactDAO.getNames(ids));
 			}
 			if (!Objects.isNull(customerRelations.getHandlePerson())) {
 				List<String> ids = Arrays.asList(customerRelations.getHandlePerson().split(","));
-				customerRelations.setHandlePerson(contactDAO.getNames(ids));
+				customerRelations.setHandlePersonName(contactDAO.getNames(ids));
 			}
 			if (!Objects.isNull(customerRelations.getManagePerson())) {
 				List<String> ids = Arrays.asList(customerRelations.getManagePerson().split(","));
-				customerRelations.setManagePerson(contactDAO.getNames(ids));
+				customerRelations.setManagePersonName(contactDAO.getNames(ids));
 			}
 			if (!Objects.isNull(customerRelations.getProfessionalPerson())) {
 				List<String> ids = Arrays.asList(customerRelations.getProfessionalPerson().split(","));
-				customerRelations.setProfessionalPerson(contactDAO.getNames(ids));
+				customerRelations.setProfessionalPersonName(contactDAO.getNames(ids));
 			}
 			if (!Objects.isNull(customerRelations.getTrustPerson())) {
 				List<String> ids = Arrays.asList(customerRelations.getTrustPerson().split(","));
-				customerRelations.setTrustPerson(contactDAO.getNames(ids));
+				customerRelations.setTrustPersonName(contactDAO.getNames(ids));
 			}
 		}
 		return customerRelations;

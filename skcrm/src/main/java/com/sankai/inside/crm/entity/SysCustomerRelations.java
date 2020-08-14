@@ -11,27 +11,81 @@ public class SysCustomerRelations {
 
     /**渠道伙伴*/
     private String channelPartner;
+    private String channelPartnerName;
 
     /**客户信任人*/
     private String trustPerson;
+    private String trustPersonName;
 
     /**客户决策人*/
     private String decisionPerson;
+    private String decisionPersonName;
 
     /**客户管理人*/
     private String managePerson;
+    private String managePersonName;
 
     /**客户办事人*/
     private String handlePerson;
+    private String handlePersonName;
 
     /**客户业务人*/
     private String professionalPerson;
+    private String professionalPersonName;
 
     /**创建人Id*/
     private Integer createId;
 
     /**创建时间*/
     private Date createTime;
+
+    public String getChannelPartnerName() {
+        return channelPartnerName;
+    }
+
+    public void setChannelPartnerName(String channelPartnerName) {
+        this.channelPartnerName = channelPartnerName;
+    }
+
+    public String getTrustPersonName() {
+        return trustPersonName;
+    }
+
+    public void setTrustPersonName(String trustPersonName) {
+        this.trustPersonName = trustPersonName;
+    }
+
+    public String getDecisionPersonName() {
+        return decisionPersonName;
+    }
+
+    public void setDecisionPersonName(String decisionPersonName) {
+        this.decisionPersonName = decisionPersonName;
+    }
+
+    public String getManagePersonName() {
+        return managePersonName;
+    }
+
+    public void setManagePersonName(String managePersonName) {
+        this.managePersonName = managePersonName;
+    }
+
+    public String getHandlePersonName() {
+        return handlePersonName;
+    }
+
+    public void setHandlePersonName(String handlePersonName) {
+        this.handlePersonName = handlePersonName;
+    }
+
+    public String getProfessionalPersonName() {
+        return professionalPersonName;
+    }
+
+    public void setProfessionalPersonName(String professionalPersonName) {
+        this.professionalPersonName = professionalPersonName;
+    }
 
     /**
      * 

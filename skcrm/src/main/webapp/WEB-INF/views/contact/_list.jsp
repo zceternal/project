@@ -67,8 +67,7 @@
 					<td title="${item.customerName }">${extf:subStr(item.customerName,9)}</td>
 					<td title="${item.position }">${extf:subStr(item.position,5) }</td>
 					<td title="${elf:getDictName(item.buyService) }">${elf:getDictName(item.buyService) }</td>
-					<td><fmt:formatDate value="${item.createTime}"
-							pattern="yyyy-MM-dd" /></td>
+					<td><fmt:formatDate value="${item.createTime}" pattern="yyyy-MM-dd" /></td>
 					<td>
 					 <span class="colorblue edit"> <shiro:hasPermission
 								name="contact_edit">

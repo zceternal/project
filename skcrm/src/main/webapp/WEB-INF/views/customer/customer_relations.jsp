@@ -6,22 +6,22 @@
 <%@ taglib uri="/sankai-fun" prefix="extf"%>
 
 <div style="padding-top: 10px; text-align: left;">
-<label class="color999 font12">渠道伙伴：</label><div class="color333">${customerRelations.channelPartner }</div>
+<label class="color999 font12">渠道伙伴：</label><div class="color333">${customerRelations.channelPartnerName }</div>
 </div>
 <div style="padding-top: 10px; text-align: left;">
-	<label class="color999 font12">客户信任人：</label><div class="color333">${customerRelations.trustPerson }</div>
+	<label class="color999 font12">客户信任人：</label><div class="color333">${customerRelations.trustPersonName }</div>
 </div>
 <div style="padding-top: 10px; text-align: left;">
-	<label class="color999 font12">客户决策人：</label><div class="color333">${customerRelations.decisionPerson }</div>
+	<label class="color999 font12">客户决策人：</label><div class="color333">${customerRelations.decisionPersonName }</div>
 </div>
 <div style="padding-top: 10px; text-align: left;">
-	<label class="color999 font12">客户管理人：</label><div class="color333">${customerRelations.managePerson }</div>
+	<label class="color999 font12">客户管理人：</label><div class="color333">${customerRelations.managePersonName }</div>
 </div>
 <div style="padding-top: 10px; text-align: left;">
-	<label class="color999 font12">客户办事人：</label><div class="color333">${customerRelations.handlePerson }</div>
+	<label class="color999 font12">客户办事人：</label><div class="color333">${customerRelations.handlePersonName }</div>
 </div>
 <div style="padding-top: 10px; text-align: left;">
-	<label class="color999 font12">客户业务人：</label><div class="color333">${customerRelations.professionalPerson }</div>
+	<label class="color999 font12">客户业务人：</label><div class="color333">${customerRelations.professionalPersonName }</div>
 </div>
 
 									

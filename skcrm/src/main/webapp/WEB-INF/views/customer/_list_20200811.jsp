@@ -6,7 +6,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <%@ taglib uri="/sankai-fun" prefix="extf"%>
-<%@ taglib uri="/sankai-ext" prefix="elf"%>
 
 
 <table class="table table-hover ">
@@ -24,32 +23,32 @@
 			<th width="10%">客户简称
 				<div id="shortNameOrder" class="dev-order up"></div>
 			</th>
-			<th width="10%">地区
-				<div id="provinceName" class="dev-order up"></div>
-			</th>
-			<th width="8%">产品及服务
-				<div id="provinceName" class="dev-order up"></div>
-			</th>
-			<th width="8%">销售推进状态
-				<div id="provinceName" class="dev-order up"></div>
-			</th>
-			<th width="8%">负责人
-				<div id="allowAccountName" class="dev-order up"></div>
-			</th>
-			<th width="8%">销售形式
-				<div id="allowAccountName" class="dev-order up"></div>
-			</th>
-			<th width="12%">最近一次推进记录
-				<div id="allowAccountName" class="dev-order up"></div>
-			</th>
-			<th width="8%">下一步计划
-				<div id="allowAccountName" class="dev-order up"></div>
-			</th>
-			<th width="8%">计划配合人
+			<th width="8%">客户状态
 				<div id="statusName" class="dev-order up"></div>
 			</th>
-			<th width="8%">计划状态
-				<div id="statusName" class="dev-order up"></div>
+			<!-- <th width="">联系方式
+				<div id="phone" class="dev-order up"></div>
+			</th> -->
+			<!-- <th width="9%">跟踪状态
+				<div id="traceName" class="dev-order up"></div>
+			</th> -->
+			<th width="12%">最后跟踪时间
+				<div id="finalTime" class="dev-order up"></div>
+			</th>
+			<th width="8%">地区
+				<div id="provinceName" class="dev-order up"></div>
+			</th>
+			<th width="10%">类型
+				<div id="typeName" class="dev-order up"></div>
+			</th>
+			<th width="9%">销售负责人
+				<div id="allowAccountName" class="dev-order up"></div>
+			</th>
+			<th width="9%">创建时间
+				<div id="createTime" class="dev-order up"></div>
+			</th>
+			<th width="10%">来源
+			<div id="opeartor" class="empty"></div>
 			</th>
 			<th>操作
 				<div id="opeartor" class="empty"></div>
@@ -60,7 +59,7 @@
 
 		<c:if test="${pager.total == 0 }">
 			<tr>
-				<td colspan="${isShowTop || myself.equals('1')?12:11}" style="text-align: center">暂无数据</td>
+				<td colspan="${isShowTop || myself.equals('1')?11:10}" style="text-align: center">暂无数据</td>
 			</tr>
 		</c:if>
 		<c:forEach var="item" items="${model }">
@@ -76,25 +75,41 @@
 					<td xyz='z' data-customerid="${item.customerId }"><span
 						class="colorblue edit"><a href="javascript:void(0)"
 							data-share-id="${item.shareId }"
+							<%-- data-allowaccount-id="${item.allowAccountId }" --%>
 						data-order="${item.order }"
 							class="colorblue">置顶</a></span></td>
 				</c:if>
-				<td xyz='z' data-customerid="${item.customerId }" title="${item.shortName }">${extf:subStr(item.shortName,9) }</td>
+				<td xyz='z' data-customerid="${item.customerId }"
+					title="${item.shortName }">${extf:subStr(item.shortName,9) }</td>
+				<td xyz='z' data-customerid="${item.customerId }">${item.statusName }</td>
+				<%-- <td xyz='z' data-customerid="${item.customerId }"}">${item.phone}</td> --%>
+				<%-- <td xyz='z' data-customerid="${item.customerId }">${(item.traceName==null or item.traceName=="")?"无跟踪":item.traceName }</td> --%>
+				<td xyz='z' data-customerid="${item.customerId }"><fmt:formatDate
+						value="${item.finalTime }" pattern="yyyy-MM-dd HH:mm" /></td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.provinceName }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${elf:getDictName(item.buyService) }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${elf:getDictName(item.followState) }</td>
+				<td xyz='z' data-customerid="${item.customerId }"
+					title="${item.typeName}">${extf:subStr(item.typeName,5)}</td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.allowAccountName}</td>
-				<c:if test="${item.cusSourceType ==1 }">
-					<td xyz='z' data-customerid="${item.customerId }">渠道-${item.cusSource}</td>
-				</c:if>
-				<c:if test="${item.cusSourceType !=1 }">
-					<td xyz='z' data-customerid="${item.customerId }">直销-${elf:getDictName(item.cusSource)}</td>
-				</c:if>
-				<td xyz='z' data-customerid="${item.customerId }">${item.buyService }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${item.buyService }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${item.buyService }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${item.buyService }</td>
+				<td xyz='z' data-customerid="${item.customerId }"><fmt:formatDate
+						value="${item.createTime }" pattern="yyyy-MM-dd" /></td>
 				<td>
+					 <c:choose>
+						<c:when test="${item.isFrom==0}">
+							创建
+						</c:when>						
+						<c:when test="${item.isFrom==1}">
+							转移人-${item.createName }
+						</c:when>
+						<c:when test="${item.isFrom==2}">
+							共享人-${item.optName }
+						</c:when>
+						<c:when test="${item.isFrom==3}">
+							公海
+						</c:when>
+					</c:choose> 
+				</td>
+				<td>
+					<%-- <span class="colorblue edit"><a href="javascript:void(0)"  onclick="showDetail('${item.customerId }')" title="查看详情" class="colorblue">详情</a></span> --%>
 					<shiro:hasPermission name="customer_edit">
 						<span class="colorblue edit"><a href="javascript:void(0)"
 							data-id="customer_edit" data-edit-id="${item.customerId }"

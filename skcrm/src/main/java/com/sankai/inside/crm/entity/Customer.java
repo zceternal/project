@@ -1,5 +1,7 @@
 package com.sankai.inside.crm.entity;
 
+import com.sankai.inside.crm.service.ContactService;
+
 import java.util.Date;
 
 public class Customer {
@@ -34,10 +36,9 @@ public class Customer {
 	/**产品及服务*/
 	private String buyService;
 
-	/**客户来源*/
+	/**客户来源(销售形式)*/
 	private String cusSource;
-
-	/**客户来源类型：1渠道；2直销*/
+	/**客户来源类型(销售形式类型)：1渠道；2直销*/
 	private String cusSourceType;
 
 	/**客户简介*/

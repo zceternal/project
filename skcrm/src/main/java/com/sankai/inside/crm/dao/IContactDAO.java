@@ -139,5 +139,12 @@ import org.apache.ibatis.annotations.Param;
 	  * @param userId
 	  * @return
 	  */
-	 public List<Map<String,String>> getListForRole(@Param("roleId") int roleId,@Param("userId") int userId);
+	 List<Map<String,String>> getListForRole(@Param("roleId") int roleId,@Param("userId") int userId);
+
+	 /**
+	  * 获取联系人信息
+	  * @param customerId
+	  * @return
+	  */
+	 List<Contact> getListByCustomerId(@Param("customerId") int customerId);
 }

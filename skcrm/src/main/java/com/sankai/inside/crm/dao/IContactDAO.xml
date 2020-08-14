@@ -7,8 +7,7 @@
 <mapper namespace="com.sankai.inside.crm.dao.IContactDAO">
 
 	<!-- 根据Id获取实体 -->
-	<select id="getContactList" parameterType="String"
-			resultType="com.sankai.inside.crm.entity.Contact">
+	<select id="getContactList" parameterType="String" resultType="com.sankai.inside.crm.entity.Contact">
 		SELECT
 		c.id,
 		c.NAME,
@@ -661,6 +660,12 @@
 
 	<select id="getListForRole" resultType="map" >
 	select id,name from sys_contact where role = #{roleId} and create_id = #{userId}
+	</select>
+
+	<!-- 获取联系人集合 -->
+	<select id="getListByCustomerId" parameterType="int" resultType="com.sankai.inside.crm.entity.Contact">
+		SELECT id,`name`,role FROM sys_contact
+		where customer_id=#{customerId}
 	</select>
 
 </mapper>

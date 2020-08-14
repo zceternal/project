@@ -37,6 +37,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -53,32 +54,116 @@ public class CustomerController {
 	private ICustomerRecordService customerRecordServiceImpl;
 	@Resource
 	private ISysDictService sysDictService;// 数据字典
-	// @Resource
-	// private DepartmentService departmentService;//部门服务
 	@Resource
 	private AccountService accountService;// 用户服务
-
 	@Resource
 	private IAddressService addressServiceImpl;
-
 	@Resource
 	private CustomerLogService customerLogService;// 客户日志管理
-
 	@Resource
 	private ICustomerShareService customerShareService;// 客户共享服务
-
 	@Resource
 	private CustomerRemindService customerRemindService;// 客户提醒
-
 	@Autowired
 	private ContactService contactService;// 联系人
 	@Autowired
 	private ContactShareService contactShareService;// 联系人分享表
-
 	@Resource
 	private SpringMailSender send;// 发送邮件
 	@Resource
 	private CustomerStatusTimeService customerStatusTimeService;//客户状态停留时间
+
+	@RequiresAuthentication
+	@RequiresPermissions(value = "customer_edit")
+	@RequestMapping(path = "record", method = RequestMethod.POST)
+	@ResponseBody
+	public ServiceResultBool record(CommunicationForm from)
+			throws Exception {
+		from.setUserId(UserState.getLoginId());
+		from.setUserName(UserState.getLoginName());
+		ServiceResultBool result = customerServiceImpl.saveCommunication(from);
+		return new ServiceResultBool();
+
+	}
+
+	// 新增沟通记录
+	@RequiresAuthentication
+	@RequiresPermissions(value = "customer_list")
+	@RequestMapping(path = "record", method = RequestMethod.GET)
+	public String record(Model model,Integer customerId) {
+		try {
+			List<Address> list = this.addressServiceImpl.listAllProvs();// 地区
+			model.addAttribute("listProvs", list);
+
+
+			Integer loginId = UserState.getLoginId(); // 获取当前登录人id
+			// 计划执行人
+			List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id获取部门的所有成员
+			String accIds = "";
+			List<AccountOfDept> accListNew = new ArrayList<AccountOfDept>();
+			if (accList != null) {
+				AccountOfDept first = accList.get(0);
+				if (first.isMySelf() && first.getIsDeptManager() == 0) {// 部门领导
+					accIds = String.valueOf(first.getId());
+					accListNew.add(first);
+				} else {
+					for (AccountOfDept item : accList) {
+						accIds += item.getId() + ",";
+					}
+					if (accIds != "")
+						accIds = accIds.substring(0, accIds.length() - 1);
+					accListNew = accList;
+				}
+			}
+
+			// 客户信息
+			ServiceResult<Customer> costomerResult = customerServiceImpl.getModelById(customerId);
+			// 客户联系人集合信息
+			List<Contact> contacts = contactService.getListByCustomerId(customerId);
+			// 人际关系图
+			SysCustomerRelations customerRelations = customerServiceImpl.getCustomerRelations(customerId);
+
+			if (CollectionUtils.isEmpty(contacts)) {
+				List<String> jcrs = new ArrayList<>(5);// 决策人
+				List<String> glrs = new ArrayList<>(5);// 管理人
+				List<String> bsrs = new ArrayList<>(5);// 办事人
+				List<String> ywrs = new ArrayList<>(5);// 业务人
+				for (Contact contact : contacts) {
+					if (Objects.equals("114", contact.getRole())) {
+						jcrs.add(contact.getName());
+					}else if (Objects.equals("115", contact.getRole())) {
+						glrs.add(contact.getName());
+					}else if (Objects.equals("116", contact.getRole())) {
+						bsrs.add(contact.getName());
+					}else if (Objects.equals("117", contact.getRole())) {
+						ywrs.add(contact.getName());
+					}
+				}
+				model.addAttribute("jcrs",jcrs);
+				model.addAttribute("glrs",glrs);
+				model.addAttribute("bsrs",bsrs);
+				model.addAttribute("ywrs",ywrs);
+			}
+			model.addAttribute("model",costomerResult.getData());// 客户信息
+			model.addAttribute("contacts",contacts);// 客户联系人
+			model.addAttribute("customerRelations",customerRelations);// 客户人际关系图
+			model.addAttribute("currentDate", LocalDateTime.now().toLocalDate());
+			model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
+			model.addAttribute("cqxz", sysDictService.findAllByPid(10));// 客户出钱性质
+			model.addAttribute("cpfw", sysDictService.findAllByPid(9));// 产品及服务
+			model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
+			model.addAttribute("lxr", contactService.getList("112"));;// 客户来源-渠道
+			model.addAttribute("xstjzt", sysDictService.findAllByPid2(11));// 销售推进状态
+			model.addAttribute("gtfs", sysDictService.findAllByPid(16));// 沟通方式
+			model.addAttribute("taskxz", sysDictService.findAllByPid2(15));// 任务性质
+			model.addAttribute("taskxx", sysDictService.findAllByPid(13));// 任务象限
+			model.addAttribute("accList", accListNew);// 计划执行人
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "customer/record";
+	}
 
 	@RequiresAuthentication
 	@RequiresPermissions(value = "customer_list")
@@ -90,9 +175,6 @@ public class CustomerController {
 		boolean isDeptLeader = accountService.isLeaderById(loginId);// 是否是部门领导人
 
 		String status = request.getParameter("status");//客户状态
-		List<SysDict> xsztList = sysDictService.findAllByPid(36);// 客户状态
-		List<SysDict> khlxList = sysDictService.findAllByPid(37);// 客户类型
-		List<SysDict> ptbbList = sysDictService.findAllByPid(83);// 平台版本
 
 		List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id获取部门的所有成员
 		String accIds = "";
@@ -136,6 +218,10 @@ public class CustomerController {
 			search.setTraceType(tranceType);
 			search.setAccountId(account);
 			search.setIsFrom(-1);
+			search.setCusSource("-1");
+			search.setBuyService("-1");
+			search.setFollowState("-1");
+			search.setNextPlanState("-1");
 		}
 
 		if (search.getOrderField() != null && search.getOrderField().contains("traceName"))
@@ -174,10 +260,12 @@ public class CustomerController {
 		model.addAttribute("loginId", loginId);
 		model.addAttribute("model", result.getData());
 		model.addAttribute("pager", new PageInfo<>(result.getData()));
-		model.addAttribute("xszt", xsztList);
 		model.addAttribute("myself", myself);// 首页点击 客户总数
-		model.addAttribute("khlx", khlxList);
-		model.addAttribute("ptbb", ptbbList);
+
+		model.addAttribute("cpfw", sysDictService.findAllByPid(9));// 产品及服务
+		model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
+		model.addAttribute("lxr", contactService.getList("112"));;// 客户来源-渠道
+		model.addAttribute("xstjzt", sysDictService.findAllByPid2(11));// 销售推进状态
 
 		model.addAttribute("accList", accListNew);
 		model.addAttribute("isDeptLeader", isDeptLeader);
@@ -227,26 +315,18 @@ public class CustomerController {
 		session.setAttribute(key, search);
 		int loginId = UserState.getLoginId();
 		boolean isDeptLeader = accountService.isLeaderById(loginId);// 是否是部门领导人
-
-		List<SysDict> xsztList = sysDictService.findAllByPid(36);// 客户状态
-		List<SysDict> khlxList = sysDictService.findAllByPid(37);// 客户类型
-		List<SysDict> khcglList = sysDictService.findAllByPid(83);// 客户成功率
 		List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id获取部门的所有成员
-
-		List<AccountOfDept> accListNew = new ArrayList<AccountOfDept>();
 		String accIds = "";
 		if (accList != null) {
 			AccountOfDept first = accList.get(0);
 			if (first.isMySelf() && first.getIsDeptManager() == 0) {
 				accIds = String.valueOf(first.getId());
-				accListNew.add(first);
 			} else {
 				for (AccountOfDept item : accList) {
 					accIds += item.getId() + ",";
 				}
 				if (accIds != "")
 					accIds = accIds.substring(0, accIds.length() - 1);
-				accListNew = accList;
 			}
 		}
 
@@ -285,9 +365,10 @@ public class CustomerController {
 		model.addAttribute("loginId", loginId);
 		model.addAttribute("model", result.getData());
 		model.addAttribute("pager", new PageInfo<>(result.getData()));
-		model.addAttribute("xszt", xsztList);
-		model.addAttribute("khlx", khlxList);
-		model.addAttribute("khcgl", khcglList);
+		model.addAttribute("cpfw", sysDictService.findAllByPid(9));// 产品及服务
+		model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
+		model.addAttribute("lxr", contactService.getList("112"));;// 客户来源-渠道
+		model.addAttribute("xstjzt", sysDictService.findAllByPid2(11));// 销售推进状态
 
 		model.addAttribute("accList", accList);
 		model.addAttribute("isShowTop", (search.getAccountId() != -1));// 是否显示置顶列
@@ -440,11 +521,6 @@ public class CustomerController {
 		List<SysDictListByRecordTypeDTO> dictmodelList = recordType == null ? null
 				: sysDictServiceImpl.findByRecordType(recordType);
 
-		// 分页列出销售跟踪记录
-		/*ServiceResult<Page<CustomerRecordDTO>> result = this.customerRecordServiceImpl.findAllByCustomerIdGet(
-				deptLeader, customerId, (isShare ? accountId : (selfAccountId == 0 ? null : selfAccountId)), null,
-				page.getPage(), 6);*/
-
 		ServiceResult<Page<CustomerRecordDTO>> result = this.customerRecordServiceImpl.findAllByCustomerId(
 				isDeptLeader ? 1 : 0, customerId,
 				((isShare || selfAccountId <= 0 || isDeptLeader) ? accountId : selfAccountId), vo.getType(),
@@ -530,13 +606,6 @@ public class CustomerController {
 
 		Integer customerId = vo.getCustomerId();
 		Integer accountId = vo.getAccountId();
-		/*
-		 * // 根据客户Id和被分享的人查看，是否被分享 CustomerRecordIsShare cusRecShare = new
-		 * CustomerRecordIsShare(); cusRecShare.setCustomerId(customerId);
-		 * cusRecShare.setAllowAccountId(selfAccountId); CustomerRecordShareDTO
-		 * getIsShare = customerRecordServiceImpl.getIsShare(cusRecShare);
-		 */
-
 		boolean isDeptLeader = accountService.isLeaderById(selfAccountId);// 是否是部门领导人
 		Integer shareResult = customerServiceImpl.getIsShare(customerId, selfAccountId);
 		boolean isShare = (shareResult == null ? 0 : shareResult) == 1;
@@ -556,7 +625,6 @@ public class CustomerController {
 		try {
 			firstCustomerShare = this.customerServiceImpl.findFirstAllow(customerId);
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -576,7 +644,6 @@ public class CustomerController {
 			mav.addObject("isRecordShare", (isShare || isDeptLeader));// 跟踪记录是否共享
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		mav.setViewName("customer/show_list");
@@ -590,7 +657,6 @@ public class CustomerController {
 	public String add(Model model) {
 
 		try {
-
 			List<SysDict> cpfwList = sysDictService.findAllByPid(9);// 产品及服务
 			List<SysDict> cqxzList = sysDictService.findAllByPid(10);// 客户出钱性质
 			List<SysDict> xsztList = sysDictService.findAllByPid(36);// 客户状态

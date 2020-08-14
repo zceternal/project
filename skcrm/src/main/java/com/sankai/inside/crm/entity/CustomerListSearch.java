@@ -35,7 +35,45 @@ public class CustomerListSearch  extends FormPage{
 	
 	private String allowAccountName;
 	private List<Integer> accountIds;
-	
+
+	private String cusSource;//客户来源(销售形式)
+	private String buyService;//产品与服务
+	private String followState;//销售推进状态
+	private String nextPlanState;//下一步计划状态
+
+
+	public String getCusSource() {
+		return cusSource;
+	}
+
+	public void setCusSource(String cusSource) {
+		this.cusSource = cusSource;
+	}
+
+	public String getBuyService() {
+		return buyService;
+	}
+
+	public void setBuyService(String buyService) {
+		this.buyService = buyService;
+	}
+
+	public String getFollowState() {
+		return followState;
+	}
+
+	public void setFollowState(String followState) {
+		this.followState = followState;
+	}
+
+	public String getNextPlanState() {
+		return nextPlanState;
+	}
+
+	public void setNextPlanState(String nextPlanState) {
+		this.nextPlanState = nextPlanState;
+	}
+
 	public List<Integer> getAccountIds() {
 		return accountIds;
 	}

@@ -14,6 +14,9 @@ INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`,
 INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (14, '0', '任务状态', 0, 2, 53, sysdate(), 0, '任务状态', NULL, NULL);
 -- 1.7任务性质
 INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (15, '0', '任务性质', 0, 2, 53, sysdate(), 0, '任务性质', NULL, NULL);
+-- 1.8沟通方式
+INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (16, ''0'', ''沟通方式'', 0, 2, 53, sysdate(), 0, ''沟通方式'', NULL, NULL);
+
 
 -- 2、客户表新增字段
 ALTER TABLE `sys_customer`
@@ -63,7 +66,7 @@ CREATE TABLE `task` (
   `back_time` timestamp NULL DEFAULT NULL COMMENT '计划反馈时间',
   `back_way` int(2) DEFAULT NULL COMMENT '反馈方式',
   `top` int(2) DEFAULT '0' COMMENT '是否置顶：0否；1是',
-  `task_nature` varchar(20) DEFAULT NULL COMMENT '任务性质',
+  `task_nature` varchar(20) DEFAULT NULL COMMENT '任务性质(暂无用)',
   `assign_person` varchar(20) DEFAULT NULL COMMENT '指派者',
   `assign_time` timestamp NULL DEFAULT NULL COMMENT '指派时间',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
@@ -105,5 +108,7 @@ CREATE TABLE `task_share` (
   `del_flag` int(2) DEFAULT NULL COMMENT '删除标记：0正常，-1删除；',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务共享表';
-
+-- 9、客户跟踪记录表，增加“沟通方式”字段
+ALTER TABLE `sys_customer_record`
+ADD COLUMN `communication_way` int(11) NULL COMMENT '沟通方式' ;
 

@@ -309,5 +309,10 @@ public interface ICustomerDAO {
 	 */
 	public int insertCustomerRelations(SysCustomerRelations model);
 
-
+	/**
+	 * 修改客户信息
+	 * @param model
+	 * @return
+	 */
+	int updateByPrimaryKeySelective(Customer model);
 }

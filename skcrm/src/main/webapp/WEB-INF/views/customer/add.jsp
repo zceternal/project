@@ -54,26 +54,6 @@
 							</c:if>
 						</ul>
 					</div>
-					<%--<div class="form-group">
-						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">客户状态：</label>
-						<ul class="wh_ul">
-								<c:if test="${xszt != null }">
-								<c:forEach var="item" items="${xszt }" varStatus="sta">
-									<li><label><input class="dev-xszt" name="status" ${sta.index == 0 ? 'checked':'' } type="radio" value="${item.id }" />${item.name }</label></li>
-									</c:forEach>
-								</c:if>
-						</ul>
-					</div>--%>
-					<%--<div class="form-group">
-						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">客户类型：</label>
-						<ul class="wh_ul">
-								<c:if test="${khlx != null }">
-								<c:forEach var="item" items="${khlx }">
-									<li><label><input  name="type" class="dev-khlx" type="checkbox" value="${item.id }" />${item.name }</label></li>
-									</c:forEach>
-								</c:if>
-						</ul>
-					</div>--%>
 					<div class="form-group">
 						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">客户来源：</label>
 						<div class="wh_ul">
@@ -81,7 +61,7 @@
 							<ul class="wh_ul">
 								<c:if test="${lxr != null }">
 									<c:forEach var="item" items="${lxr }">
-										<li><label><input  name="cusSource" class="dev-khly" type="radio" value="${item.id }" />${item.name }</label></li>
+										<li><label><input  name="cusSource" class="dev-khly" type="radio" value="${item.id }_1" />${item.name }</label></li>
 									</c:forEach>
 								</c:if>
 							</ul>
@@ -89,33 +69,14 @@
 							<ul class="wh_ul">
 								<c:if test="${khly != null }">
 									<c:forEach var="item" items="${khly }">
-										<li><label><input  name="cusSource" class="dev-khly" type="radio" value="${item.id }" />${item.name }</label></li>
+										<li><label><input  name="cusSource" class="dev-khly" type="radio" value="${item.id }_2" />${item.name }</label></li>
 									</c:forEach>
 								</c:if>
 
 							</ul>
 						</div>
 					</div>
-					
-					<%--<div class="form-group">
-						<label class="col-sm-2 dev-col-sm-120 control-label">平台版本：</label>
-						<div class="col-sm-4">
-							<ul class="wh_ul">
-								<c:if test="${ptbb != null }">
-								<c:forEach var="item" items="${ptbb }" varStatus="sta">
-									<li><label><input class="dev-khcgl" name="salesSuccessRate" ${sta.index == 0 ? 'checked':'' } type="radio" value="${item.id }" />${item.name }</label></li>
-									</c:forEach>
-								</c:if>
-							</ul>
-						</div>
-						<label for="" class="col-sm-2 dev-col-sm-120 control-label">推荐人：</label>
-						<div class="col-sm-4">
-							<input type="text" data-prompt-position="inline"
-								class="form-control input200 validate[maxSize[10]]"
-								id="recommender" placeholder="请输入推荐人" name="recommender" maxLength = 10>
-						</div>
-					</div>--%>
-					
+
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">客户网站：</label>
 						<div class="col-sm-4">

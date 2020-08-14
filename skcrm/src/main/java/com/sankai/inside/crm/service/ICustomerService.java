@@ -259,4 +259,11 @@ public interface ICustomerService {
 	 * @return
 	 */
 	SysCustomerRelations getCustomerRelations(Integer cusId);
+
+	/**
+	 * 新增沟通记录（新增记录信息，修改客户信息，新增任务）
+	 * @param model
+	 * @return
+	 */
+	ServiceResultBool saveCommunication(CommunicationForm model);
 }

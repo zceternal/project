@@ -73,12 +73,8 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 						<input id="customerType" name="customerType" type="hidden" title="客户类型" value="${search.customerType }" /> 
 						<input id="accountId" name="accountId" type="hidden" value="${search.accountId }" />
 						<input id="salesSuccessRate" name="salesSuccessRate" type="hidden" title="销售成功率" value="${search.salesSuccessRate }" />
-						<input id="orderType" name="orderType" title="排序类型" type="hidden" value="${search.orderType }">
-						<input id="orderField" name="orderField" title="排序字段" type="hidden" value="${search.orderField }">
-						<input id="cusSource" name="cusSource" type="hidden" title="客户来源(销售形式)" value="${search.cusSource }" />
-						<input id="buyService" name="buyService" type="hidden" title="产品与服务" value="${search.buyService }" />
-						<input id="followState" name="followState" type="hidden" title="销售推进状态" value="${search.followState }" />
-						<input id="nextPlanState" name="nextPlanState" type="hidden" title="下一步计划状态" value="${search.accountId }" />
+						<input id="orderType" name="orderType" title="排序类型" type="hidden" value="${search.orderType }"></input>
+						<input id="orderField" name="orderField" title="排序字段" type="hidden" value="${search.orderField }"></input>
 						
 						<div class="form-group form-inline" style="padding: 5px 0px;">
 							<label class="col-sm-1 control-label dev-col-sm-1">销售负责人：</label>
@@ -94,67 +90,80 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 								</ul>
 							</div>
 						</div>
-						<div class="form-group form-inline" style="padding: 5px 0px;">
-							<label class="col-sm-1 control-label dev-col-sm-1">销售形式：</label>
+						<div class="form-group form-inline">
+							<label class="col-sm-1 control-label dev-col-sm-1">客  户  状  态：</label>
 							<div class="col-sm-11 favorite dev-col-sm-11">
-								<ul id="acclistTab" class="tab_button search_sk" style="margin-bottom: 0px; margin-top: 3px">
-									<li class="dev-cusSourceList ${search.cusSource == -1 ? "on":"" }" id="dev-cusSourceList-all" data-value="-1">全选</li>
-									<c:if test="${lxr != null }">
-										<c:forEach var="item" items="${lxr }">
-											<li class="dev-cusSourceList ${search.cusSource == item.id ? "on":"" }" data-value="${item.id }">渠道-${item.name }</li>
-										</c:forEach>
-									</c:if>
-									<c:if test="${khly != null }">
-										<c:forEach var="item" items="${khly }">
-											<li class="dev-cusSourceList ${search.cusSource == item.id ? "on":"" }" data-value="${item.id }">直销-${item.name }</li>
-										</c:forEach>
-									</c:if>
-								</ul>
-							</div>
-						</div>
-						<div class="form-group form-inline" style="padding: 5px 0px;">
-							<label class="col-sm-1 control-label dev-col-sm-1">产品及服务：</label>
-							<div class="col-sm-11 favorite dev-col-sm-11">
-								<ul id="acclistTab" class="tab_button search_sk"
+								<ul id="xsztTab" class="tab_button search_sk"
 									style="margin-bottom: 0px; margin-top: 3px">
-									<li class="dev-buyServiceList ${search.buyService == -1 ? "on":"" }" id="dev-buyServiceList-all" data-value="-1">全选</li>
-									<c:if test="${cpfw != null }">
-										<c:forEach var="item" items="${cpfw }" varStatus="sta">
-											<li class="dev-buyServiceList ${search.buyService == item.id ? "on":"" }" data-value="${item.id }">${item.name }</li>
-										</c:forEach>
-									</c:if>
-								</ul>
-							</div>
-						</div>
-						<div class="form-group form-inline" style="padding: 5px 0px;">
-							<label class="col-sm-1 control-label dev-col-sm-1">销售推进状态：</label>
-							<div class="col-sm-11 favorite dev-col-sm-11">
-								<ul id="acclistTab" class="tab_button search_sk"
-									style="margin-bottom: 0px; margin-top: 3px">
-									<li class="dev-followStateList ${search.followState == -1 ? "on":"" }" id="dev-followStateList-all" data-value="-1">全选</li>
-									<c:if test="${xstjzt != null }">
-										<c:forEach var="item" items="${xstjzt }">
-											<li class="dev-followStateList ${search.followState == item.id ? "on":"" }" data-value="${item.id }">${item.name }</li>
-										</c:forEach>
-									</c:if>
-								</ul>
-							</div>
-						</div>
-						<div class="form-group form-inline" style="padding: 5px 0px;">
-							<label class="col-sm-1 control-label dev-col-sm-1">下一步计划状态：</label>
-							<div class="col-sm-11 favorite dev-col-sm-11">
-								<ul id="acclistTab" class="tab_button search_sk"
-									style="margin-bottom: 0px; margin-top: 3px">
-									<li class="dev-nextPlanStateList ${search.nextPlanState == -1 ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">全选</li>
-									<li class="dev-nextPlanStateList ${search.nextPlanState == item.id ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">正常</li>
-									<li class="dev-nextPlanStateList ${search.nextPlanState == item.id ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">超期7天</li>
-									<li class="dev-nextPlanStateList ${search.nextPlanState == item.id ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">超期14天</li>
-									<li class="dev-nextPlanStateList ${search.nextPlanState == item.id ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">超期28天</li>
-									<li class="dev-nextPlanStateList ${search.nextPlanState == item.id ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">搁置</li>
-								</ul>
-							</div>
-						</div>
 
+									<li class='${search.status == -1 ? "on":"" } dev-xszt' data-value="-1">全选</li>
+									<c:if test="${xszt != null }">
+										<c:forEach var="item" items="${xszt }">
+										<c:set var="selid" >,${item.id },</c:set>
+										<c:if test="${fn:contains(',38,39,40,41,42,' ,selid )}">
+										<li class="dev-xszt dev-xszt-v ${search.status == item.id ? "on":"" }" title="公海规则(${item.value }天)" data-value="${item.id }">${item.name }</li>
+										</c:if>
+										<c:if test="${!fn:contains(',38,39,40,41,42,' ,selid )}">
+										<li class="dev-xszt dev-xszt-v ${search.status == item.id ? "on":"" }" title="公海规则(无)" data-value="${item.id }">${item.name }</li>
+										</c:if>
+										</c:forEach>
+									</c:if>
+								</ul>
+							</div>
+						</div>
+					<%-- 	<div class="form-group form-inline">
+							<label class="col-sm-1 control-label dev-col-sm-1">跟  踪  状  态：</label>
+							<div class="col-sm-11 favorite dev-col-sm-11">
+								<ul id="traceTab" class="tab_button search_sk"
+									style="margin-bottom: 0px; margin-top: 3px">
+									<li class="dev-trace ${search.traceType == -1 ? "on":"" }" data-value="-1">全选</li>
+									<li class="dev-trace ${search.traceType == 7 ?  "on":"" }" data-value="7">7天未跟踪</li>
+									<li class="dev-trace ${search.traceType == 10 ? "on":"" }" data-value="10">10天未跟踪</li>
+									<li class="dev-trace ${search.traceType == 15 ? "on":"" }" data-value="15">15天未跟踪</li>
+									<li class="dev-trace ${search.traceType == 30 ? "on":"" }" data-value="30">30天未跟踪</li>
+									<li class="dev-trace ${search.traceType == 60 ? "on":"" }" data-value="60">60天未跟踪</li>
+									<li class="dev-trace ${search.traceType == -2 ? "on":"" }" data-value="-2">无跟踪状态</li>
+								</ul>
+							</div>
+						</div> --%>
+						<div class="form-group form-inline">
+						<c:if test="${search.customerType != -1 or search.salesSuccessRate!=-1}">
+							<label class="col-sm-1 control-label dev-col-sm-1"><a href="javascript:;" onclick="hideH()" id="a_hs">隐 藏 查 询</a></label>
+						</c:if>
+						<c:if test="${search.customerType == -1 and search.salesSuccessRate ==-1}">
+						<label class="col-sm-1 control-label dev-col-sm-1"><a href="javascript:;" onclick="showH()" id="a_hs">高 级 查 询</a></label>
+						</c:if>
+						</div>
+						<div class="form-group form-inline dev-highSeacrch" style='${(search.customerType!=-1 or search.salesSuccessRate!=-1)?"":"display:none"}'>
+							<label class="col-sm-1 control-label dev-col-sm-1">客 户 类 型：</label>
+							<div class="col-sm-11 favorite dev-col-sm-11">
+								<ul id="khlxTab" class="tab_button search_sk"
+									style="margin-bottom: 0px; margin-top: 3px">
+									<li id="dev-khlx-all" class="${search.customerType == -1 ? "on":"" } dev-khlx" data-value="-1" />全选
+									</li>
+									<c:if test="${khlx != null }">
+										<c:forEach var="item" items="${khlx }">
+											<li class="dev-khlx ${search.customerType == item.id ? "on":"" }" data-value="${item.id }">${item.name }</li>
+										</c:forEach>
+									</c:if>
+								</ul>
+							</div>
+						</div>
+						<div class="form-group form-inline dev-highSeacrch" style='${(search.customerType!=-1 or search.salesSuccessRate!=-1)?"":"display:none"}'>
+							<label class="col-sm-1 control-label dev-col-sm-1">平台版本 ：</label>
+							<div class="col-sm-11 favorite dev-col-sm-11">
+								<ul id="khlxTab" class="tab_button search_sk"
+									style="margin-bottom: 0px; margin-top: 3px">
+									<li id="dev-khcgl-all" class="${search.salesSuccessRate == -1 ? "on":"" } dev-khcgl" data-value="-1" />全选
+									</li>
+									<c:if test="${ptbb != null }">
+										<c:forEach var="item" items="${ptbb }">
+											<li class="dev-khcgl ${search.salesSuccessRate == item.id ? "on":"" }" data-value="${item.id }">${item.name }</li>
+										</c:forEach>
+									</c:if>
+								</ul>
+							</div>
+						</div>
 						<div class="divider" style="width:100%;margin:15px 0px 15px -10px"></div>
 						<div class="form-group">
 							<label for="lastname" class="col-sm-1 control-label dev-col-sm-1">客 户 条 件：</label>

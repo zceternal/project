@@ -24,7 +24,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM sys_record_praise WHERE record_id=sr.`id` AND
 		account_id=#{loginId}) AS liked,
 		(SELECT avatar FROM sys_account WHERE
-		id=sr.`account_id`) AS avatar
+		id=sr.`account_id`) AS avatar,
+		sr.communication_way as communicationWay
 		FROM sys_customer_record AS sr
 
 		WHERE
@@ -83,8 +84,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 添加纪录 -->
 	<insert id="insertRecord" parameterType="com.sankai.inside.crm.entity.CustomerRecord">
 		INSERT INTO
-		sys_customer_record(account_id,customer_id,last_time,communication_time,create_time,type,source,remark)
-		VALUES(#{accountId},#{customerId},#{lastTime},#{communicationTime},#{createTime},#{type},#{source},#{remark})
+		sys_customer_record(account_id,customer_id,last_time,communication_time,create_time,type,source,remark,communication_way)
+		VALUES(#{accountId},#{customerId},#{lastTime},#{communicationTime},#{createTime},#{type},#{source},#{remark},#{communicationWay})
 	</insert>
 	<!--获取记录人上一次跟踪时间 -->
 	<select id="getLastTimeByAccountId" parameterType="com.sankai.inside.crm.entity.LastTimeDTO"

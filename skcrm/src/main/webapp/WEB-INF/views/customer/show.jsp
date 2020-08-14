@@ -265,21 +265,18 @@
 									<div class="">
 										<div class="site_change "
 											style="height: 33px; margin-bottom: 20px; margin-top: 10px; border-bottom: solid 1px #ccc; margin-left: 20px;">
-											<span class="colorshenblue font16"
-												style="border-bottom: 2px #49b79d solid; padding: 0px 5px 10px 5px;">处理记录列表</span>
-												<a class="btn btn_blueg2 font14 pull-right"  href="getCustomer.html?customerId=${customerId }&isFirst=${isFirst }"
-												 style="margin-right:18px;">记录历史</a>	
+											<span class="colorshenblue font16" style="border-bottom: 2px #49b79d solid; padding: 0px 5px 10px 5px;">处理记录列表</span>
+												<a class="btn btn_blueg2 font14 pull-right"  href="getCustomer.html?customerId=${customerId }&isFirst=${isFirst }" style="margin-right:18px;">记录历史</a>
 												 	
-												<a class="btn btn_blueg2 font14 pull-right"  href="javascript:void(0)" onclick="addRecordShow()" id="addrecord"
-												 style="margin-right:18px;">添加处理记录</a>	
-													
-												<a class="btn btn_blueg2 font14 pull-right"  href="javascript:void(0)" id="addremind"
-												data-cusid="${customerId }" style="margin-right:18px;">添加提醒</a>
+												<a class="btn btn_blueg2 font14 pull-right"  href="javascript:void(0)" onclick="addRecordShow()" id="addrecord" style="margin-right:18px;">添加处理记录</a>
+
+										        <a class="btn btn_blueg2 font14 pull-right"  href="javascript:void(0)" id="addNewRecord" data-cusid="${customerId }" style="margin-right:18px;">添加沟通记录</a>
+
+											    <a class="btn btn_blueg2 font14 pull-right"  href="javascript:void(0)" id="addremind" data-cusid="${customerId }" style="margin-right:18px;">添加提醒</a>
 												
 												<shiro:hasPermission name="highseas_transfer">
 												<c:if test="${isFirst }">
-												<a class="btn btn_blueg2 font14 pull-right"  href="javascript:void(0)" id="injecthighseas"
-												data-cusid="${customerId }" style="margin-right:18px;">投入公海</a>
+													<a class="btn btn_blueg2 font14 pull-right"  href="javascript:void(0)" id="injecthighseas" data-cusid="${customerId }" style="margin-right:18px;">投入公海</a>
 												</c:if>
 												</shiro:hasPermission>
 										</div>

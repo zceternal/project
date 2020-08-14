@@ -117,16 +117,13 @@
 		=a.`customer_id`)
 		AS finalTime,b.province,
 
-		(SELECT `name` FROM
-		sys_prov_city_area_street
-		WHERE `code` = b.province) AS
-		provinceName,b.`type`,
+		(SELECT `name` FROM sys_prov_city_area_street WHERE `code` = b.province) AS provinceName,
+		b.`type`,
 
-		(SELECT GROUP_CONCAT(dict.`name`) FROM sys_dict
-		AS dict WHERE
-		LOCATE(CONCAT(",",CONCAT(dict.id,",")),CONCAT(",",CONCAT(b.`type`,","))))
-		AS
-		typeName,b.create_time AS createTime
+		(SELECT GROUP_CONCAT(dict.`name`) FROM sys_dict AS dict WHERE LOCATE(CONCAT(",",CONCAT(dict.id,",")),CONCAT(",",CONCAT(b.`type`,",")))) AS typeName,
+		b.create_time AS createTime,
+		b.recommender,b.buy_service as buyService,b.cus_source as cusSource,b.cus_source_type as cusSourceType,b.synopsis,
+		b.business,b.pay_nature as payNature,b.follow_state as followState,b.follow_state_details as followStateDetails
 		FROM sys_customer_share AS a
 		LEFT JOIN sys_customer AS b ON a.customer_id = b.id
 		LEFT JOIN sys_account AS g
@@ -143,7 +140,7 @@
 			or
 			tb.namePy like CONCAT(CONCAT('%', #{content}),'%')
 			or
-			tb.phone like CONCAT(CONCAT('%', #{content}),'%')
+			tb.phone like CONCAT(CONCAT('%', #{content}),'%')CustomerListSearch
 			)
 		</if>
 
@@ -152,6 +149,16 @@
 		</if>
 		<if test="traceType==-2">
 			and tb.finalTime is null
+		</if>
+
+		<if test="cusSource != -1">
+			and tb.cusSource = #{cusSource}
+		</if>
+		<if test="buyService != -1">
+			and tb.buyService = #{buyService}
+		</if>
+		<if test="followState != -1">
+			and tb.followState = #{followState}
 		</if>
 
 		<if test="status>0">
@@ -314,14 +321,7 @@
 
 
 	<select id="selectCustomerById" resultType="com.sankai.inside.crm.entity.Customer">
-		SELECT `id`, `name`,
-		`short_name`, `status`, `type`, `source`, `url`,
-		`phone`, `province`,
-		`city`, `country`, `address`, `x_coord`,
-		`y_coord`, `remark`, `state`,
-		`create_id`, `create_time`,sales_success_rate
-		FROM sys_customer WHERE id=#{id}
-
+		SELECT * FROM sys_customer WHERE id=#{id}
 	</select>
 
 	<select id="selectCustomerByCreateTIme" resultType="com.sankai.inside.crm.entity.Customer">
@@ -672,6 +672,100 @@
 			</if>
 		</trim>
 	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.sankai.inside.crm.web.controllers.CustomerRecordController">
+		update sys_customer
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="shortName != null">
+				short_name = #{shortName,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="source != null">
+				source = #{source,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				province = #{province,jdbcType=INTEGER},
+			</if>
+			<if test="city != null">
+				city = #{city,jdbcType=INTEGER},
+			</if>
+			<if test="country != null">
+				country = #{country,jdbcType=INTEGER},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="xCoord != null">
+				x_coord = #{xCoord,jdbcType=DOUBLE},
+			</if>
+			<if test="yCoord != null">
+				y_coord = #{yCoord,jdbcType=DOUBLE},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER},
+			</if>
+			<if test="createId != null">
+				create_id = #{createId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="nameSimplePy != null">
+				name_simple_py = #{nameSimplePy,jdbcType=VARCHAR},
+			</if>
+			<if test="namePy != null">
+				name_py = #{namePy,jdbcType=VARCHAR},
+			</if>
+			<if test="salesSuccessRate != null">
+				sales_success_rate = #{salesSuccessRate,jdbcType=INTEGER},
+			</if>
+			<if test="recommender != null">
+				recommender = #{recommender,jdbcType=VARCHAR},
+			</if>
+			<if test="buyService != null">
+				buy_service = #{buyService,jdbcType=VARCHAR},
+			</if>
+			<if test="cusSource != null">
+				cus_source = #{cusSource,jdbcType=VARCHAR},
+			</if>
+			<if test="cusSourceType != null">
+				cus_source_type = #{cusSourceType,jdbcType=VARCHAR},
+			</if>
+			<if test="synopsis != null">
+				synopsis = #{synopsis,jdbcType=VARCHAR},
+			</if>
+			<if test="business != null">
+				business = #{business,jdbcType=VARCHAR},
+			</if>
+			<if test="payNature != null">
+				pay_nature = #{payNature,jdbcType=VARCHAR},
+			</if>
+			<if test="followState != null">
+				follow_state = #{followState,jdbcType=VARCHAR},
+			</if>
+			<if test="followStateDetails != null">
+				follow_state_details = #{followStateDetails,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
 
 
 </mapper>

@@ -1,5 +1,27 @@
 var dialog;
 $(function() {
+
+	// 新增沟通记录
+	$("#addNewRecord").on("click", function() {
+		var $this = $(this);
+		dialog = $.sk.open({
+			url : "record",
+			data : {
+				customerId : $this.data("cusid")
+			},
+			width : 900,
+			height:600,
+			title : "新增沟通记录",
+			buttons : [ {
+				html : "确定",
+				"class" : "btn btn-minier btn-success delay",
+				click : function() {
+					$("#myformAddRemind").submit();
+				}
+			} ]
+		});
+	});
+
 	$("#addContactX").click(
 			function() {
 				var $this = $(this);

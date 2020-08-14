@@ -47,6 +47,10 @@ public class ContactService {
 		return contactDAO.getContactList(relationId);
 	}
 
+	public List<Contact> getListByCustomerId(int customerId){
+		return contactDAO.getListByCustomerId(customerId);
+	}
+
 	public ServiceResult<Page<Contact>> list(ContactSearch content, int page, int pageSize) {
 
 		PageHelper.startPage(page, pageSize, true);
@@ -68,7 +72,6 @@ public class ContactService {
 	/**
 	 * 根据登录id获取当前人创建的客户Id
 	 *
-	 * @param id
 	 * @return
 	 */
 	public ServiceResult<Page<Contact>> getConByLoginId(ContactSearch content, int page, int pageSize) {
