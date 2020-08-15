@@ -378,4 +378,12 @@
     </foreach>
   </insert>
 
+  <select id="getLastTask" parameterType="int" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM task
+    WHERE customer_id=#{customerId}
+    ORDER BY create_time desc limit 1
+	</select>
+
 </mapper>

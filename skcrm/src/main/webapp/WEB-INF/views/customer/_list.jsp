@@ -90,9 +90,9 @@
 				<c:if test="${item.cusSourceType !=1 }">
 					<td xyz='z' data-customerid="${item.customerId }">直销-${elf:getDictName(item.cusSource)}</td>
 				</c:if>
-				<td xyz='z' data-customerid="${item.customerId }">${item.buyService }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${item.buyService }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${item.buyService }</td>
+				<td xyz='z' data-customerid="${item.customerId }">${item.nextReport }</td>
+				<td xyz='z' data-customerid="${item.customerId }">${item.nextPlan }</td>
+				<td xyz='z' data-customerid="${item.customerId }">${item.planExecutorAll }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.buyService }</td>
 				<td>
 					<shiro:hasPermission name="customer_edit">

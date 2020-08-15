@@ -3,8 +3,25 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-
 <mapper namespace="com.sankai.inside.crm.dao.ICustomerRecordDAO">
+	<resultMap id="BaseResultMap" type="com.sankai.inside.crm.entity.CustomerRecord" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="account_id" property="accountId" jdbcType="INTEGER" />
+		<result column="customer_id" property="customerId" jdbcType="INTEGER" />
+		<result column="last_time" property="lastTime" jdbcType="TIMESTAMP" />
+		<result column="communication_time" property="communicationTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="communication_way" property="communicationWay" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List" >
+		id, account_id, customer_id, last_time, communication_time, create_time, type, source,remark,
+		communication_way
+	 </sql>
+
 	<!--查询销售跟踪记录列表 -->
 	<select id="findAllByCustomerId" parameterType="com.sankai.inside.crm.entity.CustomerRecordListDTO"
 		resultType="com.sankai.inside.crm.entity.CustomerRecordDTO">
@@ -132,11 +149,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		ORDER BY cr.create_time DESC
 	</select>
-	
-	<select id="getCusNameById" parameterType="java.lang.Integer"
-		resultType="java.lang.String">
-		SELECT `name` FROM sys_customer WHERE id=56
-	</select>
 
+	<select id="getLastReport" parameterType="int" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sys_customer_record
+		WHERE customer_id=#{customerId}
+		ORDER BY create_time desc limit 1
+	</select>
 	
 </mapper>

@@ -94,8 +94,6 @@ public class CustomerController {
 		try {
 			List<Address> list = this.addressServiceImpl.listAllProvs();// 地区
 			model.addAttribute("listProvs", list);
-
-
 			Integer loginId = UserState.getLoginId(); // 获取当前登录人id
 			// 计划执行人
 			List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id获取部门的所有成员
@@ -657,25 +655,16 @@ public class CustomerController {
 	public String add(Model model) {
 
 		try {
-			List<SysDict> cpfwList = sysDictService.findAllByPid(9);// 产品及服务
-			List<SysDict> cqxzList = sysDictService.findAllByPid(10);// 客户出钱性质
-			List<SysDict> xsztList = sysDictService.findAllByPid(36);// 客户状态
-			List<SysDict> khlxList = sysDictService.findAllByPid(37);// 客户类型
-			List<SysDict> khkyList = sysDictService.findAllByPid(67);// 客户来源-直销
-			List<SysDict> ptbbList = sysDictService.findAllByPid(83);// 平台版本
-			List<Contact> lxrList = contactService.getList("112");;// 客户来源-渠道
-			List<SysDict> xstjztList = sysDictService.findAllByPid2(11);// 销售推进状态
-
 			List<Address> list = this.addressServiceImpl.listAllProvs();// 地区
 			model.addAttribute("listProvs", list);
-			model.addAttribute("xszt", xsztList);
-			model.addAttribute("khlx", khlxList);
-			model.addAttribute("khly", khkyList);
-			model.addAttribute("ptbb", ptbbList);
-			model.addAttribute("cpfw", cpfwList);
-			model.addAttribute("lxr", lxrList);
-			model.addAttribute("cqxz", cqxzList);
-			model.addAttribute("xstjzt", xstjztList);
+			model.addAttribute("xszt", sysDictService.findAllByPid(36));// 客户状态
+			model.addAttribute("khlx", sysDictService.findAllByPid(37));// 客户类型
+			model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
+			model.addAttribute("ptbb", sysDictService.findAllByPid(83));// 平台版本
+			model.addAttribute("cpfw", sysDictService.findAllByPid(9));// 产品及服务
+			model.addAttribute("lxr", contactService.getList("112"));// 客户来源-渠道
+			model.addAttribute("cqxz", sysDictService.findAllByPid(10));// 客户出钱性质
+			model.addAttribute("xstjzt", sysDictService.findAllByPid2(11));// 销售推进状态
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -720,16 +709,6 @@ public class CustomerController {
 
 		Customer customer = result.getData();
 
-		List<SysDict> cpfwList = sysDictService.findAllByPid(9);// 产品及服务
-		List<SysDict> khcglList = sysDictService.findAllByPid(83);// 客户成功率
-		List<SysDict> cqxzList = sysDictService.findAllByPid(10);// 客户出钱性质
-		List<SysDict> xsztList = sysDictService.findAllByPid(36);// 客户状态
-		List<SysDict> khlxList = sysDictService.findAllByPid(37);// 客户类型
-		List<SysDict> khkyList = sysDictService.findAllByPid(67);// 客户来源-直销
-		List<SysDict> ptbbList = sysDictService.findAllByPid(83);// 平台版本
-		List<Contact> lxrList = contactService.getList("112");;// 客户来源-渠道
-		List<SysDict> xstjztList = sysDictService.findAllByPid2(11);// 销售推进状态
-
 		List<Address> list = this.addressServiceImpl.listAllProvs();// 地区 省
 		model.addAttribute("listProvs", list);
 		List<Address> listCity = this.addressServiceImpl.listCityDicByProv(customer.getProvince());// 地区
@@ -739,17 +718,20 @@ public class CustomerController {
 		// 县
 		model.addAttribute("listCountry", listCountry);
 
+		// 人际关系图
+		SysCustomerRelations customerRelations = customerServiceImpl.getCustomerRelations(id);
+
 		model.addAttribute("model", customer);
-		model.addAttribute("xszt", xsztList);
-		model.addAttribute("khlx", khlxList);
-		model.addAttribute("khly", khkyList);
-		model.addAttribute("khcgl", khcglList);
-		model.addAttribute("cpfw", cpfwList);
-		model.addAttribute("ptbb", ptbbList);
-		model.addAttribute("cpfw", cpfwList);
-		model.addAttribute("lxr", lxrList);
-		model.addAttribute("cqxz", cqxzList);
-		model.addAttribute("xstjzt", xstjztList);
+		model.addAttribute("customerRelations",customerRelations);// 客户人际关系图
+		model.addAttribute("xszt", sysDictService.findAllByPid(36));// 客户状态
+		model.addAttribute("khlx", sysDictService.findAllByPid(37));// 客户类型
+		model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
+		model.addAttribute("khcgl", sysDictService.findAllByPid(83));// 客户成功率
+		model.addAttribute("cpfw", sysDictService.findAllByPid(9));// 产品及服务
+		model.addAttribute("ptbb", sysDictService.findAllByPid(83));// 平台版本
+		model.addAttribute("lxr", contactService.getList("112"));;// 客户来源-渠道
+		model.addAttribute("cqxz", sysDictService.findAllByPid(10));// 客户出钱性质
+		model.addAttribute("xstjzt", sysDictService.findAllByPid2(11));// 销售推进状态
 
 		List<String> types = new ArrayList<String>();
 		if (customer.getType() != null && customer.getType().contains(",")) {

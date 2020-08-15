@@ -32,6 +32,7 @@ public class Task {
     private String planExecutorUser;
     /**计划执行人（联系人）*/
     private String planExecutorContact;
+    /** 计划执行人-总和 */
     private String planExecutorAll;
 
     /**告知执行人方式*/

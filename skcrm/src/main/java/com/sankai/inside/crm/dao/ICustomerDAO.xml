@@ -412,7 +412,35 @@
 		`address`=#{address},
 		`x_coord`=#{xCoord}, `y_coord`=#{yCoord},
 		`remark`=#{remark},name_simple_py=#{nameSimplePy},
-		name_py=#{namePy},sales_success_rate=#{salesSuccessRate} WHERE `id`=#{id}
+		<if test="recommender != null">
+			recommender = #{recommender,jdbcType=VARCHAR},
+		</if>
+		<if test="buyService != null">
+			buy_service = #{buyService,jdbcType=VARCHAR},
+		</if>
+		<if test="cusSource != null">
+			cus_source = #{cusSource,jdbcType=VARCHAR},
+		</if>
+		<if test="cusSourceType != null">
+			cus_source_type = #{cusSourceType,jdbcType=VARCHAR},
+		</if>
+		<if test="synopsis != null">
+			synopsis = #{synopsis,jdbcType=VARCHAR},
+		</if>
+		<if test="business != null">
+			business = #{business,jdbcType=VARCHAR},
+		</if>
+		<if test="payNature != null">
+			pay_nature = #{payNature,jdbcType=VARCHAR},
+		</if>
+		<if test="followState != null">
+			follow_state = #{followState,jdbcType=VARCHAR},
+		</if>
+		<if test="followStateDetails != null">
+			follow_state_details = #{followStateDetails,jdbcType=VARCHAR},
+		</if>
+		name_py=#{namePy},sales_success_rate=#{salesSuccessRate}
+		WHERE `id`=#{id}
 	</update>
 	<update id="updateCustomerSim" parameterType="com.sankai.inside.crm.entity.Customer">
 		UPDATE `sys_customer`
@@ -672,6 +700,40 @@
 			</if>
 		</trim>
 	</insert>
+
+	<update id="updateCustomerRelations" parameterType="com.sankai.inside.crm.entity.SysCustomerRelations" >
+		update sys_customer_relations
+		<set >
+			<if test="customerId != null" >
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="channelPartner != null" >
+				channel_partner = #{channelPartner,jdbcType=VARCHAR},
+			</if>
+			<if test="trustPerson != null" >
+				trust_person = #{trustPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="decisionPerson != null" >
+				decision_person = #{decisionPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="managePerson != null" >
+				manage_person = #{managePerson,jdbcType=VARCHAR},
+			</if>
+			<if test="handlePerson != null" >
+				handle_person = #{handlePerson,jdbcType=VARCHAR},
+			</if>
+			<if test="professionalPerson != null" >
+				professional_person = #{professionalPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="createId != null" >
+				create_id = #{createId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null" >
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.sankai.inside.crm.web.controllers.CustomerRecordController">
 		update sys_customer

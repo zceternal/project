@@ -90,6 +90,67 @@ public class CustomerList {
 	/**客户业务人*/
 	private String professionalPerson;
 
+	/** 最近一次推进记录	*/
+	private String nextReport;
+	/**下一步工作计划*/
+	private String nextPlan;
+	/**计划执行人（内部员工）*/
+	private String planExecutorUser;
+	/**计划执行人（联系人）*/
+	private String planExecutorContact;
+	/** 计划执行人-总和 */
+	private String planExecutorAll;
+	/** 计划状态 */
+	private String taskStatus;
+
+	public String getNextReport() {
+		return nextReport;
+	}
+
+	public void setNextReport(String nextReport) {
+		this.nextReport = nextReport;
+	}
+
+	public String getNextPlan() {
+		return nextPlan;
+	}
+
+	public void setNextPlan(String nextPlan) {
+		this.nextPlan = nextPlan;
+	}
+
+	public String getPlanExecutorUser() {
+		return planExecutorUser;
+	}
+
+	public void setPlanExecutorUser(String planExecutorUser) {
+		this.planExecutorUser = planExecutorUser;
+	}
+
+	public String getPlanExecutorContact() {
+		return planExecutorContact;
+	}
+
+	public void setPlanExecutorContact(String planExecutorContact) {
+		this.planExecutorContact = planExecutorContact;
+	}
+
+	public String getPlanExecutorAll() {
+		return planExecutorAll;
+	}
+
+	public void setPlanExecutorAll(String planExecutorAll) {
+		this.planExecutorAll = planExecutorAll;
+	}
+
+	public String getTaskStatus() {
+		return taskStatus;
+	}
+
+	public void setTaskStatus(String taskStatus) {
+		this.taskStatus = taskStatus;
+	}
+
 	public String getRecommender() {
 		return recommender;
 	}

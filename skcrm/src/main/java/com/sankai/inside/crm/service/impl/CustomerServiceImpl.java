@@ -134,23 +134,42 @@ public class CustomerServiceImpl implements ICustomerService {
 	public ServiceResult<Page<CustomerList>> getList(CustomerListSearch val, int page, int pageSize) {
 		PageHelper.startPage(page, pageSize, true);
 		Page<CustomerList> list = (Page<CustomerList>) customerDAO.selectList(val);
-		for (CustomerList tmp : list) {
+		for (CustomerList customer : list) {
 			//联系人转换
-			if (Objects.equals(tmp.getCusSourceType(), "1")) {
-				ServiceResult<Contact> contactServiceResult = contactService.selectById(Integer.valueOf(tmp.getCusSource()));
+			if (Objects.equals(customer.getCusSourceType(), "1")) {
+				ServiceResult<Contact> contactServiceResult = contactService.selectById(Integer.valueOf(customer.getCusSource()));
 				if (contactServiceResult.isSuccess()) {
-					tmp.setCusSource(contactServiceResult.getData().getName());
+					customer.setCusSource(contactServiceResult.getData().getName());
 				}
 			}
 
 			//日期格式化
-			if (tmp.getFinalTime() == null)
-				continue;
-			SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
-			String myDate = dateFormater.format(tmp.getFinalTime());
-			tmp.setTraceName(TraceType.CalcValue(myDate).getName());
+			if (!Objects.isNull(customer.getFinalTime())) {
+				SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
+				String myDate = dateFormater.format(customer.getFinalTime());
+				customer.setTraceName(TraceType.CalcValue(myDate).getName());
+			}
 
-
+			//最近一次推进记录
+			CustomerRecord lastReport = customerRecordDAO.getLastReport(customer.getCustomerId());
+			if (!Objects.isNull(lastReport)) {
+				customer.setNextReport(lastReport.getRemark());
+			}
+			//下一步计划（任务）
+			Task lastTask = taskDAO.getLastTask(customer.getCustomerId());
+			if (!Objects.isNull(lastTask)) {
+				String planExecutorAll = "";
+				if (!Objects.isNull(lastTask.getPlanExecutorContact())) {
+					List<String> ids = Arrays.asList(lastTask.getPlanExecutorContact().split(","));
+					planExecutorAll = contactDAO.getNames(ids);
+				}
+				if (!Objects.isNull(lastTask.getPlanExecutorUser())) {
+					String names = accountDAO.getNames(lastTask.getPlanExecutorUser());
+					planExecutorAll  = StringUtils.isEmpty(planExecutorAll)?names:names+","+planExecutorAll;
+				}
+				customer.setNextPlan(lastTask.getNextPlan());
+				customer.setPlanExecutorAll(planExecutorAll);
+			}
 		}
 		return new ServiceResult<Page<CustomerList>>(list);
 	}
@@ -367,6 +386,12 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public ServiceResultBool saveCustomer(Customer model) {
+		String cusSource = model.getCusSource();
+		if (!StringUtils.isEmpty(cusSource)) {
+			String[] cs = cusSource.split("_");
+			model.setCusSource(cs[0]);
+			model.setCusSourceType(cs[1]);
+		}
 		ServiceResult<Customer> oldModel = getCustomer(model.getId());
 		Customer oldCustomer = oldModel.getData();
 		if (oldCustomer!=null&&!model.getName().equals(oldCustomer.getName())) {
@@ -383,6 +408,14 @@ public class CustomerServiceImpl implements ICustomerService {
 		model.setNameSimplePy(Pinyin4jUtil.getPinYinHeadChar(model.getName()));
 		model.setNamePy(Pinyin4jUtil.getPinYin(model.getName()));
 		customerDAO.updateCustomer(model);
+
+		// 新增人际关系
+		SysCustomerRelations customerRelations = new SysCustomerRelations();
+		BeanUtils.copyProperties(model, customerRelations);
+		customerRelations.setCustomerId(model.getId());
+		customerRelations.setId(model.getRelationsId());
+		customerDAO.updateCustomerRelations(customerRelations);
+
 		//修改状态的天数，新增最新状态
 		customerStatusTimeUA(model.getId(),model.getStatus());
 		if ((!model.getContactName().equals(null)&&!model.getContactName().equals(""))&&(!model.getContactPhone().equals(null)&&!model.getContactPhone().equals(""))) {

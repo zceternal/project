@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class Customer {
 	private int id;
+	private int relationsId;//人际关系id
 	private String name;
 	private String shortName;
 	private int status;//客户状态,字典
@@ -73,6 +74,14 @@ public class Customer {
 
 	/**客户业务人*/
 	private String professionalPerson;
+
+	public int getRelationsId() {
+		return relationsId;
+	}
+
+	public void setRelationsId(int relationsId) {
+		this.relationsId = relationsId;
+	}
 
 	public String getRecommender() {
 		return recommender;

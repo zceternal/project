@@ -183,7 +183,7 @@
 									<li><label><input  name="followState" class="dev-cjzt" ${item.id==model.followState?"checked":""} type="radio" value="${item.id }" />${item.name }</label></li>
 									<c:if test="${item.childList != null }">
 										<c:forEach var="child" items="${item.childList }">
-											<li><label><input  name="followStateDetails" ${(model.followStateDetails!=null && model.followStateDetails.contains(item.id))?"selected":""} class="dev-cjztmx" type="checkbox" value="${child.id }" />${child.name }</label></li>
+											<li><label><input  name="followStateDetails" ${(model.followStateDetails!=null && model.followStateDetails.concat(",").contains(String.valueOf(child.id).concat(",")))?"checked":""} class="dev-cjztmx" type="checkbox" value="${child.id }" />${child.name }</label></li>
 										</c:forEach>
 									</c:if>
 								</c:forEach>

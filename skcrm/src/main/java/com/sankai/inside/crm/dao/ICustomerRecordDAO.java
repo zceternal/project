@@ -12,6 +12,7 @@ import com.sankai.inside.crm.entity.CustomerRecordShareDTO;
 import com.sankai.inside.crm.entity.LastTimeDTO;
 import com.sankai.inside.crm.entity.LikeItDTO;
 import com.sankai.inside.crm.web.model.CustomerRecordSearchForm;
+import org.apache.ibatis.annotations.Param;
 
 public interface ICustomerRecordDAO {
 	/**
@@ -78,5 +79,12 @@ public interface ICustomerRecordDAO {
  	 * @return
  	 */
 	public List<CustomerRecordLogsDTO> findAllCustomerRecordLogsBy(CustomerRecordSearchForm dto);
+
+	/**
+	 * 获取最近一条记录
+	 * @param customerId
+	 * @return
+	 */
+	CustomerRecord getLastReport(@Param("customerId") int customerId);
 	
 }

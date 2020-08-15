@@ -307,7 +307,9 @@ public interface ICustomerDAO {
 	 * @param model
 	 * @return
 	 */
-	public int insertCustomerRelations(SysCustomerRelations model);
+	int insertCustomerRelations(SysCustomerRelations model);
+
+	int updateCustomerRelations(SysCustomerRelations model);
 
 	/**
 	 * 修改客户信息

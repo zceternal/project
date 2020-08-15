@@ -50,4 +50,10 @@ public interface ITaskDAO {
     Integer checkExists(TaskShareExistsCheck ckeck);
     /** 批量新增任务共享 */
     Integer insertTaskShare(List<TaskShare> list);
+    /**
+     * 获取最近一条记录
+     * @param customerId
+     * @return
+     */
+    Task getLastTask(@Param("customerId") int customerId);
 }
