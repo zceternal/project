@@ -1,4 +1,5 @@
-var dialog;
+var dialogForAdd;
+var dialogForEdit;
 
 var $page, $formsearch;
 $page = $(":hidden[name=page]");
@@ -34,7 +35,7 @@ $(function() {
 	$("a[data-id=customer_add]").live("click", function() {
 		
 		var $this = $(this);
-		dialog = $.sk.open({
+		dialogForAdd = $.sk.open({
 			url : "add",
 			width : 900,
 			height:600,
@@ -52,7 +53,7 @@ $(function() {
 	// 修改
 	$("a[data-id=customer_edit]").live("click", function() {
 		var $this = $(this);
-		dialog = $.sk.open({
+		dialogForEdit = $.sk.open({
 			url : "edit",
 			width : 900,
 			height:600,
@@ -65,7 +66,6 @@ $(function() {
 				"class" : "btn btn-minier btn-success delay",
 				click : function() {
 					$("#myformEdit").submit();
-
 				}
 			} ]
 		});
@@ -173,7 +173,7 @@ function onCustomerSuccessAdd(data) {
 			$("#content").val("");
 			$page.val("1");
 			$formsearch.submit();
-			$.sk.close(dialog);
+			$.sk.close(dialogForAdd);
 		});
 	} else {
 		$.sk.error(data.msg);
@@ -184,9 +184,11 @@ function onCustomerSuccessAdd(data) {
 
 function onCustomerSuccessEdit(data) {
 	if (data.success) {
-		$.sk.success("客户修改成功", function() {
+		$.sk.success("修改客户成功", function() {
+			$("#content").val("");
+			$page.val("1");
 			$formsearch.submit();
-			$.sk.close(dialog);
+			$.sk.close(dialogForEdit);
 		});
 	} else {
 		$.sk.error(data.msg);

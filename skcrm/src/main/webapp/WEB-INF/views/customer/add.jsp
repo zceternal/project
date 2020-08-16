@@ -253,7 +253,7 @@
 	$("a[data-id=contact_list]").click(function() {
 		var $this = $(this);
         var bz = $this.data("bz");
-		dialog = $.sk.open({
+		$selectCustomerList = $.sk.open({
 			url : "select_contact_list",
 			width : 1000,
 			height : 600,
@@ -276,6 +276,7 @@
 					}
 					$("#sp_"+bz).text(names);
 					$("#hid_"+bz).val(ids);
+					$.sk.close($selectCustomerList);
 				}
 			} ]
 		});

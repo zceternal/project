@@ -233,6 +233,8 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 			src="../content/js/jquery.unobtrusive-ajax.min.js"></script>
 		<script type="text/javascript"
 			src="../content/module/customer/customer.index.js"></script>
+	<script type="text/javascript"
+			src="../content/module/customer/customer.list.js"></script>
 		<!--引入地图搜索JS (1/2)  -->
 		<script type="text/javascript"
 			src="http://api.map.baidu.com/api?v=2.0&ak=2i6NaIyF6fP4NOFdLs4I9Fk9"></script>

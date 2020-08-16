@@ -207,8 +207,8 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 	<script type="text/javascript"
 		src="../content/js/jquery.JPlaceholder.js"></script>
 
-	<script type="text/javascript"
-		src="../content/module/customer/select.contact.js"></script>
+<%--	<script type="text/javascript"
+		src="../content/module/customer/select.contact.js"></script>--%>
 	<!--表单验证 s-->
 	<script type="text/javascript"
 		src="../content/js/jquery.validationEngine-zh_CN.js"></script>

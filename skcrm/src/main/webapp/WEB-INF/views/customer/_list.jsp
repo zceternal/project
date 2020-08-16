@@ -113,8 +113,6 @@
 
 <div id="Pagination" class="pager"></div>
 
-<script type="text/javascript"
-	src="../content/module/customer/customer.list.js"></script>
 <link rel="stylesheet" href="../content/css/order.css" />
 
 <script type="text/javascript">
