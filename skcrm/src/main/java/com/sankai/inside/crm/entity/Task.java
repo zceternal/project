@@ -60,7 +60,7 @@ public class Task {
     private String modifyName;
 
     /**任务状态*/
-    private String status;
+    private int status;
     /**是否置顶：0否；1是*/
     private Integer top;
     private Integer source;
@@ -140,11 +140,11 @@ public class Task {
     public void setTop(Integer top) {
         this.top = top;
     }
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

@@ -15,7 +15,7 @@ INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`,
 -- 1.7任务性质
 INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (15, '0', '任务性质', 0, 2, 53, sysdate(), 0, '任务性质', NULL, NULL);
 -- 1.8沟通方式
-INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (16, ''0'', ''沟通方式'', 0, 2, 53, sysdate(), 0, ''沟通方式'', NULL, NULL);
+INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (16, '0', '沟通方式', 0, 2, 53, sysdate(), 0, '沟通方式', NULL, NULL);
 
 
 -- 2、客户表新增字段
@@ -61,7 +61,7 @@ CREATE TABLE `task` (
   `plan_executor_contact` varchar(30) DEFAULT NULL COMMENT '计划执行人（联系人），多个用逗号分隔',
   `execute_way` varchar(20) DEFAULT NULL COMMENT '告知执行人方式，多个用逗号分隔',
   `quadrant` varchar(20) DEFAULT NULL COMMENT '任务象限',
-  `status` varchar(20) DEFAULT NULL COMMENT '任务状态',
+  `status` int(11) DEFAULT '0' COMMENT '任务状态：-1搁置；0正常；1超期一天；N超期N天',
   `source` int(2) DEFAULT NULL COMMENT '任务来源：1我指派的；2被指派的',
   `back_time` timestamp NULL DEFAULT NULL COMMENT '计划反馈时间',
   `back_way` int(2) DEFAULT NULL COMMENT '反馈方式',

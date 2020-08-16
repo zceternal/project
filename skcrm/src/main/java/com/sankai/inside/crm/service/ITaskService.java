@@ -21,4 +21,8 @@ public interface ITaskService {
     Integer checkExists(int taskId, int allowAccountId) ;
     /** 共享任务，批量新增 */
     Integer insertContactShare(List<TaskShare> list);
+    /** 获取列表-任务状态逾期低于30天的 */
+    List<Task> getListForJob();
+    /** 修改任务信息 */
+    int updateById(Task task);
 }

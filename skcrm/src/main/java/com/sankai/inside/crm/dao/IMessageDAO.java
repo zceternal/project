@@ -13,7 +13,7 @@ public interface IMessageDAO {
 	
 	public void insert(Message message);
 	
-	public void insertReceives(int[] receive,BigInteger sendId);
+	public void insertReceives(Integer[] receive,BigInteger sendId);
 	
 	public void delete(BigInteger id);
 	

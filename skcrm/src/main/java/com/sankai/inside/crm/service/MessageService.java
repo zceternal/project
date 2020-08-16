@@ -60,7 +60,7 @@ public class MessageService {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public void sendMessage(String title, String content, int[] ids, int type) {
+	public void sendMessage(String title, String content, Integer[] ids, int type) {
 
 		int loginId = UserState.getLoginId();
 
@@ -124,7 +124,7 @@ public class MessageService {
 		messageDAO.updateState(id, loginId);
 	}
 	@Transactional(rollbackFor = Exception.class)
-	public void sendMessage(String title, String content,Integer createId, int[] ids, int type) {
+	public void sendMessage(String title, String content,Integer createId, Integer[] ids, int type) {
 
 		Message message = new Message();
 		message.setId(IdUtils.uniqueId());

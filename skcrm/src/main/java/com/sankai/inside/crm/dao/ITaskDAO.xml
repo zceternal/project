@@ -18,7 +18,7 @@
     <result column="create_name" property="createName" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_name" property="modifyName" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="top" property="top" jdbcType="INTEGER" />
     <result column="source" property="source" jdbcType="INTEGER" />
     <result column="task_nature" property="taskNature" jdbcType="VARCHAR" />
@@ -55,7 +55,7 @@
       #{planStandard,jdbcType=VARCHAR}, #{planExecutorUser,jdbcType=VARCHAR},#{planExecutorContact,jdbcType=VARCHAR}, #{executeWay,jdbcType=VARCHAR},
       #{quadrant,jdbcType=VARCHAR}, #{backTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createName,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyName,jdbcType=VARCHAR},
-      #{status,jdbcType=VARCHAR},#{top,jdbcType=INTEGER},#{createId,jdbcType=INTEGER},#{source,jdbcType=INTEGER},
+      #{status,jdbcType=INTEGER},#{top,jdbcType=INTEGER},#{createId,jdbcType=INTEGER},#{source,jdbcType=INTEGER},
       #{taskNature,jdbcType=VARCHAR}, #{assignPerson,jdbcType=VARCHAR}, #{assignTime,jdbcType=TIMESTAMP},
       #{backWay,jdbcType=INTEGER},#{name,jdbcType=VARCHAR}
       )
@@ -189,7 +189,7 @@
         #{modifyName,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="top != null" >
         #{top,jdbcType=INTEGER},
@@ -266,7 +266,7 @@
         modify_name = #{modifyName,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="top != null" >
         top = #{top,jdbcType=INTEGER},
@@ -313,7 +313,7 @@
       create_name = #{createName,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       modify_name = #{modifyName,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       top = #{top,jdbcType=INTEGER},
       create_id = #{createId,jdbcType=INTEGER},
       task_nature = #{taskNature,jdbcType=VARCHAR},
@@ -336,7 +336,7 @@
      <if test="quadrant != '-1'">
       and quadrant = #{quadrant}
      </if>
-     <if test="status != '-1'">
+     <if test="status != -1">
        and status = #{status}
      </if>
      <if test="source != '-1'">
@@ -385,5 +385,12 @@
     WHERE customer_id=#{customerId}
     ORDER BY create_time desc limit 1
 	</select>
+
+  <select id="getListForJob" parameterType="int" resultMap="BaseResultMap">
+    select * from (
+      select * from task <![CDATA[where status <= 30]]>
+    ) t where t.back_way != 5
+  </select>
+
 
 </mapper>

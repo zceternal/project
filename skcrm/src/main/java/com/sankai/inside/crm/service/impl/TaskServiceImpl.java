@@ -35,6 +35,16 @@ public class TaskServiceImpl implements ITaskService {
     private ITaskFeedbackFileDAO taskFeedbackFileDAO;
 
     @Override
+    public int updateById(Task task) {
+        return taskDAO.updateByPrimaryKeySelective(task);
+    }
+
+    @Override
+    public List<Task> getListForJob() {
+        return taskDAO.getListForJob();
+    }
+
+    @Override
     public Integer insertContactShare(List<TaskShare> list) {
         if (CollectionUtils.isEmpty(list)) {
             return 1;

@@ -11,7 +11,7 @@ public class CustomerListSearch  extends FormPage{
 	private String content;//文本查询条件
 	private String traceType;//跟踪状态
 	
-	private String status;//销售状态
+	private int status;//销售状态
 	
 	private List<Integer> principal;//销售负责人
 	
@@ -154,10 +154,10 @@ public class CustomerListSearch  extends FormPage{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 

@@ -56,4 +56,10 @@ public interface ITaskDAO {
      * @return
      */
     Task getLastTask(@Param("customerId") int customerId);
+
+    /**
+     * 获取列表-任务状态逾期低于30天的
+     * @return
+     */
+    List<Task> getListForJob();
 }
