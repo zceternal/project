@@ -28,28 +28,28 @@
 				<div id="provinceName" class="dev-order up"></div>
 			</th>
 			<th width="8%">产品及服务
-				<div id="provinceName" class="dev-order up"></div>
+				<div id="buyServiceName" class="dev-order up"></div>
 			</th>
 			<th width="8%">销售推进状态
-				<div id="provinceName" class="dev-order up"></div>
+				<div id="followStateName" class="dev-order up"></div>
 			</th>
 			<th width="8%">负责人
 				<div id="allowAccountName" class="dev-order up"></div>
 			</th>
 			<th width="8%">销售形式
-				<div id="allowAccountName" class="dev-order up"></div>
+				<div id="cusSourceName" class="dev-order up"></div>
 			</th>
 			<th width="12%">最近一次推进记录
-				<div id="allowAccountName" class="dev-order up"></div>
+			<%--	<div id="allowAccountName" class="dev-order up"></div>--%>
 			</th>
 			<th width="8%">下一步计划
-				<div id="allowAccountName" class="dev-order up"></div>
+				<%--<div id="allowAccountName" class="dev-order up"></div>--%>
 			</th>
 			<th width="8%">计划配合人
-				<div id="statusName" class="dev-order up"></div>
+				<%--<div id="statusName" class="dev-order up"></div>--%>
 			</th>
 			<th width="8%">计划状态
-				<div id="statusName" class="dev-order up"></div>
+				<div id="taskStatus" class="dev-order up"></div>
 			</th>
 			<th>操作
 				<div id="opeartor" class="empty"></div>
@@ -60,7 +60,7 @@
 
 		<c:if test="${pager.total == 0 }">
 			<tr>
-				<td colspan="${isShowTop || myself.equals('1')?12:11}" style="text-align: center">暂无数据</td>
+				<td colspan="${isShowTop || myself.equals('1')?13:12}" style="text-align: center">暂无数据</td>
 			</tr>
 		</c:if>
 		<c:forEach var="item" items="${model }">
@@ -93,7 +93,7 @@
 				<td xyz='z' data-customerid="${item.customerId }">${item.nextReport }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.nextPlan }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.planExecutorAll }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${item.buyService }</td>
+				<td xyz='z' data-customerid="${item.customerId }">${item.status }</td>
 				<td>
 					<shiro:hasPermission name="customer_edit">
 						<span class="colorblue edit"><a href="javascript:void(0)"
@@ -113,8 +113,11 @@
 
 <div id="Pagination" class="pager"></div>
 
-<link rel="stylesheet" href="../content/css/order.css" />
 
+
+
+
+<link rel="stylesheet" href="../content/css/order.css" />
 <script type="text/javascript">
 
 //分页选择每页行数下拉回调函数

@@ -107,7 +107,7 @@ public class CustomerYunTransformCrmService {
 							log.info("*【跑批成功】...{}客户名称：" +item.getCustomerName());
 						}else
 						{
-							int[] ids = new int[1];
+							Integer[] ids = new Integer[1];
 							ids[0]= tranDefaultCreateId;
 							messageService.sendMessage("系统提醒-客户信息已存在","客户【"+item.getCustomerName()+"】已被其他人创建过。" , -100, ids, 0);
 							log.info("*【跑批失败】...{}客户名称已存在：" +item.getCustomerName());

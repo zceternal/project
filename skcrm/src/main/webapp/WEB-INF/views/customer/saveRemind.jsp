@@ -55,7 +55,7 @@
 			var picker = new Pikaday({
 				field : El,
 				firstDay : 1,
-				minDate : new Date(),
+				//minDate : new Date(),
 				//maxDate: new Date(),
 				format : 'YYYY-MM-DD',
 				yearRange : [ 1900, 2330 ]

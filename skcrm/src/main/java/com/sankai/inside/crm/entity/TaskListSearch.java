@@ -12,8 +12,36 @@ public class TaskListSearch extends FormPage{
 	private String quadrant;//任务象限
 	private String status;//任务状态
 	private String source;//任务来源
+	private int sourceId;//任务来源id
 	private int accountId;//负责人
 	private String content;//查询条件(任务名称)
+
+	private String orderField;//排序字段
+	private String orderType;//排序类型
+
+	public int getSourceId() {
+		return sourceId;
+	}
+
+	public void setSourceId(int sourceId) {
+		this.sourceId = sourceId;
+	}
+
+	public String getOrderField() {
+		return orderField;
+	}
+
+	public void setOrderField(String orderField) {
+		this.orderField = orderField;
+	}
+
+	public String getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
+	}
 
 	public String getContent() {
 		return content;

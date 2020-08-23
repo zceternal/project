@@ -15,6 +15,7 @@ import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.util.CollectionUtils;
+import org.omg.CORBA.INTERNAL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,7 +173,7 @@ public class CustomerController {
 		Integer loginId = UserState.getLoginId();
 		boolean isDeptLeader = accountService.isLeaderById(loginId);// 是否是部门领导人
 
-		String status = request.getParameter("status");//客户状态
+		Integer status = -2;//客户状态
 
 		List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id获取部门的所有成员
 		String accIds = "";
@@ -207,8 +208,11 @@ public class CustomerController {
 			if (myself != null && myself.equals("1"))
 				account = loginId;// 首页点击 客户总数
 			search = new CustomerListSearch();
-			if(StringUtils.isEmpty(status))search.setStatus("-1");
-			else search.setStatus(status);
+			if (StringUtils.isEmpty(status)) {
+				search.setStatus(-2);// -1 搁置；-2 全选
+			} else {
+				search.setStatus(status);
+			}
 			search.setCustomerType("-1");
 			search.setsalesSuccessRate("-1");
 			search.setOrderField("order");
@@ -258,6 +262,7 @@ public class CustomerController {
 		model.addAttribute("loginId", loginId);
 		model.addAttribute("model", result.getData());
 		model.addAttribute("pager", new PageInfo<>(result.getData()));
+		model.addAttribute("PAGER", new PageInfo<>(result.getData()));
 		model.addAttribute("myself", myself);// 首页点击 客户总数
 
 		model.addAttribute("cpfw", sysDictService.findAllByPid(9));// 产品及服务
@@ -291,7 +296,7 @@ public class CustomerController {
 		if(!StringUtils.isEmpty(indexPage))search.setPage(Integer.valueOf(indexPage));
 		if(!StringUtils.isEmpty(indexPageSize))search.setPageSize(Integer.valueOf(indexPageSize));
 		//if(!StringUtils.isEmpty(indexTraceType))search.setTraceType(indexTraceType);
-		if(!StringUtils.isEmpty(indexStatus))search.setStatus(indexStatus);
+		if(!StringUtils.isEmpty(indexStatus))search.setStatus(Integer.valueOf(indexStatus));
 		if(!StringUtils.isEmpty(indexCustomerType))search.setCustomerType(indexCustomerType);
 		if(!StringUtils.isEmpty(indexSalesSuccessRate))search.setsalesSuccessRate(indexSalesSuccessRate);
 		int accId = Integer.valueOf(indexAccountId);
@@ -363,6 +368,7 @@ public class CustomerController {
 		model.addAttribute("loginId", loginId);
 		model.addAttribute("model", result.getData());
 		model.addAttribute("pager", new PageInfo<>(result.getData()));
+		model.addAttribute("PAGER", new PageInfo<>(result.getData()));
 		model.addAttribute("cpfw", sysDictService.findAllByPid(9));// 产品及服务
 		model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
 		model.addAttribute("lxr", contactService.getList("112"));;// 客户来源-渠道

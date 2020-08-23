@@ -161,10 +161,10 @@ public class QuartzCustomerLimitService implements Job {
 	{
 		if(model==null) return ;
 		//发送消息给自己
-		int[] ids = new int[1];
+		Integer[] ids = new Integer[1];
 		ids[0] = model.getId();
 		//发送消息给部门领导
-		int[] pids = new int[1];
+		Integer[] pids = new Integer[1];
 		
 		String content = "";
 		if(i==1)//上限

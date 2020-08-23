@@ -119,16 +119,19 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="" class="col-sm-2 control-label">计划反馈时间：</label>
-						<div class="col-sm-4" style="margin-left: -15px; padding-left: 0px;">
+						<label class="col-sm-2 dev-col-sm-120 control-label">计划反馈时间：</label>
+						<div class="col-sm-10">
 							<div class="inline relative mr0">
 								<input type="text" class="form-control input150" placeholder="请输入计划反馈时间" name="backTime" id="backTime" input-type="date" >
 								<span class="date_icon" style="cursor: pointer;"><i></i></span>
 							</div>
 						</div>
-						<label for="" class="col-sm-2 control-label">提醒方式：</label>
-						<div class="col-sm-6 favorite">
-							<div class="wh_ul">
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 dev-col-sm-120 control-label">提醒方式：</label>
+						<div class="col-sm-10">
+							<div class="">
 								<ul class="wh_ul">
 									<li class="dev-acclist " >
 										<input  name="backWay" class="dev-cjztmx" type="radio" value="1" />提前一天

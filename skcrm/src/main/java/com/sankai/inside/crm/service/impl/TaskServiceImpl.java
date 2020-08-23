@@ -115,6 +115,24 @@ public class TaskServiceImpl implements ITaskService {
 
     @Override
     public ServiceResult<Page<Task>> getList(TaskListSearch val, int page, int pageSize) {
+
+        if (Objects.equals(val.getOrderField(), "taskName")) {
+            val.setOrderField("name");
+        }else if (Objects.equals(val.getOrderField(), "taskQuadrant")) {
+            val.setOrderField("quadrant");
+        }else if (Objects.equals(val.getOrderField(), "taskBackTime")) {
+            val.setOrderField("back_time");
+        }else if (Objects.equals(val.getOrderField(), "taskTaskNature")) {
+            val.setOrderField("task_Nature");
+        }else if (Objects.equals(val.getOrderField(), "taskAssignPerson")) {
+            val.setOrderField("assign_person");
+        }else if (Objects.equals(val.getOrderField(), "taskAssignTime")) {
+            val.setOrderField("assign_time");
+        }else if (Objects.equals(val.getOrderField(), "taskStatus")) {
+            val.setOrderField("status");
+        }
+        val.setSourceId(UserState.getLoginId());
+
         PageHelper.startPage(page, pageSize, true);
         Page<Task> list = (Page<Task>) taskDAO.selectList(val);
         if (!CollectionUtils.isEmpty(list)) {
@@ -129,7 +147,22 @@ public class TaskServiceImpl implements ITaskService {
                     planExecutorAll  = StringUtils.isEmpty(planExecutorAll)?names:names+","+planExecutorAll;
                 }
                 task.setPlanExecutorAll(planExecutorAll);
-
+                // 任务状态
+                int status = task.getStatus();
+                //0 正常	<=7 超期7天	 7>and<=14 超期14天	14>超期28天	搁置
+                if (Objects.isNull(status)) {
+                    task.setStatusName("搁置");
+                } else if (status < 0) {
+                    task.setStatusName("搁置");
+                }else if (status == 0) {
+                    task.setStatusName("正常");
+                }else if (status >0 && status < 14) {
+                    task.setStatusName("超期7天");
+                }else if (status >=14 && status < 28) {
+                    task.setStatusName("超期14天");
+                }else if (status >=28) {
+                    task.setStatusName("超期28天");
+                }
                 // 指派者
                 if (!Objects.isNull(task.getAssignPerson())) {
                     if (task.getAssignPerson().equals(UserState.getLoginId())) {

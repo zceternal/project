@@ -61,6 +61,7 @@ public class Task {
 
     /**任务状态*/
     private int status;
+    private String statusName;
     /**是否置顶：0否；1是*/
     private Integer top;
     private Integer source;
@@ -76,6 +77,14 @@ public class Task {
 
     /**反馈方式*/
     private Integer backWay;
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
 
     public String getName() {
         return name;

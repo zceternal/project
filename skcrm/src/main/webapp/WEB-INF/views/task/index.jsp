@@ -75,6 +75,8 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 						<input id="quadrant" name="quadrant" type="hidden" title="任务象限" value="${search.quadrant }" />
 						<input id="accountId" name="accountId" type="hidden" title="负责人" value="${search.accountId }" />
 						<input id="source" name="source" type="hidden" title="任务来源" value="${search.source }" />
+						<input id="orderType" name="orderType" title="排序类型" type="hidden" value="${search.orderType }">
+						<input id="orderField" name="orderField" title="排序字段" type="hidden" value="${search.orderField }">
 
 						<div class="form-group form-inline" style="padding: 5px 0px;">
 							<label class="col-sm-1 control-label dev-col-sm-1">负责人：</label>
@@ -105,7 +107,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 								</ul>
 							</div>
 						</div>
-						<div class="form-group form-inline dev-highSeacrch" >
+						<%--<div class="form-group form-inline dev-highSeacrch" >
 							<label class="col-sm-1 control-label dev-col-sm-1">任务状态 ：</label>
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<ul class="tab_button search_sk"
@@ -118,9 +120,24 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 									</c:if>
 								</ul>
 							</div>
+						</div>--%>
+						<div class="form-group form-inline dev-highSeacrch" >
+							<label class="col-sm-1 control-label dev-col-sm-1">任务状态 ：</label>
+							<div class="col-sm-11 favorite dev-col-sm-11">
+								<ul id="acclistTab" class="tab_button search_sk"
+									style="margin-bottom: 0px; margin-top: 3px">
+									<li class="dev-khcgl ${search.status == -2 ? "on":"" }" id="dev-status" data-value="-2">全选</li>
+									<li class="dev-khcgl ${search.status == 0 ? "on":"" }" id="dev-status" data-value="0">正常</li>
+									<li class="dev-khcgl ${search.status == 7 ? "on":"" }" id="dev-status" data-value="7">超期7天</li>
+									<li class="dev-khcgl ${search.status == 14 ? "on":"" }" id="dev-status" data-value="14">超期14天</li>
+									<li class="dev-khcgl ${search.status == 28 ? "on":"" }" id="dev-status" data-value="28">超期28天</li>
+									<li class="dev-khcgl ${search.status == -1 ? "on":"" }" id="dev-status" data-value="-1">搁置</li>
+								</ul>
+							</div>
 						</div>
 						<div class="form-group form-inline dev-highSeacrch" >
 							<label class="col-sm-1 control-label dev-col-sm-1">任务来源 ：</label>
+							<div class="col-sm-11 favorite dev-col-sm-11">
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<ul class="tab_button search_sk"
 									style="margin-bottom: 0px; margin-top: 3px">

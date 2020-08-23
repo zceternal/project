@@ -336,16 +336,35 @@
      <if test="quadrant != '-1'">
       and quadrant = #{quadrant}
      </if>
-     <if test="status != -1">
-       and status = #{status}
+     <if test="source == 1">
+       and assign_person = #{sourceId}
      </if>
-     <if test="source != '-1'">
-       and source = #{source}
+     <if test="source == 2">
+       and assign_person != #{sourceId}
      </if>
      <if test="content != null ">
        and `name` like CONCAT(CONCAT('%',#{content}),'%')
      </if>
+     <if test="status == -1">
+       and status = -1
+     </if>
+     <if test="status == 0">
+       and status = 0
+     </if>
+     <if test="status == 7">
+       <![CDATA[ and (status >0 and status< 14 ) ]]>
+     </if>
+     <if test="status == 14">
+       <![CDATA[ and (status >=14 and status< 28 ) ]]>
+     </if>
+     <if test="status == 28">
+       <![CDATA[ and (status >= 28 ) ]]>
+     </if>
    </where>
+
+    <if test="orderField!=null and orderField!=''">
+      <![CDATA[ order by `${orderField}` ${orderType} ]]>
+    </if>
   </select>
 
   <!--查看是否已经共享过 -->

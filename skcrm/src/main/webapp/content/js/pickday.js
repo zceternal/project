@@ -6,8 +6,8 @@ $(function(){
           {
                 field: El,
                 firstDay: 1,
-                minDate: new Date('1900-01-01'),
-                maxDate: new Date(),
+                // minDate: new Date('1900-01-01'),
+                // maxDate: new Date(),
                 format: 'YYYY-MM-DD',
                 yearRange: [1900,2330]
           });

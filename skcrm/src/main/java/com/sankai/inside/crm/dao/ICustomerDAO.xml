@@ -123,7 +123,9 @@
 		(SELECT GROUP_CONCAT(dict.`name`) FROM sys_dict AS dict WHERE LOCATE(CONCAT(",",CONCAT(dict.id,",")),CONCAT(",",CONCAT(b.`type`,",")))) AS typeName,
 		b.create_time AS createTime,
 		b.recommender,b.buy_service as buyService,b.cus_source as cusSource,b.cus_source_type as cusSourceType,b.synopsis,
-		b.business,b.pay_nature as payNature,b.follow_state as followState,b.follow_state_details as followStateDetails
+		b.business,b.pay_nature as payNature,b.follow_state as followState,b.follow_state_details as followStateDetails,
+		(SELECT remark FROM sys_customer_record WHERE customer_id=b.id ORDER BY create_time desc limit 1) as 'nextReport',
+		(select status from task where  customer_id=b.id  ORDER BY create_time desc limit 1) as 'taskStatus'
 		FROM sys_customer_share AS a
 		LEFT JOIN sys_customer AS b ON a.customer_id = b.id
 		LEFT JOIN sys_account AS g
@@ -161,8 +163,20 @@
 			and tb.followState = #{followState}
 		</if>
 
-		<if test="status>0">
-			and tb.status = #{status}
+		<if test="status == -1">
+			and tb.taskStatus = -1
+		</if>
+		<if test="status == 0">
+			and tb.taskStatus = 0
+		</if>
+		<if test="status == 7">
+			<![CDATA[ and (tb.taskStatus >0 and tb.taskStatus< 14 ) ]]>
+		</if>
+		<if test="status == 14">
+			<![CDATA[ and (tb.taskStatus >=14 and tb.taskStatus< 28 ) ]]>
+		</if>
+		<if test="status == 28">
+			<![CDATA[ and (tb.taskStatus >= 28 ) ]]>
 		</if>
 		<if test="isFrom>=0">
 			and tb.isFrom=#{isFrom }

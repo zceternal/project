@@ -70,7 +70,7 @@ public ServiceResultBool exportExcel(HttpServletRequest request) throws IllegalA
 		search.setAccountId((accountId==null?-100:Integer.valueOf(accountId)));
 		search.setPrincipalStr(accountId);
 		
-		search.setStatus("-1");
+		search.setStatus(-1);
 		search.setCustomerType("-1");
 		search.setsalesSuccessRate("-1");
 		search.setOrderField("order");

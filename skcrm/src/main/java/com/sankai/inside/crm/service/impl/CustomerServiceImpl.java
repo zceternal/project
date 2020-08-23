@@ -132,6 +132,13 @@ public class CustomerServiceImpl implements ICustomerService {
 	
 	@Override
 	public ServiceResult<Page<CustomerList>> getList(CustomerListSearch val, int page, int pageSize) {
+		if (Objects.equals(val.getOrderField(), "buyServiceName")) {
+			val.setOrderField("buyService");
+		}else if (Objects.equals(val.getOrderField(), "followStateName")) {
+			val.setOrderField("followState");
+		}else if (Objects.equals(val.getOrderField(), "cusSourceName")) {
+			val.setOrderField("cusSource");
+		}
 		PageHelper.startPage(page, pageSize, true);
 		Page<CustomerList> list = (Page<CustomerList>) customerDAO.selectList(val);
 		for (CustomerList customer : list) {
@@ -151,10 +158,10 @@ public class CustomerServiceImpl implements ICustomerService {
 			}
 
 			//最近一次推进记录
-			CustomerRecord lastReport = customerRecordDAO.getLastReport(customer.getCustomerId());
-			if (!Objects.isNull(lastReport)) {
-				customer.setNextReport(lastReport.getRemark());
-			}
+//			CustomerRecord lastReport = customerRecordDAO.getLastReport(customer.getCustomerId());
+//			if (!Objects.isNull(lastReport)) {
+//				customer.setNextReport(lastReport.getRemark());
+//			}
 			//下一步计划（任务）
 			Task lastTask = taskDAO.getLastTask(customer.getCustomerId());
 			if (!Objects.isNull(lastTask)) {
@@ -169,6 +176,24 @@ public class CustomerServiceImpl implements ICustomerService {
 				}
 				customer.setNextPlan(lastTask.getNextPlan());
 				customer.setPlanExecutorAll(planExecutorAll);
+				// 任务状态
+				int status = lastTask.getStatus();
+				//0 正常	<=7 超期7天	 7>and<=14 超期14天	14>超期28天	搁置
+				if (Objects.isNull(status)) {
+					customer.setStatus("搁置");
+				} else if (status < 0) {
+					customer.setStatus("搁置");
+				}else if (status == 0) {
+					customer.setStatus("正常");
+				}else if (status >0 && status < 14) {
+					customer.setStatus("超期7天");
+				}else if (status >=14 && status < 28) {
+					customer.setStatus("超期14天");
+				}else if (status >=28) {
+					customer.setStatus("超期28天");
+				}
+			}else{
+				customer.setStatus(null);
 			}
 		}
 		return new ServiceResult<Page<CustomerList>>(list);
@@ -550,7 +575,7 @@ public class CustomerServiceImpl implements ICustomerService {
 	}
 	/**
 	 * 新增客户状态时间表
-	 * @param model
+	 * @param customer
 	 */
 	private void opeCustomerStatus(Customer customer)
 	{

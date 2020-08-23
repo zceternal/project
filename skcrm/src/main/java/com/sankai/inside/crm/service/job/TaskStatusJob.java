@@ -76,9 +76,8 @@ public class TaskStatusJob implements Job {
 			}
 			log.error("############################【任务执行状态】【完成】【end】############################{}",new Date());
 		} catch (Exception e) {
-			log.error("############################【任务执行状态】【异常】【start】############################");
-			e.printStackTrace();
 			log.error("############################【任务执行状态】【异常】【end】############################");
+			e.printStackTrace();
 		}
 		
 	}

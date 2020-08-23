@@ -152,7 +152,7 @@ public class MessageController {
 	@RequestMapping(path="send",method=RequestMethod.POST)
 	@ResponseBody
 	public  ServiceResultBool send(MessageSendForm form){
-		int[] ids = StringToInt(form.getReceives().split(","));
+		Integer[] ids = StringToInt(form.getReceives().split(","));
 		messageService.sendMessage(form.getTitle(), form.getContent(), ids, 0);
 		return new ServiceResultBool();
 	}
@@ -166,9 +166,9 @@ public class MessageController {
 		return new ServiceResultBool();
 	}
 	
-	private int[] StringToInt(String[] arrs){
-		int[] ints = new int[arrs.length];
-		for(int i=0;i<arrs.length;i++){
+	private Integer[] StringToInt(String[] arrs){
+		Integer[] ints = new Integer[arrs.length];
+		for(Integer i=0;i<arrs.length;i++){
 			ints[i] = Integer.parseInt(arrs[i]);
 		}
 		return ints;

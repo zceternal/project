@@ -68,8 +68,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 						data-ajax-update="#result">
 						<input id="page" name="page" type="hidden" value="${search.page }" /> 
 						<input id="pageSize" name="pageSize" type="hidden" value="${search.pageSize }" />
-						<input id="traceType" name="traceType" type="hidden" title="跟踪状态" value="${search.traceType }" /> 
-						<input id="status" name="status" type="hidden" title="销售状态" value="${search.status }" />
+						<input id="traceType" name="traceType" type="hidden" title="跟踪状态" value="${search.traceType }" />
 						<input id="customerType" name="customerType" type="hidden" title="客户类型" value="${search.customerType }" /> 
 						<input id="accountId" name="accountId" type="hidden" value="${search.accountId }" />
 						<input id="salesSuccessRate" name="salesSuccessRate" type="hidden" title="销售成功率" value="${search.salesSuccessRate }" />
@@ -79,6 +78,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 						<input id="buyService" name="buyService" type="hidden" title="产品与服务" value="${search.buyService }" />
 						<input id="followState" name="followState" type="hidden" title="销售推进状态" value="${search.followState }" />
 						<input id="nextPlanState" name="nextPlanState" type="hidden" title="下一步计划状态" value="${search.accountId }" />
+						<input id="status" name="status" type="hidden" title="下一步计划状态" value="${search.status }" />
 						
 						<div class="form-group form-inline" style="padding: 5px 0px;">
 							<label class="col-sm-1 control-label dev-col-sm-1">销售负责人：</label>
@@ -145,12 +145,12 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<ul id="acclistTab" class="tab_button search_sk"
 									style="margin-bottom: 0px; margin-top: 3px">
-									<li class="dev-nextPlanStateList ${search.nextPlanState == -1 ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">全选</li>
-									<li class="dev-nextPlanStateList ${search.nextPlanState == item.id ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">正常</li>
-									<li class="dev-nextPlanStateList ${search.nextPlanState == item.id ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">超期7天</li>
-									<li class="dev-nextPlanStateList ${search.nextPlanState == item.id ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">超期14天</li>
-									<li class="dev-nextPlanStateList ${search.nextPlanState == item.id ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">超期28天</li>
-									<li class="dev-nextPlanStateList ${search.nextPlanState == item.id ? "on":"" }" id="dev-nextPlanStateList-all" data-value="-1">搁置</li>
+									<li class="dev-nextPlanStateList ${search.status == -2 ? "on":"" }" id="dev-status" data-value="-2">全选</li>
+									<li class="dev-nextPlanStateList ${search.status == 0 ? "on":"" }" id="dev-status" data-value="0">正常</li>
+									<li class="dev-nextPlanStateList ${search.status == 7 ? "on":"" }" id="dev-status" data-value="7">超期7天</li>
+									<li class="dev-nextPlanStateList ${search.status == 14 ? "on":"" }" id="dev-status" data-value="14">超期14天</li>
+									<li class="dev-nextPlanStateList ${search.status == 28 ? "on":"" }" id="dev-status" data-value="28">超期28天</li>
+									<li class="dev-nextPlanStateList ${search.status == -1 ? "on":"" }" id="dev-status" data-value="-1">搁置</li>
 								</ul>
 							</div>
 						</div>
@@ -262,6 +262,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 		$("#a_hs").text("高 级 查 询");
 		$("#a_hs").attr("onclick","showH()")
 }
+	$("#myform").submit();
 </script>
 
 </body>

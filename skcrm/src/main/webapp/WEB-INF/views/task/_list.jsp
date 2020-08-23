@@ -13,8 +13,7 @@
 	<thead>
 		<tr>
 			<th width="1%"><label class="control-label check_home">
-					<label class="label_check"> <input type="checkbox"
-						data-for="checkbox_share" /></label>
+					<label class="label_check"> <input type="checkbox" data-for="checkbox_share" /></label>
 			</label></th>
 			<c:if test="${isShowTop || myself.equals('1')}">
 				<th width="5%">置顶
@@ -22,34 +21,34 @@
 				</th>
 			</c:if>
 			<th width="10%">任务名称
-				<div id="name" class="dev-order up"></div>
+				<div id="taskName" class="dev-order up"></div>
 			</th>
 			<th width="10%">任务象限
-				<div id="quadrant" class="dev-order up"></div>
+				<div id="taskQuadrant" class="dev-order up"></div>
 			</th>
 			<th width="8%">下一步工作计划
-				<div id="nextPlan" class="dev-order up"></div>
+				<%--<div id="nextPlan" class="dev-order up"></div>--%>
 			</th>
 			<th width="12%">计划标准
-				<div id="planStandard" class="dev-order up"></div>
+				<%--<div id="planStandard" class="dev-order up"></div>--%>
 			</th>
 			<th width="8%">计划执行人
-				<div id="planExecutorAll" class="dev-order up"></div>
+				<%--<div id="planExecutorAll" class="dev-order up"></div>--%>
 			</th>
 			<th width="10%">计划反馈时间
-				<div id="backTime" class="dev-order up"></div>
+				<div id="taskBackTime" class="dev-order up"></div>
 			</th>
 			<th width="9%">任务性质
-				<div id="taskNature" class="dev-order up"></div>
+				<div id="taskTaskNature" class="dev-order up"></div>
 			</th>
 			<th width="9%">指派者
-				<div id="assignPerson" class="dev-order up"></div>
+				<div id="taskAssignPerson" class="dev-order up"></div>
 			</th>
 			<th width="10%">指派时间
-			<div id="assignTime" class="empty"></div>
+				<div id="taskAssignTime" class="dev-order up"></div>
 			</th>
 			<th>任务状态
-				<div id="status" class="empty"></div>
+				<div id="taskStatus" class="dev-order up"></div>
 			</th>
 		</tr>
 	</thead>
@@ -83,7 +82,7 @@
 				<td  data-taskid="${item.id }">${elf:getDictName(item.taskNature)}</td>
 				<td  data-taskid="${item.id }">${item.assignPerson==null?"自己":item.assignPerson}</td>
 				<td  data-taskid="${item.id }"><fmt:formatDate value="${item.assignTime }" pattern="yyyy-MM-dd" /></td>
-				<td  data-taskid="${item.id }">${item.status}</td>
+				<td  data-taskid="${item.id }">${item.statusName}</td>
 			</tr>
 		</c:forEach>
 	</tbody>

@@ -228,7 +228,7 @@ public class TaskController {
 		TaskListSearch search = new TaskListSearch();
 		search.setAccountId(-1);
 		search.setQuadrant("-1");
-		search.setStatus("-1");
+		search.setStatus("-2");
 		search.setSource("-1");
 		ServiceResult<Page<Task>> result = taskService.getList(search, search.getPage(),search.getPageSize());
 

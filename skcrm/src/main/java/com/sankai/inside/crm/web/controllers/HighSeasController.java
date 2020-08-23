@@ -141,7 +141,7 @@ public class HighSeasController {
 			else account = loginId;
 			if(myself!=null&&myself.equals("1"))account = loginId;//首页点击 客户总数
 			search = new CustomerListSearch();
-			search.setStatus("-1");
+			search.setStatus(-1);
 			search.setCustomerType("-1");
 			search.setsalesSuccessRate("-1");
 			search.setOrderField("order");
