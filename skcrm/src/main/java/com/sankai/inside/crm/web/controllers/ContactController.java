@@ -67,15 +67,13 @@ public class ContactController {
 	@RequiresPermissions(value = "contact_list")
 	@RequestMapping(path = "index", method = RequestMethod.GET)
 	public String index(Model model, FormPage page,HttpServletRequest request) {
-
 		ContactSearch search = new ContactSearch();
 		int loginId = UserState.getLoginId();
-		
 		search.setAccountId(loginId);// 当前登录人
 		search.setContactRole("0");
 		search.setOrderField(null);
 		search.setOrderType("");
-		search.setIsqq(false);
+		search.setIsqq(false);	
 		search.setIsemail(false);
 		search.setIsphone(false);
 		search.setIswechat(false);
@@ -196,7 +194,7 @@ public class ContactController {
 			model.addAttribute("isShowTop", false);// 是否显示置顶列
 		else
 			model.addAttribute("isShowTop", true);// 是否显示置顶列
-
+		model.addAttribute("sor", form.getSor());
 		return "contact/_list";
 
 	}

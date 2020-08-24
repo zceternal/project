@@ -19,25 +19,32 @@
 				<c:if test="${isShowTop || myself.equals('1')}">
 				<th width="5%">置顶<div id="top" class="empty" ></div></th>
 				</c:if>
-				<th width="6%">姓名<div id="name" class="dev-order up"></div></th>
-				<th width="6%">性别<div id="sex" class="dev-order up"></div></th>
-				<th width="5%">手机<div id="phone" class="empty" ></div></th>
-				<th width="7%">联系人角色<div id="role" class="dev-order up"></div></th>
-				<th width="7%">联系人来源<div id="source" class="dev-order up"></div></th>
+				<th width="6%">姓名<c:if test="${sor != '1'}"><div id="name" class="dev-order up"></div></c:if></th>
+				<th width="6%">性别<c:if test="${sor != '1'}"><div id="sex" class="dev-order up"></div></c:if></th>
+				<th width="5%">手机<c:if test="${sor != '1'}"><div id="phone" class="empty" ></div></c:if></th>
+				<th width="7%">联系人角色<c:if test="${sor != '1'}"><div id="role" class="dev-order up"></div></c:if></th>
+				<th width="7%">联系人来源<c:if test="${sor != '1'}"><div id="source" class="dev-order up"></div></c:if></th>
 				<!-- <th width="4%">QQ</th> -->
 <%--				<th width="200px;">邮箱<div id="email" class="empty" ></div></th>	--%>
-				<th width="15%">单位名称<div id="customerNameOrder" class="dev-order up"></div></th>
-				<th width="9%">职务<div id="position" class="dev-order up"></div></th>
-				<th width="9%">产品与服务<div id="buyService" class="dev-order up"></div></th>
+				<th width="15%">单位名称<c:if test="${sor != '1'}"><div id="customerNameOrder" class="dev-order up"></div></c:if></th>
+				<th width="9%">职务<c:if test="${sor != '1'}"><div id="position" class="dev-order up"></div></c:if></th>
+				<th width="9%">产品与服务<c:if test="${sor != '1'}"><div id="buyService" class="dev-order up"></div></c:if></th>
 				<!-- <th width="8%">创建人</th> -->
-				<th width="10%">创建日期<div id="createTime" class="dev-order up"></div></th>
-				<th >操作<div id="opeator" class="empty" ></div></th>
+								<th width="10%">创建日期<c:if test="${sor != '1'}"><div id="createTime" class="dev-order up"></div></c:if></th>
+				<c:if test="${sor != '1'}">
+					<th >操作<div id="opeator" class="empty" ></div></th>
+				</c:if>
 			</tr>
 		</thead>
 		<tbody>
 			<c:if test="${pager.total == 0 }">
 				<tr>
-					<td colspan="${isShowTop || myself.equals('1') ?11:10}" style="text-align: center">暂无数据</td>
+				<c:if test="${sor == '1'}">
+					<td colspan="${isShowTop || myself.equals('1') ?10:9}" style="text-align: center">暂无数据</td>
+				</c:if>
+					<c:if test="${sor != '1'}">
+						<td colspan="${isShowTop || myself.equals('1') ?11:10}" style="text-align: center">暂无数据</td>
+					</c:if>
 				</tr>
 			</c:if>
 
@@ -68,14 +75,16 @@
 					<td title="${item.position }">${extf:subStr(item.position,5) }</td>
 					<td title="${elf:getDictName(item.buyService) }">${elf:getDictName(item.buyService) }</td>
 					<td><fmt:formatDate value="${item.createTime}" pattern="yyyy-MM-dd" /></td>
+						<c:if test="${sor != '1'}">
 					<td>
-					 <span class="colorblue edit"> <shiro:hasPermission
-								name="contact_edit">
-								<a href="javascript:void(0)" data-edit-id="${item.id }"
-									data-title="${item.name }" class="colorblue">修改</a>
-							</shiro:hasPermission>
-					</span>
+							 <span class="colorblue edit"> <shiro:hasPermission
+										name="contact_edit">
+										<a href="javascript:void(0)" data-edit-id="${item.id }"
+											data-title="${item.name }" class="colorblue">修改</a>
+									</shiro:hasPermission>
+							</span>
 						</td>
+						</c:if>
 				</tr>
 			</c:forEach>
 		</tbody>

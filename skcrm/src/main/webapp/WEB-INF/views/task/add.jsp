@@ -10,7 +10,7 @@
 			<div class="panel panel-default">
 				<form class="form-horizontal old_block" id="myformAdd"
 					action="add" method="post" role="form" data-ajax="true" data-ajax-success="onTaskSuccessAdd">
-
+					<input id="customerId" name="customerId" type="hidden" title="现有客户id" value="${search.page }" />
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">任务名称：</label>
 						<div class="col-sm-10">
@@ -27,7 +27,11 @@
                                     <ul class="wh_ul">
                                         <c:if test="${item.childList != null }">
                                             <c:forEach var="child" items="${item.childList }">
-                                                <li><label><input  name="taskNature" class="dev-khly" type="radio" value="${child.id }" />${child.name }</label></li>
+                                                <li><label><input  name="taskNature" class="dev-khly" type="radio" value="${child.id }" />${child.name }</label>
+													<c:if test="${child.id == 167}">
+														<li><label><a href="javascript:void(0)" data-id="customer_list" id="a_selName">选择客户+</a></label></li>
+													</c:if>
+												</li>
                                             </c:forEach>
                                         </c:if>
                                     </ul>
@@ -161,21 +165,24 @@
 	<script type="text/javascript" src="../content/js/pickday.js"></script>
 <script type="text/javascript">
 
-	$("a[data-id=contact_list]").click(function() {
+	$("a[data-id=customer_list]").click(function() {
 		var $this = $(this);
-        var bz = $this.data("bz");
 		dialog = $.sk.open({
-			url : "select_contact_list",
+			url : "select_customer_list",
 			width : 1000,
 			height : 600,
 			overflow:scroll,
-			title : "选择关系人",
+			title : "选择客户",
 			buttons : [ {
 				html : "确定",
 				"class" : "btn btn-minier btn-success delay",
 				click : function() {
 					var ids = "";
 					var names = "";
+					var selectCustomers = $(":checkbox[class=sk_checkbox]:checked");
+					if(selectCustomers.length>1){
+						$.sk.error("只能选择一个客户！");
+					}
 					$(":checkbox[class=sk_checkbox]:checked").each(function() {
 						var ck = $(this);
 						ids += ck.val() + ",";
@@ -185,8 +192,8 @@
 						names = names.substr(0, names.length - 1);
 						ids = ids.substr(0, ids.length - 1);
 					}
-					$("#sp_"+bz).text(names);
-					$("#hid_"+bz).val(ids);
+					$("#a_selName").text(names);
+					$("#customerId").val(ids);
 				}
 			} ]
 		});

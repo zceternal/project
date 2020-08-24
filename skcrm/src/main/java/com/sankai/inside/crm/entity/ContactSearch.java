@@ -10,8 +10,18 @@ public class ContactSearch {
 	private boolean isphone;
 	private boolean iswechat;
 	private boolean isemail;
-	
+
 	private int isGetValue;
+	private String sor;// 跳转来源 1 人际关系弹框；其他属于联系人跳转
+
+	public String getSor() {
+		return sor;
+	}
+
+	public void setSor(String sor) {
+		this.sor = sor;
+	}
+
 	public int getIsGetValue() {
 		return isGetValue;
 	}

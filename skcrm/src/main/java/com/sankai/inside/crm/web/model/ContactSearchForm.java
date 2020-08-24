@@ -5,12 +5,21 @@ public class ContactSearchForm {
 	
 	private int customerId;
 	private String name;
+	private String sor;// 跳转来源 1 人际关系弹框；其他属于联系人跳转
 	//联系人详情
 	private boolean qq;
 	private boolean phone;
 	private boolean wechat;
 	private boolean email;
-	
+
+	public String getSor() {
+		return sor;
+	}
+
+	public void setSor(String sor) {
+		this.sor = sor;
+	}
+
 	public int getRole() {
 		return role;
 	}

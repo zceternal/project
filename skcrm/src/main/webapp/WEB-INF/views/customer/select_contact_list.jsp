@@ -74,6 +74,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 					<form method="post" action="select_contact_list" class="form-inline pl20" role="form"
 						id="contactIndex" data-ajax="true" data-ajax-mode="replace"
 						data-ajax-update="#contactDv">
+						<input id="sor" name="sor" type="hidden" value="${sor }" />
 						<input id="contactRole" name="contactRole" type="hidden"
 							title="联系人角色" value="0" /> <input id="customerType"
 							name="customerType" type="hidden" title="联系人客户" value="-1" /> <input

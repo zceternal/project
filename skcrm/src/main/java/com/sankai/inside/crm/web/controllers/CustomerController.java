@@ -1278,7 +1278,6 @@ public class CustomerController {
 		search.setIsGetValue(0);
 		ServiceResult<Page<Contact>> result = null;
 
-
 		List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id
 		List<AccountOfDept> accListNew = new ArrayList<AccountOfDept>();
 		// 不是领导人查询自己创建的联系人，是否执行
@@ -1305,8 +1304,6 @@ public class CustomerController {
 
 			}
 		}
-
-
 		if(StringUtils.isEmpty(myself))myself = "";
 		else accountIdList.add(String.valueOf(loginId));// 当前登录人
 		search.setPrincipal(accountIdList);
@@ -1324,7 +1321,7 @@ public class CustomerController {
 		model.addAttribute("accList", accListNew);
 		model.addAttribute("myself", myself);//首页点击 联系人总数
 		model.addAttribute("isShowTop", false);// 是否显示置顶列
-
+		model.addAttribute("sor", "1");// 是否显示置顶列
 		return "customer/select_contact_list";
 	}
 
@@ -1391,6 +1388,7 @@ public class CustomerController {
 			model.addAttribute("isShowTop", false);// 是否显示置顶列
 		else
 			model.addAttribute("isShowTop", true);// 是否显示置顶列
+		model.addAttribute("sor", form.getSor());
 
 		return "contact/_list";
 

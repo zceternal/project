@@ -2,6 +2,7 @@ package com.sankai.inside.crm.web.controllers;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
+import com.sankai.inside.crm.core.mail.SpringMailSender;
 import com.sankai.inside.crm.entity.*;
 import com.sankai.inside.crm.service.*;
 import com.sankai.inside.crm.web.core.UserState;
@@ -37,7 +38,7 @@ import java.util.*;
 public class TaskController {
 
 	public final static Logger log = LoggerFactory.getLogger(CustomerController.class);
-
+	private final String key = "CustomerListSearch";
 	@Resource
 	private ISysDictService sysDictService;// 数据字典
 	@Autowired
@@ -48,6 +49,8 @@ public class TaskController {
 	private ContactService contactService;// 联系人
 	@Resource
 	private ICustomerShareService customerShareService;// 客户分享
+	@Resource
+	private ICustomerService customerServiceImpl;
 
 	// 分享任务
 	@RequiresAuthentication
@@ -328,6 +331,222 @@ public class TaskController {
 			throws Exception {
 
 		return taskService.add(form);
+	}
+
+
+	@RequiresAuthentication
+	@RequiresPermissions(value = "customer_list")
+	@RequestMapping(path = "select_customer_list", method = RequestMethod.GET)
+	public String selectCustomerList(Model model, @RequestParam(defaultValue = "false", name = "cache") boolean isCache,
+						HttpSession session, HttpServletRequest request) throws Exception {
+
+		Integer loginId = UserState.getLoginId();
+		boolean isDeptLeader = accountService.isLeaderById(loginId);// 是否是部门领导人
+
+		Integer status = -2;//客户状态
+
+		List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id获取部门的所有成员
+		String accIds = "";
+		List<AccountOfDept> accListNew = new ArrayList<AccountOfDept>();
+		if (accList != null) {
+			AccountOfDept first = accList.get(0);
+			if (first.isMySelf() && first.getIsDeptManager() == 0) {// 部门领导
+				accIds = String.valueOf(first.getId());
+				accListNew.add(first);
+			} else {
+				for (AccountOfDept item : accList) {
+					accIds += item.getId() + ",";
+				}
+				if (accIds != "")
+					accIds = accIds.substring(0, accIds.length() - 1);
+				accListNew = accList;
+			}
+		}
+		String myself = request.getParameter("myself");
+		CustomerListSearch search = null;
+		if (isCache && session != null) {
+			search = (CustomerListSearch) session.getAttribute(key);
+		}
+		if (search == null) {
+			String tranceType = request.getParameter("tracetype");// 首页点击 跟踪状态
+
+			Integer account = -1;
+			if (StringUtils.isEmpty(tranceType))
+				tranceType = "-1";
+			else
+				account = loginId;
+			if (myself != null && myself.equals("1"))
+				account = loginId;// 首页点击 客户总数
+			search = new CustomerListSearch();
+			if (StringUtils.isEmpty(status)) {
+				search.setStatus(-2);// -1 搁置；-2 全选
+			} else {
+				search.setStatus(status);
+			}
+			search.setCustomerType("-1");
+			search.setsalesSuccessRate("-1");
+			search.setOrderField("order");
+			search.setOrderType("desc");
+			search.setTraceType(tranceType);
+			search.setAccountId(account);
+			search.setIsFrom(-1);
+			search.setCusSource("-1");
+			search.setBuyService("-1");
+			search.setFollowState("-1");
+			search.setNextPlanState("-1");
+		}
+
+		if (search.getOrderField() != null && search.getOrderField().contains("traceName"))
+			search.setOrderField("finalTime");
+		if (search.getOrderField() != null && search.getOrderField().contains("shortNameOrder"))
+			search.setOrderField("shortName");
+
+		search.setLoginId(UserState.getLoginId());
+
+		// 销售负责人
+		List<Integer> accountIdList = new ArrayList<Integer>();
+		if (search.getAccountId() != -1) {
+			search.setPrincipal(accountIdList);
+			search.setPrincipalStr(search.getAccountId() + "");
+		} else {
+			if (isDeptLeader) {
+				search.setPrincipal(null);
+				search.setPrincipalStr(accIds);
+			} else {
+				accountIdList.add(loginId);
+				search.setPrincipal(accountIdList);
+				search.setPrincipalStr(String.valueOf(loginId));
+			}
+		}
+		//客户详细页面点击返回按钮后的信息 - start
+		initSearch(request,search,isDeptLeader);
+
+		// 客户列表
+		ServiceResult<Page<CustomerList>> result = customerServiceImpl.getList(search, search.getPage(),
+				search.getPageSize());
+
+		Account account = accountService.getAccountInfo(loginId);// 当前用户信息
+
+		model.addAttribute("loginName", (account == null ? "" : account.getName()));
+		model.addAttribute("search", search);
+		model.addAttribute("loginId", loginId);
+		model.addAttribute("model", result.getData());
+		model.addAttribute("pager", new PageInfo<>(result.getData()));
+		model.addAttribute("PAGER", new PageInfo<>(result.getData()));
+		model.addAttribute("myself", myself);// 首页点击 客户总数
+
+		model.addAttribute("cpfw", sysDictService.findAllByPid(9));// 产品及服务
+		model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
+		model.addAttribute("lxr", contactService.getList("112"));;// 客户来源-渠道
+		model.addAttribute("xstjzt", sysDictService.findAllByPid2(11));// 销售推进状态
+
+		model.addAttribute("accList", accListNew);
+		model.addAttribute("isDeptLeader", isDeptLeader);
+		model.addAttribute("isShowTop", false);// 是否显示置顶列
+
+		return "task/select_customer_index";
+	}
+
+	public void initSearch(HttpServletRequest request,CustomerListSearch search,boolean isDeptLeader){
+		String indexAccountId = request.getParameter("indexAccountId");
+		if(StringUtils.isEmpty(indexAccountId)) return;
+		//客户详细页面点击返回按钮后的信息 - start
+		String indexPage = request.getParameter("indexPage");
+		String indexPageSize = request.getParameter("indexPageSize");
+		//String indexTraceType = request.getParameter("indexTraceType");
+		String indexStatus = request.getParameter("indexStatus");
+		String indexCustomerType = request.getParameter("indexCustomerType");
+		String indexSalesSuccessRate = request.getParameter("indexSalesSuccessRate");
+		String indexOrderType = request.getParameter("indexOrderType");
+		String indexOrderField = request.getParameter("indexOrderField");
+		String indexContent = request.getParameter("indexContent");
+		String indexIsFrom = request.getParameter("indexIsFrom");
+		//客户详细页面点击返回按钮后的信息 - end
+		if(!StringUtils.isEmpty(indexPage))search.setPage(Integer.valueOf(indexPage));
+		if(!StringUtils.isEmpty(indexPageSize))search.setPageSize(Integer.valueOf(indexPageSize));
+		//if(!StringUtils.isEmpty(indexTraceType))search.setTraceType(indexTraceType);
+		if(!StringUtils.isEmpty(indexStatus))search.setStatus(Integer.valueOf(indexStatus));
+		if(!StringUtils.isEmpty(indexCustomerType))search.setCustomerType(indexCustomerType);
+		if(!StringUtils.isEmpty(indexSalesSuccessRate))search.setsalesSuccessRate(indexSalesSuccessRate);
+		int accId = Integer.valueOf(indexAccountId);
+		if(accId>0&&isDeptLeader){
+			search.setAccountId(accId);
+			search.setPrincipalStr(indexAccountId);
+		}
+		if(!StringUtils.isEmpty(indexOrderType))search.setOrderType(indexOrderType);
+		if(!StringUtils.isEmpty(indexOrderField))search.setOrderField(indexOrderField);
+		if(!StringUtils.isEmpty(indexContent))search.setContent(indexContent);
+		if(!StringUtils.isEmpty(indexIsFrom))search.setIsFrom(Integer.valueOf(indexIsFrom));
+		//return search;
+	}
+	@RequiresAuthentication
+	@RequiresPermissions(value = "customer_list")
+	@RequestMapping(path = "select_customer_list", method = RequestMethod.POST)
+	public String selectCustomerList(CustomerListSearch search, Model model, HttpSession session) throws Exception {
+
+		session.setAttribute(key, search);
+		int loginId = UserState.getLoginId();
+		boolean isDeptLeader = accountService.isLeaderById(loginId);// 是否是部门领导人
+		List<AccountOfDept> accList = accountService.getAccOfDeptByAccId(loginId);// 根据当前用户id获取部门的所有成员
+		String accIds = "";
+		if (accList != null) {
+			AccountOfDept first = accList.get(0);
+			if (first.isMySelf() && first.getIsDeptManager() == 0) {
+				accIds = String.valueOf(first.getId());
+			} else {
+				for (AccountOfDept item : accList) {
+					accIds += item.getId() + ",";
+				}
+				if (accIds != "")
+					accIds = accIds.substring(0, accIds.length() - 1);
+			}
+		}
+
+		if (search.getOrderField().contains("traceName"))
+			search.setOrderField("finalTime");
+		if (search.getOrderField() != null && search.getOrderField().contains("shortNameOrder"))
+			search.setOrderField("shortName");
+
+		if (search.getOrderType() == null)
+			search.setOrderType("");
+		search.setLoginId(UserState.getLoginId());
+
+		// 销售负责人
+		List<Integer> accountIdList = new ArrayList<Integer>();
+		if (search.getAccountId() != -1) {
+			search.setPrincipal(accountIdList);
+			search.setPrincipalStr(search.getAccountId() + "");
+		} else {
+			if (isDeptLeader) {
+				search.setPrincipal(null);
+				search.setPrincipalStr(accIds);
+			} else {
+				accountIdList.add(loginId);
+				search.setPrincipal(accountIdList);
+				search.setPrincipalStr(String.valueOf(loginId));
+			}
+		}
+		// 客户列表
+		ServiceResult<Page<CustomerList>> result = customerServiceImpl.getList(search, search.getPage(),
+				search.getPageSize());
+
+		Account account = accountService.getAccountInfo(loginId);// 当前用户信息
+
+		model.addAttribute("loginName", (account == null ? "" : account.getName()));
+		model.addAttribute("search", search);
+		model.addAttribute("loginId", loginId);
+		model.addAttribute("model", result.getData());
+		model.addAttribute("pager", new PageInfo<>(result.getData()));
+		model.addAttribute("PAGER", new PageInfo<>(result.getData()));
+		model.addAttribute("cpfw", sysDictService.findAllByPid(9));// 产品及服务
+		model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
+		model.addAttribute("lxr", contactService.getList("112"));;// 客户来源-渠道
+		model.addAttribute("xstjzt", sysDictService.findAllByPid2(11));// 销售推进状态
+
+		model.addAttribute("accList", accList);
+		model.addAttribute("isShowTop", (search.getAccountId() != -1));// 是否显示置顶列
+		return "task/select_customer_list";
+
 	}
 
 }
