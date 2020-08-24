@@ -66,6 +66,27 @@
 		 <!-- 每天每小时30分整点执行一次 -->
 		 <property name="cronExpression" value="0 30 0/1 * * ?"></property>
 	</bean>
+
+	<!-- 【调度作业：任务状态】...start -->
+	<bean id="TaskStatusJob" class="com.sankai.inside.crm.service.job.TaskStatusJob" />
+
+	<bean id="TaskStatusJobMethod"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="TaskStatusJob" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+	</bean>
+	<!-- ======================== 调度触发器 ======================== -->
+	<bean id="TaskStatusTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="TaskStatusJobMethod"></property>
+		<!-- 每天凌晨2:10:00执行 -->
+		<property name="cronExpression" value="0 10 2 * * ? "></property>
+	</bean>
+	<!-- 【调度作业：任务状态】...end -->
+
 	<!-- ======================== 调度工厂 ======================== -->
 	<bean id="SpringJobSchedulerFactoryBean"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" autowire="no">
@@ -74,6 +95,7 @@
 				<ref bean="CronTriggerBeanYun" />
 				<ref bean="CronTriggerBean" />
 				<ref bean="CronTriggerBean_2" />
+				<ref bean="TaskStatusTriggerBean" />
 			</list>
 		</property>
 	</bean>

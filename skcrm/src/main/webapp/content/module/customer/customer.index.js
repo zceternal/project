@@ -160,7 +160,7 @@ $(function() {
 			$("input[class=dev-nextPlanStateList]:checked").removeAttr("checked");
 		}
 		$this.addClass("on").siblings().removeClass("on");
-		$("#nextPlanState").val($this.data("value"));
+		$("#status").val($this.data("value"));
 		$("#myform").submit();
 	});
 
