@@ -81,16 +81,18 @@ public class CustomerServiceImpl implements ICustomerService {
 		}
 
 		// 新增跟踪日志(type=6 [默认销售记录]，source=1 [默认PC])
-		CustomerRecord customerRecord = new CustomerRecord();
-		customerRecord.setRemark(model.getReportRemark());
-		customerRecord.setCommunicationWay(model.getCommunicationWay());
-		customerRecord.setCommunicationTime(model.getCommunicationTime());
-		customerRecord.setType(6);
-		customerRecord.setSource(1);
-		customerRecord.setAccountId(model.getUserId());
-		customerRecord.setCustomerId(model.getId());
-		customerRecord.setCreateTime(date);
-		customerRecordDAO.insertRecord(customerRecord);
+		if (!StringUtils.isEmpty(model.getReportRemark())) {
+			CustomerRecord customerRecord = new CustomerRecord();
+			customerRecord.setRemark(model.getReportRemark());
+			customerRecord.setCommunicationWay(model.getCommunicationWay());
+			customerRecord.setCommunicationTime(model.getCommunicationTime());
+			customerRecord.setType(6);
+			customerRecord.setSource(1);
+			customerRecord.setAccountId(model.getUserId());
+			customerRecord.setCustomerId(model.getId());
+			customerRecord.setCreateTime(date);
+			customerRecordDAO.insertRecord(customerRecord);
+		}
 
 		// 新增任务(任务名称=“新增沟通记录任务”)
 		Task task = new Task();

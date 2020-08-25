@@ -195,21 +195,18 @@
 						<tr>
 							<td>自己</td>
 							<td>
-								<span id="sp_channelPartner"></span>
+								<span id="sp_channelPartner">${customerRelations.channelPartnerName}</span>
 								<input type="hidden" name="channelPartner" id="hid_channelPartner" value="${customerRelations.channelPartner}">
-								${customerRelations.channelPartnerName}
 								<a href="javascript:void(0)" data-id="contact_list" data-bz="channelPartner">+</a>
 							</td>
 							<td>
-								<span id="sp_trustPerson"></span>
+								<span id="sp_trustPerson">${customerRelations.trustPersonName}</span>
 								<input type="hidden" name="trustPerson" id="hid_trustPerson" value="${customerRelations.trustPerson}">
-								${customerRelations.trustPersonName}
 								<a href="javascript:void(0)" data-id="contact_list" data-bz="trustPerson">+</a>
 							</td>
 							<td>
-								<span id="sp_decisionPerson"></span>
+								<span id="sp_decisionPerson">${customerRelations.decisionPersonName}</span>
 								<input type="hidden" name="decisionPerson" id="hid_decisionPerson" value="${customerRelations.decisionPerson}">
-								${customerRelations.decisionPersonName}
 								<a href="javascript:void(0)" data-id="contact_list" data-bz="decisionPerson">+</a>
 							</td>
 							<td>客户管理人</td>
@@ -222,9 +219,8 @@
 							<td></td>
 							<td></td>
 							<td>
-								<span id="sp_managePerson"></span>
+								<span id="sp_managePerson">${customerRelations.managePersonName}</span>
 								<input type="hidden" name="managePerson" id="hid_managePerson" value="${customerRelations.managePerson}">
-								${customerRelations.managePersonName}
 								<a href="javascript:void(0)" data-id="contact_list" data-bz="managePerson">+</a>
 							</td>
 							<td>客户办事人</td>
@@ -237,9 +233,8 @@
 							<td></td>
 							<td></td>
 							<td>
-								<span id="sp_handlePerson"></span>
+								<span id="sp_handlePerson">${customerRelations.handlePersonName}</span>
 								<input type="hidden" name="handlePerson" id="hid_handlePerson" value="${customerRelations.handlePerson}">
-								${customerRelations.handlePersonName}
 								<a href="javascript:void(0)" data-id="contact_list" data-bz="handlePerson">+</a>
 							</td>
 							<td>客户业务人</td>
@@ -252,9 +247,8 @@
 							<td></td>
 							<td></td>
 							<td>
-								<span id="sp_professionalPerson"></span>
+								<span id="sp_professionalPerson">${customerRelations.professionalPersonName}</span>
 								<input type="hidden" name="professionalPerson" id="hid_professionalPerson" value="${customerRelations.professionalPerson}">
-								${customerRelations.professionalPersonName}
 								<a href="javascript:void(0)" data-id="contact_list" data-bz="professionalPerson">+</a>
 							</td>
 						</tr>

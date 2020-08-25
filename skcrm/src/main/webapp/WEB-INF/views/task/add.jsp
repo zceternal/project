@@ -8,14 +8,14 @@
 </style>
 	<div class="main_content dialog">
 			<div class="panel panel-default">
-				<form class="form-horizontal old_block" id="myformAdd"
+				<form class="form-horizontal old_block" id="mytaskFormAdd"
 					action="add" method="post" role="form" data-ajax="true" data-ajax-success="onTaskSuccessAdd">
 					<input id="customerId" name="customerId" type="hidden" title="现有客户id" value="${search.page }" />
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">任务名称<em
 								class="colorred">*</em>：</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control validate[required,maxSize[50]]" id="name" placeholder="请输入任务名称" name="name" style="width: 625px" data-prompt-position="inline" >
+							<input type="text" class="form-control validate[required,maxSize[50]]" id="taskname" placeholder="请输入任务名称" name="name" style="width: 625px" >
 						</div>
 					</div>
 
@@ -206,7 +206,7 @@
 		});
 	});
 
-	$("#myformAdd").validationEngine({
+	$("#mytaskFormAdd").validationEngine({
 		ajaxFormValidationMethod : 'post',
 		promptPosition : "centerRight"
 	});

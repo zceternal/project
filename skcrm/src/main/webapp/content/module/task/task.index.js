@@ -32,9 +32,7 @@ $(function() {
 
 	// 新增
 	$("a[data-id=task_add]").live("click", function() {
-
-		var $this = $(this);
-		dialog = $.sk.open({
+		dialogaddtask = $.sk.open({
 			url : "add",
 			width : 900,
 			height:600,
@@ -43,7 +41,7 @@ $(function() {
 				html : "确定",
 				"class" : "btn btn-minier btn-success delay",
 				click : function() {
-					$("#myformAdd").submit();
+					$("#mytaskFormAdd").submit();
 				}
 			} ]
 		});
@@ -126,7 +124,7 @@ function onTaskSuccessAdd(data) {
 			$("#content").val("");
 			$page.val("1");
 			$formsearch.submit();
-			$.sk.close(dialog);
+			$.sk.close(dialogaddtask);
 		});
 	} else {
 		$.sk.error(data.msg);

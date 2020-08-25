@@ -104,7 +104,7 @@ public class TaskServiceImpl implements ITaskService {
     @Override
     public ServiceResultBool add(Task model) {
         // 167 现有客户
-        if (!Objects.equals(model.getCustomerType(), "167")) {
+        if (!Objects.equals(model.getTaskNature(), "167")) {
             model.setCustomerId(null);
         }
         Date date = new Date();

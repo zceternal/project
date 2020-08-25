@@ -148,7 +148,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 							</div>
 						</div>
 
-						<div class="divider" style="width:100%;margin:15px 0px 15px -10px"></div>
+						<div class="divider" style="width:100%;margin:40px 0px 15px -10px"></div>
 						<div class="form-group">
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<div class="search fl" style="width: 280px; margin-left: 15px;">

@@ -104,9 +104,9 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
         var selectShareIds = [];//选中的sys_customer_share中的id集合
     </script>
 
-    <script type="text/javascript"  src="../content/js/jquery.unobtrusive-ajax.min.js"></script>
-    <script type="text/javascript" src="../content/module/customer/select_customer.index.js"></script>
-    <script type="text/javascript" src="../content/module/customer/select_customer.list.js"></script>
+  <%--  <script type="text/javascript"  src="../content/js/jquery.unobtrusive-ajax.min.js"></script>--%>
+   <%-- <script type="text/javascript" src="../content/module/customer/select_customer.index.js"></script>--%>
+    <%--<script type="text/javascript" src="../content/module/customer/select_customer.list.js"></script>--%>
 
 </body>
 </html>
