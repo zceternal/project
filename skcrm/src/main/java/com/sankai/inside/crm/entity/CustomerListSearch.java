@@ -14,7 +14,6 @@ public class CustomerListSearch  extends FormPage{
 	private Integer status;//销售状态
 	
 	private List<Integer> principal;//销售负责人
-	
 	private String customerType;//客户类型 
 	private String principalStr;//销售负责人字符串
 	
@@ -40,7 +39,6 @@ public class CustomerListSearch  extends FormPage{
 	private String buyService;//产品与服务
 	private String followState;//销售推进状态
 	private String nextPlanState;//下一步计划状态
-
 
 	public String getCusSource() {
 		return cusSource;

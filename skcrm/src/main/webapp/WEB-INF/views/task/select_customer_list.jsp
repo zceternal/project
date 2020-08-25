@@ -12,48 +12,15 @@
 <table class="table table-hover ">
 	<thead>
 		<tr>
-			<th width="1%"><label class="control-label check_home">
-					<label class="label_check"> <input type="checkbox"
-						data-for="checkbox_share" /></label>
-			</label></th>
-			<%--<c:if test="${isShowTop || myself.equals('1')}">
-				<th width="5%">置顶
-					<div id="top" class="empty"></div>
-				</th>
-			</c:if>--%>
+			<th width="1%"></th>
 			<th width="10%">客户简称
-				<div id="shortNameOrder" class="dev-order up"></div>
 			</th>
 			<th width="10%">地区
-				<div id="provinceName" class="dev-order up"></div>
 			</th>
 			<th width="8%">产品及服务
-				<div id="buyServiceName" class="dev-order up"></div>
 			</th>
-			<%--<th width="8%">销售推进状态
-				<div id="followStateName" class="dev-order up"></div>
-			</th>--%>
 			<th width="8%">负责人
-				<div id="allowAccountName" class="dev-order up"></div>
 			</th>
-			<%--<th width="8%">销售形式
-				<div id="cusSourceName" class="dev-order up"></div>
-			</th>
-			<th width="12%">最近一次推进记录
-			&lt;%&ndash;	<div id="allowAccountName" class="dev-order up"></div>&ndash;%&gt;
-			</th>
-			<th width="8%">下一步计划
-				&lt;%&ndash;<div id="allowAccountName" class="dev-order up"></div>&ndash;%&gt;
-			</th>
-			<th width="8%">计划配合人
-				&lt;%&ndash;<div id="statusName" class="dev-order up"></div>&ndash;%&gt;
-			</th>
-			<th width="8%">计划状态
-				<div id="taskStatus" class="dev-order up"></div>
-			</th>
-			<th>操作
-				<div id="opeartor" class="empty"></div>
-			</th>--%>
 		</tr>
 	</thead>
 	<tbody>
@@ -72,39 +39,10 @@
 							class="sk_checkbox" />
 					</label>
 				</label></td>
-				<%--<c:if test="${isShowTop || myself.equals('1')}">
-					<td xyz='z' data-customerid="${item.customerId }"><span
-						class="colorblue edit"><a href="javascript:void(0)"
-							data-share-id="${item.shareId }"
-						data-order="${item.order }"
-							class="colorblue">置顶</a></span></td>
-				</c:if>--%>
 				<td xyz='z' data-customerid="${item.customerId }" title="${item.shortName }">${extf:subStr(item.shortName,9) }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.provinceName }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${elf:getDictName(item.buyService) }</td>
-				<%--<td xyz='z' data-customerid="${item.customerId }">${elf:getDictName(item.followState) }</td>--%>
 				<td xyz='z' data-customerid="${item.customerId }">${item.allowAccountName}</td>
-				<%--<c:if test="${item.cusSourceType ==1 }">
-					<td xyz='z' data-customerid="${item.customerId }">渠道-${item.cusSource}</td>
-				</c:if>
-				<c:if test="${item.cusSourceType !=1 }">
-					<td xyz='z' data-customerid="${item.customerId }">直销-${elf:getDictName(item.cusSource)}</td>
-				</c:if>
-				<td xyz='z' data-customerid="${item.customerId }">${item.nextReport }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${item.nextPlan }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${item.planExecutorAll }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${item.status }</td>
-				<td>
-					<shiro:hasPermission name="customer_edit">
-						<span class="colorblue edit"><a href="javascript:void(0)"
-							data-id="customer_edit" data-edit-id="${item.customerId }"
-							data-title="${item.shortName }" class="colorblue">修改</a></span>
-					</shiro:hasPermission> 
-					&lt;%&ndash; <shiro:hasPermission name="customer_remove">
-						<span class="colorred delete" data-delete-accid="${item.shareId }"
-							data-title="${item.shortName }">删除</span>
-					</shiro:hasPermission> &ndash;%&gt;
-				</td>--%>
 			</tr>
 		</c:forEach>
 	</tbody>
@@ -113,17 +51,13 @@
 
 <div id="Pagination" class="pager"></div>
 
-
-
-
-
 <link rel="stylesheet" href="../content/css/order.css" />
 <script type="text/javascript">
 
 //分页选择每页行数下拉回调函数
 var selVal = function() {
 	$("#pageSize").val($("#pageSizeNum").val());
-	$("#myform").submit();
+	$("#myformSelectCustomer").submit();
 }
 
 	$(function() {
@@ -157,14 +91,14 @@ var selVal = function() {
 					$("#orderType").val("DESC")
 				}
 			
-			$("#myform").submit();
+			$("#myformSelectCustomer").submit();
 
 		});
 		// 表头排序 结束
 
 		var pageClick = function(pageindex) {
 			$("#page").val(pageindex);
-			$("#myform").submit();
+			$("#myformSelectCustomer").submit();
 		};
 		$("#Pagination").pager({
 			pagenumber : '${search.page}',
@@ -181,7 +115,7 @@ var selVal = function() {
 	//customerId 客户id
 	//isFirst 是否是第一负责人
 	function showDetail(customerId,isFirst) {
-		var data = $("#myform").serialize();
+		var data = $("#myformSelectCustomer").serialize();
 		if (!parent.$(".left_slide").hasClass("left_slide_show")) {
 			parent.$(".left_slide").addClass("left_slide_show");
 			parent.$(".left_menu").css("width", "70px");

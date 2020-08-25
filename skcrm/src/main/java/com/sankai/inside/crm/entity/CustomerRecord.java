@@ -12,7 +12,7 @@ public class CustomerRecord {
 	private Integer type;//记录类别 字典
 	private Integer source;//来源：1 PC; 2 手机
 	private String remark;//记录内容
-	
+
 	private Date finalTime;//没有用。。待删除
 	private String isFirst;//是否是第一负责人
 	
@@ -21,6 +21,15 @@ public class CustomerRecord {
 	private String betweenTime;//时间区间
 	private String backType;//返回界面类型
 	private String communicationWay;//沟通方式
+	private String recordFlag;//1 代表从沟通记录来
+
+	public String getRecordFlag() {
+		return recordFlag;
+	}
+
+	public void setRecordFlag(String recordFlag) {
+		this.recordFlag = recordFlag;
+	}
 
 	public String getCommunicationWay() {
 		return communicationWay;

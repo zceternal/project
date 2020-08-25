@@ -57,7 +57,28 @@ public class CustomerServiceImpl implements ICustomerService {
 		// 修改客户信息
 		Customer customer = new Customer();
 		BeanUtils.copyProperties(model, customer);
+		customer.setProvince(null);
+		customer.setCity(null);
+		customer.setCountry(null);
+		customer.setCreateId(null);
 		customerDAO.updateByPrimaryKeySelective(customer);
+
+		// 新增或修改人际关系图
+		if (!StringUtils.isEmpty(model.getChannelPartner()) || !StringUtils.isEmpty(model.getTrustPerson())
+				|| !StringUtils.isEmpty(model.getDecisionPerson()) || !StringUtils.isEmpty(model.getManagePerson())
+				|| !StringUtils.isEmpty(model.getHandlePerson()) || !StringUtils.isEmpty(model.getProfessionalPerson())) {
+			if (customer.getRelationsId() > 0) {// 修改
+				SysCustomerRelations relation = new SysCustomerRelations();
+				BeanUtils.copyProperties(model, relation);
+				relation.setId(model.getRelationsId());
+				customerDAO.updateCustomerRelations(relation);
+			}else{ // 新增
+				SysCustomerRelations relation = new SysCustomerRelations();
+				BeanUtils.copyProperties(model, relation);
+				relation.setCustomerId(model.getId());
+				customerDAO.insertCustomerRelations(relation);
+			}
+		}
 
 		// 新增跟踪日志(type=6 [默认销售记录]，source=1 [默认PC])
 		CustomerRecord customerRecord = new CustomerRecord();
@@ -132,7 +153,7 @@ public class CustomerServiceImpl implements ICustomerService {
 	
 	@Override
 	public ServiceResult<Page<CustomerList>> getList(CustomerListSearch val, int page, int pageSize) {
-		if (Objects.equals(val.getOrderField(), "buyServiceName")) {
+			if (Objects.equals(val.getOrderField(), "buyServiceName")) {
 			val.setOrderField("buyService");
 		}else if (Objects.equals(val.getOrderField(), "followStateName")) {
 			val.setOrderField("followState");

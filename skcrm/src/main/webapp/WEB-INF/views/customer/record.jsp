@@ -11,7 +11,7 @@
 	<div class="main_content dialog">
 			<div class="panel panel-default">
 				<form class="form-horizontal old_block" role="form" id="myformAddRemind"
-					action="record" method="post" data-ajax="true" data-ajax-success="onCustomerSuccessAdd">
+					action="record" method="post" data-ajax="true" data-ajax-success="onRecordSuccessAdd">
 					<div class="form-group">
 						<input id="id" name="id" type="hidden" title="客户id" value="${model.id }" />
 						<input id="customerId" name="customerId" type="hidden" title="客户id" value="${model.id }" />
@@ -193,6 +193,7 @@
 
 					<div class="form-group">
 						<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">人际关系图：</label>
+						<input type="hidden" name="relationsId" id="hid_relationsId" value="${customerRelations.id}">
 						<div class="col-sm-12">
 							<table class="table table-bordered table-hover" border="1" cellspacing="0" cellpadding="0">
 							<thead>
@@ -399,10 +400,11 @@
 <script type="text/javascript" src="../content/js/pickday.js"></script>
 <script type="text/javascript">
 
+
 	$("a[data-id=contact_list]").click(function() {
 		var $this = $(this);
         var bz = $this.data("bz");
-		dialog = $.sk.open({
+		dialogForRecord = $.sk.open({
 			url : "select_contact_list",
 			width : 1000,
 			height : 600,
@@ -425,6 +427,7 @@
 					}
 					$("#sp_"+bz).text(names);
 					$("#hid_"+bz).val(ids);
+					$.sk.close(dialogForRecord);
 				}
 			} ]
 		});

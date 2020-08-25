@@ -329,7 +329,12 @@ public class TaskController {
 	@ResponseBody
 	public ServiceResultBool add(@Validated({ ValidAdd.class }) Task form, BindingResult result, Model model)
 			throws Exception {
-
+		if (StringUtils.isEmpty(form.getPlanExecutorUser()) && StringUtils.isEmpty(form.getPlanExecutorContact())) {
+            return new ServiceResultBool(false,"请选择计划执行人！");
+		}
+		if (StringUtils.isEmpty(form.getQuadrant())) {
+			return new ServiceResultBool(false,"请选择任务象限！");
+		}
 		return taskService.add(form);
 	}
 

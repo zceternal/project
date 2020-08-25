@@ -24,6 +24,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,7 +82,13 @@ public class CustomerRecordController {
 	@RequestMapping(value = "cusRecord/addRecord", method = RequestMethod.POST)
 	public CustomerRecordAddDTO addRecord(CustomerRecord vo) {
 		CustomerRecordAddDTO result = new CustomerRecordAddDTO();
-		if (vo.getRemark() == null || vo.getRemark().equals("")) {
+		if (!StringUtils.isEmpty(vo.getRecordFlag())) {
+			result.setSuccess(true);
+			result.setMsg("添加成功");
+			return result;
+		}
+
+		if (StringUtils.isEmpty(vo.getRemark())) {
 			result.setSuccess(false);
 			result.setMsg("记录内容不能为空");
 			return result;

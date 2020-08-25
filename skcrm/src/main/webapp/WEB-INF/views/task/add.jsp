@@ -12,9 +12,10 @@
 					action="add" method="post" role="form" data-ajax="true" data-ajax-success="onTaskSuccessAdd">
 					<input id="customerId" name="customerId" type="hidden" title="现有客户id" value="${search.page }" />
 					<div class="form-group">
-						<label for="" class="col-sm-2 dev-col-sm-120 control-label">任务名称：</label>
+						<label for="" class="col-sm-2 dev-col-sm-120 control-label">任务名称<em
+								class="colorred">*</em>：</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control validate[maxSize[100]]" id="name" placeholder="请输入任务名称" name="name" style="width: 625px" data-prompt-position="inline" >
+							<input type="text" class="form-control validate[required,maxSize[50]]" id="name" placeholder="请输入任务名称" name="name" style="width: 625px" data-prompt-position="inline" >
 						</div>
 					</div>
 
@@ -41,22 +42,25 @@
                     </div>
 
 					<div class="form-group">
-						<label for="" class="col-sm-2 dev-col-sm-120 control-label">下一步工作计划：</label>
+						<label for="" class="col-sm-2 dev-col-sm-120 control-label">下一步工作计划<em
+								class="colorred">*</em>：</label>
 						<div class="col-sm-10">
-							<textarea class="form-control validate[maxSize[500]]" id="nextPlan" placeholder="请输入下一步工作计划" name="nextPlan" style="width: 625px" data-prompt-position="inline"
+							<textarea class="form-control validate[required,maxSize[500]]" id="nextPlan" placeholder="请输入下一步工作计划" name="nextPlan" style="width: 625px" data-prompt-position="inline"
 									  rows=4></textarea>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label for="" class="col-sm-2 dev-col-sm-120 control-label">计划标准：</label>
+						<label for="" class="col-sm-2 dev-col-sm-120 control-label">计划标准<em
+								class="colorred">*</em>：</label>
 						<div class="col-sm-10">
-							<textarea class="form-control validate[maxSize[500]]" id="planStandard" placeholder="请输入计划标准" name="planStandard" style="width: 625px" data-prompt-position="inline"
+							<textarea class="form-control validate[required,maxSize[200]]" id="planStandard" placeholder="请输入计划标准" name="planStandard" style="width: 625px" data-prompt-position="inline"
 									  rows=4></textarea>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 dev-col-sm-120 control-label">计划执行人：</label>
+						<label class="col-sm-2 dev-col-sm-120 control-label">计划执行人<em
+								class="colorred">*</em>：</label>
 						<div class="wh_ul">
 							<ul class="wh_ul">
 								<c:if test="${accList != null }">
@@ -111,7 +115,8 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 dev-col-sm-120 control-label">任务象限：</label>
+						<label class="col-sm-2 dev-col-sm-120 control-label">任务象限<em
+								class="colorred">*</em>：</label>
 						<div class="wh_ul">
 							<c:if test="${taskxx != null }">
 								<c:forEach var="item" items="${taskxx }" varStatus="sta" >
@@ -167,7 +172,7 @@
 
 	$("a[data-id=customer_list]").click(function() {
 		var $this = $(this);
-		dialog = $.sk.open({
+		$selectCustomerForTask = $.sk.open({
 			url : "select_customer_list",
 			width : 1000,
 			height : 600,
@@ -182,18 +187,20 @@
 					var selectCustomers = $(":checkbox[class=sk_checkbox]:checked");
 					if(selectCustomers.length>1){
 						$.sk.error("只能选择一个客户！");
+						return;
 					}
 					$(":checkbox[class=sk_checkbox]:checked").each(function() {
 						var ck = $(this);
 						ids += ck.val() + ",";
-						names += ck.data("name") + ",";
+						names += ck.data("cusname") + ",";
 					});
 					if (names) {
 						names = names.substr(0, names.length - 1);
 						ids = ids.substr(0, ids.length - 1);
 					}
-					$("#a_selName").text(names);
+					//$("#a_selName").text(names);
 					$("#customerId").val(ids);
+					$.sk.close($selectCustomerForTask);
 				}
 			} ]
 		});

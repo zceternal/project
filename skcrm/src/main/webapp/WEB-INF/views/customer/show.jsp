@@ -102,7 +102,7 @@
 				<input id="indexIsFrom" name="indexIsFrom" type="hidden" value="${indexIsFrom }" />  
 				</form>
 				<input type="hidden" id="statusVal" value="${customerInfo.status}"> 
-				<div class="flck">
+				<%--<div class="flck">
 					
 					<c:forEach items="${allStatus }" var="st"  varStatus="status">
 					<c:if test="${customerInfo.status==st.id}">
@@ -129,7 +129,7 @@
 						</c:if>							
 					</c:if>
 					</c:forEach>
-		   		</div>
+		   		</div>--%>
 				
 				<div class="divider"></div>
 				<div class="site_block member_block">
@@ -215,6 +215,7 @@
 										data-ajax-mode="replace"
 										data-ajax-success="recordAddOnSuccess"
 										data-ajax-update="#customerRecordList">
+										<input id="recordFlag" name="recordFlag" type="hidden" />
 										<input name="customerId" type="hidden" value="${customerId }" />
 											<textarea id="container"  style="height:200px;width: 100%;"></textarea>
     								  		<input type="text"  id="remarkRecord" name="remark"

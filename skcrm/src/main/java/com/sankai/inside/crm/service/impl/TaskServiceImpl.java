@@ -103,6 +103,10 @@ public class TaskServiceImpl implements ITaskService {
 
     @Override
     public ServiceResultBool add(Task model) {
+        // 167 现有客户
+        if (!Objects.equals(model.getCustomerType(), "167")) {
+            model.setCustomerId(null);
+        }
         Date date = new Date();
         model.setCreateId(UserState.getLoginId());
         model.setCreateName(UserState.getLoginName());
@@ -130,6 +134,9 @@ public class TaskServiceImpl implements ITaskService {
             val.setOrderField("assign_time");
         }else if (Objects.equals(val.getOrderField(), "taskStatus")) {
             val.setOrderField("status");
+        }else{
+            val.setOrderField("assign_time");
+            val.setOrderType(" DESC ");
         }
         val.setSourceId(UserState.getLoginId());
 

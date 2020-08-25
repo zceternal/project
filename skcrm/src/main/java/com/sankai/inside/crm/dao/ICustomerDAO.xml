@@ -86,8 +86,7 @@
 		customer_id=#{customerId}
 	</select>
 	<!-- 客户管理列表 -->
-	<select id="selectList" resultType="com.sankai.inside.crm.entity.CustomerList"
-			parameterType="com.sankai.inside.crm.entity.CustomerListSearch">
+	<select id="selectList" parameterType="com.sankai.inside.crm.entity.CustomerListSearch" resultType="com.sankai.inside.crm.entity.CustomerList">
 		SELECT *,(SELECT `name` FROM sys_account WHERE tb2.accountId = id ) AS optName
 		FROM (
 		select * from (
@@ -106,7 +105,7 @@
 		e.name FROM sys_customer_share AS f
 		LEFT JOIN sys_account e ON
 		f.account_id = e.id WHERE f.state = 0 AND f.is_own = 1 AND
-		f.customer_id=a.`customer_id`) AS
+		f.customer_id=a.`customer_id` limit 1) AS
 		allowAccountName,
 
 		(SELECT `name` FROM
@@ -142,7 +141,7 @@
 			or
 			tb.namePy like CONCAT(CONCAT('%', #{content}),'%')
 			or
-			tb.phone like CONCAT(CONCAT('%', #{content}),'%')CustomerListSearch
+			tb.phone like CONCAT(CONCAT('%', #{content}),'%')
 			)
 		</if>
 

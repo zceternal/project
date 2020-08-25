@@ -14,15 +14,15 @@ public class Customer {
 	private String source;//客户来源,字典
 	private String url;
 	private String phone;
-	private int province;//,字典
-	private int city;
-	private int country;
+	private Integer province;//,字典
+	private Integer city;
+	private Integer country;
 	private String address;
 	private Double xCoord;
 	private Double yCoord;
 	private String remark;
 	private int state;
-	private int createId;
+	private Integer createId;
 	private Date createTime;
 	private String nameSimplePy;
 	private String namePy;
@@ -159,24 +159,8 @@ public class Customer {
 		this.status = status;
 	}
 
-	public void setProvince(int province) {
-		this.province = province;
-	}
-
-	public void setCity(int city) {
-		this.city = city;
-	}
-
-	public void setCountry(int country) {
-		this.country = country;
-	}
-
 	public void setState(int state) {
 		this.state = state;
-	}
-
-	public void setCreateId(int createId) {
-		this.createId = createId;
 	}
 
 	public String getChannelPartner() {

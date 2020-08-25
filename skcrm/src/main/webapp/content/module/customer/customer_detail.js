@@ -4,7 +4,7 @@ $(function() {
 	// 新增沟通记录
 	$("#addNewRecord").on("click", function() {
 		var $this = $(this);
-		dialog = $.sk.open({
+		dialogForAdd = $.sk.open({
 			url : "record",
 			data : {
 				customerId : $this.data("cusid")
@@ -21,7 +21,6 @@ $(function() {
 			} ]
 		});
 	});
-
 	$("#addContactX").click(
 			function() {
 				var $this = $(this);
@@ -139,7 +138,7 @@ $(function() {
 function onCustomerSuccessAddRemind(data) {
 	if (data.success) {
 		$.sk.success("新增提醒成功", function() {
-			//$("#myformAddRemind").submit();
+			//$("#myformAddRemind").submit();记录内容不能为空
 			$.sk.close(dialog);
 		});
 	} else {
@@ -185,6 +184,17 @@ function recordAddOnSuccess(data) {
 		$("#form_customer_record_search").submit();
 	}
 
+}
+
+function onRecordSuccessAdd(data) {
+	if (data.success) {
+        $("#recordFlag").val("1");
+		$("#myformShow").submit();
+		$.sk.close(dialogForAdd);
+	} else {
+		$.sk.error(data.msg);
+		$formsearch.submit();
+	}
 }
 
 function contactAddSuccessForShare(data) {
