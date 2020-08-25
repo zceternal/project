@@ -78,6 +78,7 @@
 		sys_customer_share AS scs WHERE customer_id=#{customerId}
 		AND
 		scs.is_own=1
+		order by scs.id desc limit 1
 	</select>
 	<!--查询客户联系人 -->
 	<select id="findContactInfoByCustoemrId" parameterType="java.lang.Integer"

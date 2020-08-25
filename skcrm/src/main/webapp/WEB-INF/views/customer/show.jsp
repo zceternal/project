@@ -130,8 +130,7 @@
 					</c:if>
 					</c:forEach>
 		   		</div>--%>
-				
-				<div class="divider"></div>
+
 				<div class="site_block member_block">
 					<div class="panel-body">
 

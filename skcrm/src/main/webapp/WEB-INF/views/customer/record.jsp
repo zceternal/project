@@ -141,7 +141,7 @@
 							<ul class="wh_ul">
 								<c:if test="${lxr != null }">
 									<c:forEach var="item" items="${lxr }">
-										<li><label><input  name="cusSource" class="dev-khly" type="radio" ${item.id == model.cusSource ? 'checked':'' } value="${item.id }" />${item.name }</label></li>
+										<li><label><input  name="cusSource" class="dev-khly" type="radio" ${item.id == model.cusSource ? 'checked':'' } value="${item.id }_1" />${item.name }</label></li>
 									</c:forEach>
 								</c:if>
 							</ul>
@@ -149,7 +149,7 @@
 							<ul class="wh_ul">
 								<c:if test="${khly != null }">
 									<c:forEach var="item" items="${khly }">
-										<li><label><input  name="cusSource" class="dev-khly" type="radio" ${item.id == model.cusSource ? 'checked':'' } value="${item.id }" />${item.name }</label></li>
+										<li><label><input  name="cusSource" class="dev-khly" type="radio" ${item.id == model.cusSource ? 'checked':'' } value="${item.id }_2" />${item.name }</label></li>
 									</c:forEach>
 								</c:if>
 
@@ -356,36 +356,36 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="" class="col-sm-2 control-label">计划反馈时间：</label>
-						<div class="col-sm-4" style="margin-left: -15px; padding-left: 0px;">
+						<label class="col-sm-2 dev-col-sm-120 control-label">计划反馈时间：</label>
 							<div class="inline relative mr0">
 								<input type="text" class="form-control input150" placeholder="请输入计划反馈时间" name="backTime" id="backTime" input-type="date" >
 								<span class="date_icon" style="cursor: pointer;"><i></i></span>
 							</div>
-						</div>
-						<label for="" class="col-sm-2 control-label">提醒方式：</label>
-						<div class="col-sm-6 favorite">
-							<div class="wh_ul">
-								<ul class="wh_ul">
-									<li class="dev-acclist " >
-										<input  name="backWay" class="dev-cjztmx" type="radio" value="1" />提前一天
-									</li>
-									<li class="dev-acclist " >
-										<input  name="backWay" class="dev-cjztmx" type="radio" value="2" />具体时间
-									</li>
-									<li class="dev-acclist " >
-										<input  name="backWay" class="dev-cjztmx" type="radio" value="3" />具体节点
-									</li>
-									<li class="dev-acclist " >
-										<input  name="backWay" class="dev-cjztmx" type="radio" value="4" />不提醒
-									</li>
-									<li class="dev-acclist " >
-										<input  name="backWay" class="dev-cjztmx" type="radio" value="5" />搁置
-									</li>
-								</ul>
-							</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 dev-col-sm-120 control-label">提醒方式：</label>
+						<div class="wh_ul">
+							<ul class="wh_ul">
+								<li class="dev-acclist " >
+									<input  name="backWay" class="dev-cjztmx" type="radio" value="1" />提前一天
+								</li>
+								<li class="dev-acclist " >
+									<input  name="backWay" class="dev-cjztmx" type="radio" value="2" />具体时间
+								</li>
+								<li class="dev-acclist " >
+									<input  name="backWay" class="dev-cjztmx" type="radio" value="3" />具体节点
+								</li>
+								<li class="dev-acclist " >
+									<input  name="backWay" class="dev-cjztmx" type="radio" value="4" />不提醒
+								</li>
+								<li class="dev-acclist " >
+									<input  name="backWay" class="dev-cjztmx" type="radio" value="5" />搁置
+								</li>
+							</ul>
 						</div>
 					</div>
+
 				</form>
 
 		</div>

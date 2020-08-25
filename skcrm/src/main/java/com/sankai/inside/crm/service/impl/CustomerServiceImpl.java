@@ -53,6 +53,14 @@ public class CustomerServiceImpl implements ICustomerService {
 	@Transactional
 	@Override
 	public ServiceResultBool saveCommunication(CommunicationForm model) {
+
+		String cusSource = model.getCusSource();
+		if (!StringUtils.isEmpty(cusSource)) {
+			String[] cs = cusSource.split("_");
+			model.setCusSource(cs[0]);
+			model.setCusSourceType(cs[1]);
+		}
+
 		Date date = new Date();
 		// 修改客户信息
 		Customer customer = new Customer();
@@ -95,26 +103,27 @@ public class CustomerServiceImpl implements ICustomerService {
 		}
 
 		// 新增任务(任务名称=“新增沟通记录任务”)
-		Task task = new Task();
-		task.setName("新增沟通记录任务");
-		task.setCustomerType("167");// 现有客户
-		task.setCustomerId(model.getId());
-		task.setNextPlan(model.getNextPlan());
-		task.setPlanStandard(model.getPlanStandard());
-		task.setPlanExecutorUser(model.getPlanExecutorUser());
-		task.setPlanExecutorContact(model.getPlanExecutorContact());
-		task.setExecuteWay(model.getExecuteWay());
-		task.setQuadrant(model.getQuadrant());
-		task.setBackTime(model.getBackTime());
-		task.setBackWay(model.getBackWay());
-		task.setAssignTime(date);
-		task.setAssignPerson(String.valueOf(model.getUserId()));
-		task.setCreateId(model.getUserId());
-		task.setCreateName(model.getUserName());
-		task.setCreateTime(date);
-		task.setSource(1);
-
-		taskDAO.insert(task);
+		if (!StringUtils.isEmpty(model.getNextPlan()) || !StringUtils.isEmpty(model.getPlanStandard())) {
+			Task task = new Task();
+			task.setName("新增沟通记录任务");
+			task.setCustomerType("167");// 现有客户
+			task.setCustomerId(model.getId());
+			task.setNextPlan(model.getNextPlan());
+			task.setPlanStandard(model.getPlanStandard());
+			task.setPlanExecutorUser(model.getPlanExecutorUser());
+			task.setPlanExecutorContact(model.getPlanExecutorContact());
+			task.setExecuteWay(model.getExecuteWay());
+			task.setQuadrant(model.getQuadrant());
+			task.setBackTime(model.getBackTime());
+			task.setBackWay(model.getBackWay());
+			task.setAssignTime(date);
+			task.setAssignPerson(String.valueOf(model.getUserId()));
+			task.setCreateId(model.getUserId());
+			task.setCreateName(model.getUserName());
+			task.setCreateTime(date);
+			task.setSource(1);
+			taskDAO.insert(task);
+		}
 
 		return new ServiceResultBool();
 	}
