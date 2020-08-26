@@ -32,7 +32,7 @@
 										<th width="17%">客户简称</th>
 										<th width="8%">客户状态</th>
 										<th >提醒内容</th>
-										<th width="10%">销售负责人</th>
+										<th width="10%">负责人</th>
 										<th width="12%">提醒时间</th>
 										<th width="8%">超时天数</th>
 										<th width="180px">操作</th>

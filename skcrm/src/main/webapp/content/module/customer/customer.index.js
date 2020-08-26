@@ -33,12 +33,10 @@ $(function() {
 
 	// 新增
 	$("a[data-id=customer_add]").live("click", function() {
-		
-		var $this = $(this);
 		dialogForAdd = $.sk.open({
 			url : "add",
-			width : 900,
-			height:600,
+			width : 1000,
+			height: 850,
 			title : "新增客户",
 			buttons : [ {
 				html : "确定",
@@ -55,8 +53,8 @@ $(function() {
 		var $this = $(this);
 		dialogForEdit = $.sk.open({
 			url : "edit",
-			width : 900,
-			height:600,
+			width : 1000,
+			height: 850,
 			data : {
 				id : $this.data("edit-id")
 			},

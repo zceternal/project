@@ -80,14 +80,14 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 						<input id="status" name="status" type="hidden" title="下一步计划状态" value="${search.status }" />
 						
 						<div class="form-group form-inline" style="padding: 5px 0px;">
-							<label class="col-sm-1 control-label dev-col-sm-1">销售负责人：</label>
+							<label class="col-sm-1 control-label dev-col-sm-1">负责人：</label>
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<ul id="acclistTab" class="tab_button search_sk"
 									style="margin-bottom: 0px; margin-top: 3px">
 									<li class="dev-acclist ${search.accountId == -1 ? "on":"" }" id="dev-acclist-all" data-value="-1">全选</li>
 									<c:if test="${accList != null }">
 										<c:forEach var="item" items="${accList }">
-											<li class="dev-acclist ${search.accountId == item.id ? "on":"" }" data-value="${item.id }">${item.isMySelf()?"自己":item.name }</li>
+											<li class="dev-acclist ${search.accountId == item.id ? "on":"" }" data-value="${item.id }">${item.isMySelf()?"登录用户":item.name }</li>
 										</c:forEach>
 									</c:if>
 								</ul>

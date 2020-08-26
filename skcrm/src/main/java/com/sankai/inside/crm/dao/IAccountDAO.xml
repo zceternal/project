@@ -297,12 +297,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by isMySelf desc
 		</if>
 		<if test="value &lt; 0">
-		select id,`name`,sex,number,sys_dept_id as departmentId,is_dept_manager as isDeptManager,0 as isMySelf from sys_account
+		select id,`name`,sex,number,sys_dept_id as departmentId,is_dept_manager as isDeptManager,(SELECT id =
+			#{value}) as isMySelf from sys_account
 		where   `state` = 0 and id != 0
 		order by isMySelf desc
 		</if>
 		<if test="value==0">
-		select id,`name`,sex,number,sys_dept_id as departmentId,is_dept_manager as isDeptManager,0 as isMySelf from sys_account
+		select id,`name`,sex,number,sys_dept_id as departmentId,is_dept_manager as isDeptManager,(SELECT id =
+			#{value}) as isMySelf from sys_account
 		where   `state` = 0
 		order by isMySelf desc
 		</if>

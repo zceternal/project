@@ -77,7 +77,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 						<input id="orderField" name="orderField" title="排序字段" type="hidden" value="${search.orderField }"></input>
 						
 						<div class="form-group form-inline" style="padding: 5px 0px;">
-							<label class="col-sm-1 control-label dev-col-sm-1">销售负责人：</label>
+							<label class="col-sm-1 control-label dev-col-sm-1">负责人：</label>
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<ul id="acclistTab" class="tab_button search_sk"
 									style="margin-bottom: 0px; margin-top: 3px">

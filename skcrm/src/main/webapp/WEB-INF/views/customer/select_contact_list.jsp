@@ -87,7 +87,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 							
 
 						<div class="form-group form-inline" style="padding: 5px 0px;">
-							<label for="" class="col-sm-1 control-label dev-col-sm-1">销售负责人：</label>
+							<label for="" class="col-sm-1 control-label dev-col-sm-1">负责人：</label>
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<div>
 									<label class="control-label"> <label

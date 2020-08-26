@@ -428,7 +428,7 @@ public class TaskController {
 
 		// 客户列表
 		ServiceResult<Page<CustomerList>> result = customerServiceImpl.getList(search, search.getPage(),
-				search.getPageSize());
+				search.getPageSize(),UserState.getLoginId());
 
 		Account account = accountService.getAccountInfo(loginId);// 当前用户信息
 
@@ -533,7 +533,7 @@ public class TaskController {
 		}
 		// 客户列表
 		ServiceResult<Page<CustomerList>> result = customerServiceImpl.getList(search, search.getPage(),
-				search.getPageSize());
+				search.getPageSize(),UserState.getLoginId());
 
 		Account account = accountService.getAccountInfo(loginId);// 当前用户信息
 

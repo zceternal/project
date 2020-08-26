@@ -163,7 +163,7 @@ public class CustomerServiceImpl implements ICustomerService {
 	}
 	
 	@Override
-	public ServiceResult<Page<CustomerList>> getList(CustomerListSearch val, int page, int pageSize) {
+	public ServiceResult<Page<CustomerList>> getList(CustomerListSearch val, int page, int pageSize,int currId) {
 			if (Objects.equals(val.getOrderField(), "buyServiceName")) {
 			val.setOrderField("buyService");
 		}else if (Objects.equals(val.getOrderField(), "followStateName")) {
@@ -174,6 +174,11 @@ public class CustomerServiceImpl implements ICustomerService {
 		PageHelper.startPage(page, pageSize, true);
 		Page<CustomerList> list = (Page<CustomerList>) customerDAO.selectList(val);
 		for (CustomerList customer : list) {
+			// 是否是当前登录人
+			if (Objects.equals(customer.getAllowAccountId(), currId)) {
+				customer.setAllowAccountName("登录用户");
+			}
+
 			//联系人转换
 			if (Objects.equals(customer.getCusSourceType(), "1")) {
 				ServiceResult<Contact> contactServiceResult = contactService.selectById(Integer.valueOf(customer.getCusSource()));

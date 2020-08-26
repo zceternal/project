@@ -86,7 +86,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 							
 
 						<div class="form-group form-inline" style="padding: 5px 0px;">
-							<label for="" class="col-sm-1 control-label dev-col-sm-1">销售负责人：</label>
+							<label for="" class="col-sm-1 control-label dev-col-sm-1">负责人：</label>
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<div>
 									<label class="control-label"> <label
@@ -101,7 +101,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 												class="label_check  ${item.isMySelf() && myself.equals('1')?'c_on':''}"> <input type="checkbox"
 													name="accId" class="dev-acclist sk_checkbox" ${item.isMySelf() && myself.equals("1")?"checked":""}
 													data-client="dev_acclist" value="${item.id }" />
-													${item.isMySelf()?"自己":item.name }
+													${item.isMySelf()?"登录用户":item.name }
 											</label>
 											</label>
 										</c:forEach>
@@ -110,46 +110,46 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 								</div>
 							</div>
 						</div>
-						<div class="form-group form-inline">
-							<label class="col-sm-1 control-label dev-col-sm-1"><a href="javascript:;" onclick="showH()" id="a_hs">高 级 查 询</a></label>
-						</div>
-						<div class="form-group form-inline dev-highSeacrch" style="padding: 5px 0px;display:none;">
-							<label for="" class="col-sm-1 control-label dev-col-sm-1">联系人详情：</label>
-							<div class="col-sm-11 favorite dev-col-sm-11">
-								<div>
-									<label class="control-label"> <label
-										class="label_check"> <input type="checkbox"
-											data-for="dev_contactDetails" value="-1" class="dev-contactDetails"/> <b>全选</b>
-									</label>
-									</label> <label class="control-label"> <label
-										class="label_check"> <input type="checkbox"
-											name="phone" class="dev-contactDetails"
-											data-client="dev_contactDetails" value="true" /> 手机
-									</label>
-									</label> <label class="control-label"> <label
-										class="label_check"> <input type="checkbox"
-											name="wechat" class="dev-contactDetails"
-											data-client="dev_contactDetails" value="true" /> 微信
-									</label>
-									</label> <label class="control-label"> <label
-										class="label_check"> <input type="checkbox" name="qq"
-											class="dev-contactDetails" data-client="dev_contactDetails"
-											value="true" /> QQ
-									</label>
-									</label> <label class="control-label"> <label
-										class="label_check"> <input type="checkbox"
-											name="email" class="dev-contactDetails"
-											data-client="dev_contactDetails" value="true" /> 邮箱
-									</label>
-									</label>
+<%--						<div class="form-group form-inline">--%>
+<%--							<label class="col-sm-1 control-label dev-col-sm-1"><a href="javascript:;" onclick="showH()" id="a_hs">高 级 查 询</a></label>--%>
+<%--						</div>--%>
+<%--						<div class="form-group form-inline dev-highSeacrch" style="padding: 5px 0px;display:none;">--%>
+<%--							<label for="" class="col-sm-1 control-label dev-col-sm-1">联系人详情：</label>--%>
+<%--							<div class="col-sm-11 favorite dev-col-sm-11">--%>
+<%--								<div>--%>
+<%--									<label class="control-label"> <label--%>
+<%--										class="label_check"> <input type="checkbox"--%>
+<%--											data-for="dev_contactDetails" value="-1" class="dev-contactDetails"/> <b>全选</b>--%>
+<%--									</label>--%>
+<%--									</label> <label class="control-label"> <label--%>
+<%--										class="label_check"> <input type="checkbox"--%>
+<%--											name="phone" class="dev-contactDetails"--%>
+<%--											data-client="dev_contactDetails" value="true" /> 手机--%>
+<%--									</label>--%>
+<%--									</label> <label class="control-label"> <label--%>
+<%--										class="label_check"> <input type="checkbox"--%>
+<%--											name="wechat" class="dev-contactDetails"--%>
+<%--											data-client="dev_contactDetails" value="true" /> 微信--%>
+<%--									</label>--%>
+<%--									</label> <label class="control-label"> <label--%>
+<%--										class="label_check"> <input type="checkbox" name="qq"--%>
+<%--											class="dev-contactDetails" data-client="dev_contactDetails"--%>
+<%--											value="true" /> QQ--%>
+<%--									</label>--%>
+<%--									</label> <label class="control-label"> <label--%>
+<%--										class="label_check"> <input type="checkbox"--%>
+<%--											name="email" class="dev-contactDetails"--%>
+<%--											data-client="dev_contactDetails" value="true" /> 邮箱--%>
+<%--									</label>--%>
+<%--									</label>--%>
 
 
 
-								</div>
-							</div>
-						</div>
+<%--								</div>--%>
+<%--							</div>--%>
+<%--						</div>--%>
 
-						<div class="form-group form-inline dev-highSeacrch" style="padding: 5px 0px;display:none;">
+						<div class="form-group form-inline dev-highSeacrch" style="padding: 5px 0px;">
 							<label for="lastname" class="col-sm-1 control-label dev-col-sm-1">联系人角色：</label>
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<ul id="lxrjsTab" class="tab_button search_sk">
@@ -162,16 +162,16 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 							</div>
 						</div>
 
-						<div class="form-group form-inline dev-highSeacrch" style="padding: 5px 0px;display:none;">
-							<label for="lastname" class="col-sm-1 control-label dev-col-sm-1">关 联 客 户：</label>
-							<div class="col-sm-11 favorite dev-col-sm-11">
-								<ul id="customerTypeTab" class="tab_button search_sk">
-									<li class="dev-customerType on" data-value="-1">全选</li>
-									<li class="dev-customerType" data-value="1">已关联客户</li>
-									<li class="dev-customerType" data-value="0">未关联客户</li>
-								</ul>
-							</div>
-						</div>
+<%--						<div class="form-group form-inline dev-highSeacrch" style="padding: 5px 0px;display:none;">--%>
+<%--							<label for="lastname" class="col-sm-1 control-label dev-col-sm-1">关 联 客 户：</label>--%>
+<%--							<div class="col-sm-11 favorite dev-col-sm-11">--%>
+<%--								<ul id="customerTypeTab" class="tab_button search_sk">--%>
+<%--									<li class="dev-customerType on" data-value="-1">全选</li>--%>
+<%--									<li class="dev-customerType" data-value="1">已关联客户</li>--%>
+<%--									<li class="dev-customerType" data-value="0">未关联客户</li>--%>
+<%--								</ul>--%>
+<%--							</div>--%>
+<%--						</div>--%>
 
 
 						<div class="form-group" style="padding: 5px 0px;">

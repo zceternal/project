@@ -38,7 +38,7 @@
 
 						<form class="form-horizontal" role="form">
 							<div class="form-group">
-								<label for="" class="col-sm-2 control-label">销售负责人：</label>
+								<label for="" class="col-sm-2 control-label">负责人：</label>
 								<div class="col-sm-10 favorite">
 									<div>
 										<label class="checkbox-inline"> <input type="checkbox"

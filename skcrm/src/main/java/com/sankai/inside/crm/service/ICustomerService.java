@@ -46,7 +46,7 @@ public interface ICustomerService {
 	 * @return
 	 * @throws Exception
 	 */
-	public  ServiceResult<Page<CustomerList>> getList(CustomerListSearch val,int page,int pageSize) ;
+	public  ServiceResult<Page<CustomerList>> getList(CustomerListSearch val,int page,int pageSize,int currId) ;
 	/**
 	 * 根据条件导出客户信息（）
 	 * @param val

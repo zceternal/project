@@ -24,25 +24,25 @@
 			<th width="10%">客户简称
 				<div id="shortNameOrder" class="dev-order up"></div>
 			</th>
-			<th width="10%">地区
+			<th width="5%">地区
 				<div id="provinceName" class="dev-order up"></div>
 			</th>
-			<th width="8%">产品及服务
+			<th width="10%">产品及服务
 				<div id="buyServiceName" class="dev-order up"></div>
 			</th>
 			<th width="8%">销售推进状态
 				<div id="followStateName" class="dev-order up"></div>
 			</th>
-			<th width="8%">负责人
+			<th width="6%">负责人
 				<div id="allowAccountName" class="dev-order up"></div>
 			</th>
 			<th width="8%">销售形式
 				<div id="cusSourceName" class="dev-order up"></div>
 			</th>
-			<th width="12%">最近一次推进记录
+			<th >最近一次推进记录
 			<%--	<div id="allowAccountName" class="dev-order up"></div>--%>
 			</th>
-			<th width="8%">下一步计划
+			<th width="10%">下一步计划
 				<%--<div id="allowAccountName" class="dev-order up"></div>--%>
 			</th>
 			<th width="8%">计划配合人
@@ -51,7 +51,7 @@
 			<th width="8%">计划状态
 				<div id="taskStatus" class="dev-order up"></div>
 			</th>
-			<th>操作
+			<th width="6%">操作
 				<div id="opeartor" class="empty"></div>
 			</th>
 		</tr>
@@ -90,8 +90,8 @@
 				<c:if test="${item.cusSourceType !=1 }">
 					<td xyz='z' data-customerid="${item.customerId }">直销-${elf:getDictName(item.cusSource)}</td>
 				</c:if>
-				<td xyz='z' data-customerid="${item.customerId }">${item.nextReport }</td>
-				<td xyz='z' data-customerid="${item.customerId }">${item.nextPlan }</td>
+				<td xyz='z' data-customerid="${item.customerId }" title="${item.nextReport }">${extf:subStr(item.nextReport,8) }</td>
+				<td xyz='z' data-customerid="${item.customerId }" title="${item.nextPlan }">${extf:subStr(item.nextPlan,8) }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.planExecutorAll }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.status }</td>
 				<td>

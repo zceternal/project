@@ -41,7 +41,7 @@
 			<th width="10%">类型
 				<div id="typeName" class="dev-order up"></div>
 			</th>
-			<th width="9%">销售负责人
+			<th width="9%">负责人
 				<div id="allowAccountName" class="dev-order up"></div>
 			</th>
 			<th width="9%">创建时间
