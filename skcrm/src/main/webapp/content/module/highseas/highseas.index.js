@@ -37,7 +37,7 @@ $(function() {
 		dialog = $.sk.open({
 			url : "add",
 			width : 900,
-			height:600,
+			height: 700,
 			title : "新增客户",
 			buttons : [ {
 				html : "确定",

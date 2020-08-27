@@ -67,7 +67,7 @@ $(function() {
 		dialog = $.sk.open({
 			url : "../cusRecord/updateCusInfo",
 			width : 900,
-			height : 600,
+			height : 700,
 			data : {
 				id : $this.data("cusid")
 			},
