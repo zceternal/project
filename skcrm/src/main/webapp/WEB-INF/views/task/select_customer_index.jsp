@@ -75,7 +75,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 						<input id="cusSource" name="cusSource" type="hidden" title="客户来源(销售形式)" value="${search.cusSource }" />
 						<input id="buyService" name="buyService" type="hidden" title="产品与服务" value="${search.buyService }" />
 						<input id="followState" name="followState" type="hidden" title="销售推进状态" value="${search.followState }" />
-						<input id="status" name="status" type="hidden" title="下一步计划状态" value="${search.status }" />
+						<input id="status" name="status" type="hidden" title="下一步任务状态" value="${search.status }" />
 
 						<div class="form-group">
 							<%--<label for="lastname" class="col-sm-1 control-label dev-col-sm-1">客 户 条 件：</label>--%>

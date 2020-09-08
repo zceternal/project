@@ -43,7 +43,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
+				<%--<div class="form-group">
 					<label for="" class="col-sm-2 control-label">职务： </label>
 					<div class="col-sm-4 favorite">
 						<div>
@@ -60,22 +60,27 @@
 								id="department" name="department" placeholder="请输入部门">
 						</div>
 					</div>
-				</div>
+				</div>--%>
 				<div class="form-group">
 					<label for="" class="col-sm-2 control-label">所属客户： </label>
-					<div class="col-sm-10 favorite">
-
+					<div class="col-sm-4 favorite">
 						<input id="customerId" name="customerId" value="0" type="hidden">
 						<input type="text" class="form-control " id="customerName"
 							name="customerName" placeholder="请选择客户" readonly="readonly"
-							style="width: 400px !important; display: inline;"> <a
+							style="width: 200px !important; display: inline;"> <a
 							href="javascript:void(0)" id="selectCustomer"
 							style="font-size: 16px; color: green;"> <span
 							class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						</a>
-
 					</div>
-
+					<label for="" class="col-sm-2 control-label">职务： </label>
+					<div class="col-sm-4 favorite">
+						<div>
+							<input type="text" data-prompt-position="inline"
+								   class="form-control input150 validate[maxSize[10]]"
+								   id="position" name="position" placeholder="请输入职务">
+						</div>
+					</div>
 				</div>
 				<div class="form-group">
 					<label for="lastname" class="col-sm-2 control-label">联系人角色：</label>
@@ -94,10 +99,10 @@
 					<c:forEach items="${dictLxrly }" var="item" varStatus="status">
 						<label class="checkbox-inline ">
 							<input type="radio" name="source" value="${item.id }" ${status.index==0?'checked':'' }> ${item.name }
-							<c:if test="${item.id==150}">
-								<input type="text" id="referrerPerson" name="referrerPerson" class="form-control input100 validate[maxSize[10]]">
-							</c:if>
 						</label>
+						<c:if test="${item.id==150}">
+							<input type="text" id="referrerPerson" name="referrerPerson" style="width: 70px !important; margin-left: -30px !important;" class=" validate[maxSize[10]]">
+						</c:if>
 					</c:forEach>
 				</div>
 			</div>
@@ -111,7 +116,7 @@
 						</c:forEach>
 					</div>
 				</div>
-				<div class="form-group">
+				<%--<div class="form-group">
 					<label for="" class="col-sm-2 control-label">直属上级： </label>
 					<div class="col-sm-4 favorite">
 						<div>
@@ -129,7 +134,7 @@
 								id="subordinate" name="subordinate" placeholder="请输入直属下级">
 						</div>
 					</div>
-				</div>
+				</div>--%>
 				<div class="form-group">
 
 					<label for="" class="col-sm-2 control-label">常用手机<em
@@ -171,7 +176,7 @@
 						</a>
 					</div>
 				</div>
-				<div class="form-group">
+				<%--<div class="form-group">
 					<label for="" class="col-sm-2 control-label">微信： </label>
 					<div class="col-sm-4 favorite">
 
@@ -224,29 +229,33 @@
 								name="fax" placeholder="请输入传真">
 						</div>
 					</div>
-				</div>
+				</div>--%>
 				<div class="form-group">
 					<label for="" class="col-sm-2 control-label">生日： </label>
-					<div class="col-sm-4"
-						style="margin-left: -15px; padding-left: 0px;">
-
+					<div class="col-sm-4" style="margin-left: -15px; padding-left: 0px;">
 						<div class="inline relative mr0">
 							<input type="text" class="form-control input150"
 								placeholder="请输入生日" name="birthday" id="birthday"
 								input-type="date" onchange="ages(this.value)"> <span
 								class="date_icon" style="cursor: pointer;"><i></i></span>
 						</div>
-
-
 					</div>
-					<label for="" class="col-sm-2 control-label">年龄： </label>
+					<label for="" class="col-sm-2 control-label">爱好： </label>
+					<div class="col-sm-4 favorite">
+						<div>
+							<input type="text" data-prompt-position="inline"
+								   class="form-control input150  validate[maxSize[50]]"
+								   id="hobby" name="hobby" placeholder="请输入爱好">
+						</div>
+					</div>
+					<%--<label for="" class="col-sm-2 control-label">年龄： </label>
 					<div class="col-sm-4 favorite">
 						<div>
 							<label id="lblAge" class="col-sm-1 control-label"></label>
 						</div>
-					</div>
+					</div>--%>
 				</div>
-				<div class="form-group">
+				<%--<div class="form-group">
 					<label for="" class="col-sm-2 control-label">爱好： </label>
 					<div class="col-sm-4 favorite" style="padding-left: 0px;">
 						<div>
@@ -254,7 +263,7 @@
 								rows=4></textarea>
 						</div>
 					</div>
-				</div>
+				</div>--%>
 
 				<div class="form-group">
 					<label for="" class="col-sm-2 control-label">名片： </label>

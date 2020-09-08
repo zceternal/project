@@ -41,7 +41,7 @@
 	margin-top: 10px;
 }
 .dev-col-sm-1{
-width:120px !important;
+width:150px !important;
 }
 .dev-col-sm-11{
 width:88.66666667% !important;
@@ -77,7 +77,7 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 						<input id="cusSource" name="cusSource" type="hidden" title="客户来源(销售形式)" value="${search.cusSource }" />
 						<input id="buyService" name="buyService" type="hidden" title="产品与服务" value="${search.buyService }" />
 						<input id="followState" name="followState" type="hidden" title="销售推进状态" value="${search.followState }" />
-						<input id="status" name="status" type="hidden" title="下一步计划状态" value="${search.status }" />
+						<input id="status" name="status" type="hidden" title="下一步任务状态" value="${search.status }" />
 						
 						<div class="form-group form-inline" style="padding: 5px 0px;">
 							<label class="col-sm-1 control-label dev-col-sm-1">负责人：</label>
@@ -87,7 +87,10 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 									<li class="dev-acclist ${search.accountId == -1 ? "on":"" }" id="dev-acclist-all" data-value="-1">全选</li>
 									<c:if test="${accList != null }">
 										<c:forEach var="item" items="${accList }">
-											<li class="dev-acclist ${search.accountId == item.id ? "on":"" }" data-value="${item.id }">${item.isMySelf()?"登录用户":item.name }</li>
+											<li class="dev-acclist ${search.accountId == item.id ? "on":"" }" data-value="${item.id }">
+													<%--${item.isMySelf()?"登录用户":item.name }--%>
+															${item.name }
+											</li>
 										</c:forEach>
 									</c:if>
 								</ul>
@@ -140,16 +143,21 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 							</div>
 						</div>
 						<div class="form-group form-inline" style="padding: 5px 0px;">
-							<label class="col-sm-1 control-label dev-col-sm-1">下一步计划状态：</label>
+							<label class="col-sm-1 control-label dev-col-sm-1">下一步任务状态：</label>
 							<div class="col-sm-11 favorite dev-col-sm-11">
 								<ul id="acclistTab" class="tab_button search_sk"
 									style="margin-bottom: 0px; margin-top: 3px">
 									<li class="dev-nextPlanStateList ${search.status == -2 ? "on":"" }" id="dev-status" data-value="-2">全选</li>
-									<li class="dev-nextPlanStateList ${search.status == 0 ? "on":"" }" id="dev-status" data-value="0">正常</li>
-									<li class="dev-nextPlanStateList ${search.status == 7 ? "on":"" }" id="dev-status" data-value="7">超期7天</li>
-									<li class="dev-nextPlanStateList ${search.status == 14 ? "on":"" }" id="dev-status" data-value="14">超期14天</li>
-									<li class="dev-nextPlanStateList ${search.status == 28 ? "on":"" }" id="dev-status" data-value="28">超期28天</li>
-									<li class="dev-nextPlanStateList ${search.status == -1 ? "on":"" }" id="dev-status" data-value="-1">搁置</li>
+									<c:if test="${xybrwzt != null }">
+										<c:forEach var="item" items="${xybrwzt }" varStatus="sta">
+											<li class="dev-nextPlanStateList ${search.status == item.value ? "on":"" }" id="dev-status" data-value="${item.value }">${item.name }</li>
+										</c:forEach>
+									</c:if>
+<%--									<li class="dev-nextPlanStateList ${search.status == 0 ? "on":"" }" id="dev-status" data-value="0">正常</li>--%>
+<%--									<li class="dev-nextPlanStateList ${search.status == 7 ? "on":"" }" id="dev-status" data-value="7">超期7天</li>--%>
+<%--									<li class="dev-nextPlanStateList ${search.status == 14 ? "on":"" }" id="dev-status" data-value="14">超期14天</li>--%>
+<%--									<li class="dev-nextPlanStateList ${search.status == 28 ? "on":"" }" id="dev-status" data-value="28">超期28天</li>--%>
+<%--									<li class="dev-nextPlanStateList ${search.status == -1 ? "on":"" }" id="dev-status" data-value="-1">搁置</li>--%>
 								</ul>
 							</div>
 						</div>

@@ -13,7 +13,7 @@
         top.location.href = location.href;
 </script>
 
-<title>三开科技客户关系管理系统</title>
+<title>公司运管平台</title>
 
 <link rel="shortcut icon" type="image/x-icon" href="content/img/common/favicon.ico" />
 <link rel="stylesheet" href="content/vendor/bootstrap/css/bootstrap.min.css" />

@@ -135,7 +135,8 @@
 		c.create_id, cs.allow_account_id,
 		c.source,
 		c.referrer_person as referrerPerson,
-		c.buy_service
+		c.buy_service,
+		c.sex
 		FROM
 		sys_contact c LEFT JOIN sys_customer t ON c.customer_id = t.id LEFT
 		JOIN sys_account a ON c.create_id = a.id

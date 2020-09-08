@@ -23,31 +23,31 @@
 			<th width="10%">任务名称
 				<div id="taskName" class="dev-order up"></div>
 			</th>
-			<th width="10%">任务象限
+			<th width="7%">任务象限
 				<div id="taskQuadrant" class="dev-order up"></div>
 			</th>
-			<th width="8%">下一步工作计划
+			<th >下一步工作计划
 				<%--<div id="nextPlan" class="dev-order up"></div>--%>
 			</th>
-			<th width="12%">计划标准
+			<th width="14%">计划标准
 				<%--<div id="planStandard" class="dev-order up"></div>--%>
 			</th>
-			<th width="8%">计划执行人
+			<th width="10%">计划执行人
 				<%--<div id="planExecutorAll" class="dev-order up"></div>--%>
 			</th>
-			<th width="10%">计划反馈时间
+			<th width="8%">计划反馈时间
 				<div id="taskBackTime" class="dev-order up"></div>
 			</th>
-			<th width="9%">任务性质
+			<th width="8%">任务性质
 				<div id="taskTaskNature" class="dev-order up"></div>
 			</th>
-			<th width="9%">指派者
+			<th width="7%">指派者
 				<div id="taskAssignPerson" class="dev-order up"></div>
 			</th>
-			<th width="10%">指派时间
+			<th width="8%">指派时间
 				<div id="taskAssignTime" class="dev-order up"></div>
 			</th>
-			<th>任务状态
+			<th width="6%">任务状态
 				<div id="taskStatus" class="dev-order up"></div>
 			</th>
 		</tr>
@@ -73,13 +73,13 @@
 						data-order="${item.order }"
 							class="colorblue">置顶</a></span></td>
 				</c:if>
-				<td  data-taskid="${item.id }" title="${item.name}">${extf:subStr(item.name,9) }</td>
+				<td  data-taskid="${item.id }" title="${item.name}">${extf:subStr(item.name,8) }</td>
 				<td  data-taskid="${item.id }">${elf:getDictName(item.quadrant) }</td>
-				<td  data-taskid="${item.id }" title="${item.nextPlan}">${extf:subStr(item.nextPlan,9) }</td>
-				<td  data-taskid="${item.id }" title="${item.planStandard}">${extf:subStr(item.planStandard,9)}</td>
+				<td  data-taskid="${item.id }" title="${item.nextPlan}">${extf:subStr(item.nextPlan,12) }</td>
+				<td  data-taskid="${item.id }" title="${item.planStandard}">${extf:subStr(item.planStandard,12)}</td>
 				<td  data-taskid="${item.id }">${item.planExecutorAll }</td>
 				<td  data-taskid="${item.id }"><fmt:formatDate value="${item.backTime }" pattern="yyyy-MM-dd" /></td>
-				<td  data-taskid="${item.id }">${elf:getDictName(item.taskNature)}</td>
+				<td  data-taskid="${item.id }">${item.taskNature==null?"<lable style='color:red'>无</lable>":extf:subStr(elf:getDictName(item.taskNature),6)}</td>
 				<td  data-taskid="${item.id }">${item.assignPerson==null?"自己":item.assignPerson}</td>
 				<td  data-taskid="${item.id }"><fmt:formatDate value="${item.assignTime }" pattern="yyyy-MM-dd" /></td>
 				<td  data-taskid="${item.id }">${item.statusName}</td>

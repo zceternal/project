@@ -331,7 +331,7 @@ public class SettingController {
 			}
 			
 		} catch (Exception e) {
-			result.setMsg("error1603151154");
+			result.setMsg("操作失败");
 			result.setSuccess(false);
 			e.printStackTrace();
 			return result;

@@ -326,22 +326,22 @@ public class CustomerServiceImpl implements ICustomerService {
 
 			customerDAO.insertCustomerShare(modelShare);
 			
-			if ((!model.getContactName().equals(null)&&!model.getContactName().equals(""))&&(!model.getContactPhone().equals(null)&&!model.getContactPhone().equals(""))) {
-				// 5新增联系人
-				ContactForm contactModel=new ContactForm();
-				contactModel.setCreateTime(model.getCreateTime());
-				contactModel.setCustomerId(newId);
-				contactModel.setName(model.getContactName());
-				contactModel.setPhone(model.getContactPhone());
-				//contactModel.setSex(model.getSex());
-				contactModel.setSex(2);//0女；1男；2未知
-				contactModel.setCreateId(model.getCreateId());
-				contactModel.setRole(34);//默认普通人
-				ServiceResultBool res= contactService.addImport(contactModel);
-				if (!res.isSuccess()) {
-					return new ServiceResultBool("保存成功！"+res.getMsg());
-				}
-			}
+//			if ((!model.getContactName().equals(null)&&!model.getContactName().equals(""))&&(!model.getContactPhone().equals(null)&&!model.getContactPhone().equals(""))) {
+//				// 5新增联系人
+//				ContactForm contactModel=new ContactForm();
+//				contactModel.setCreateTime(model.getCreateTime());
+//				contactModel.setCustomerId(newId);
+//				contactModel.setName(model.getContactName());
+//				contactModel.setPhone(model.getContactPhone());
+//				//contactModel.setSex(model.getSex());
+//				contactModel.setSex(2);//0女；1男；2未知
+//				contactModel.setCreateId(model.getCreateId());
+//				contactModel.setRole(34);//默认普通人
+//				ServiceResultBool res= contactService.addImport(contactModel);
+//				if (!res.isSuccess()) {
+//					return new ServiceResultBool("保存成功！"+res.getMsg());
+//				}
+//			}
 			
 		}
 		return new ServiceResultBool();
@@ -480,19 +480,19 @@ public class CustomerServiceImpl implements ICustomerService {
 
 		//修改状态的天数，新增最新状态
 		customerStatusTimeUA(model.getId(),model.getStatus());
-		if ((!model.getContactName().equals(null)&&!model.getContactName().equals(""))&&(!model.getContactPhone().equals(null)&&!model.getContactPhone().equals(""))) {
-			//联系人
-			ContactForm contactModel=new ContactForm();
-			contactModel.setCreateTime(model.getCreateTime());
-			contactModel.setName(model.getContactName());
-			contactModel.setPhone(model.getContactPhone());
-			contactModel.setCustomerId(model.getId());
-			contactModel.setId(model.getContactId());
-			ServiceResultBool res= contactService.update(contactModel);
-			if (!res.isSuccess()) {
-				return new ServiceResultBool("保存成功,联系人"+res.getMsg());
-			}
-		}
+//		if ((!model.getContactName().equals(null)&&!model.getContactName().equals(""))&&(!model.getContactPhone().equals(null)&&!model.getContactPhone().equals(""))) {
+//			//联系人
+//			ContactForm contactModel=new ContactForm();
+//			contactModel.setCreateTime(model.getCreateTime());
+//			contactModel.setName(model.getContactName());
+//			contactModel.setPhone(model.getContactPhone());
+//			contactModel.setCustomerId(model.getId());
+//			contactModel.setId(model.getContactId());
+//			ServiceResultBool res= contactService.update(contactModel);
+//			if (!res.isSuccess()) {
+//				return new ServiceResultBool("保存成功,联系人"+res.getMsg());
+//			}
+//		}
 		
 		return new ServiceResultBool();
 	}

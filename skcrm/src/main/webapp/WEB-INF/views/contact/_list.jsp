@@ -62,7 +62,7 @@
 							data-sort="${item.sort }" class="colorblue">置顶</a></span></td>
 								</c:if>
 					<td>${item.name }</td>
-					<td>${item.sex }</td>
+					<td>${item.sex==0?"女":(item.sex==1?"男":"未知") }</td>
 					<td>${item.phone }</td>
 					<td>${elf:getDictName(item.role) }</td>
 					<td>${elf:getDictName(item.source) }

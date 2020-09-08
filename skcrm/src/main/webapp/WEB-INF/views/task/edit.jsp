@@ -7,7 +7,7 @@
 	height: 300px;
 }
 
-.dev-col-sm-120 {width:134px !important;}
+.dev-col-sm-120 {width:150px !important;}
 .col-sm-4,.col-sm-10,.wh_ul{padding-left:0px}
 </style>
 

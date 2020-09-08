@@ -101,7 +101,8 @@ a.btn_blueg2:hover,span.btn_blueg2:hover{background:#fff;color:#21b2cc}
 												class="label_check  ${item.isMySelf() && myself.equals('1')?'c_on':''}"> <input type="checkbox"
 													name="accId" class="dev-acclist sk_checkbox" ${item.isMySelf() && myself.equals("1")?"checked":""}
 													data-client="dev_acclist" value="${item.id }" />
-													${item.isMySelf()?"登录用户":item.name }
+													<%--${item.isMySelf()?"登录用户":item.name }--%>
+												${item.name}
 											</label>
 											</label>
 										</c:forEach>

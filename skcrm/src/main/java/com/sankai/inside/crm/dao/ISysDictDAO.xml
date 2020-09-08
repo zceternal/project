@@ -28,7 +28,7 @@
 			AND (name LIKE #{keyWord} OR pycode LIKE #{keyWord} OR
 			pyname LIKE #{keyWord})
 		</if>
-		ORDER BY sd.`order` ASC
+		ORDER BY sd.parent_id ASC,sd.`order` ASC
 	</select>
 
 	<select id="findAllByPidSearch2" parameterType="com.sankai.inside.crm.entity.SysDictSearchDTO"
@@ -44,7 +44,7 @@
 		by id) t1,
 		(select @pid := #{pid} ) t2) t3 where childId != 0
 		) t4 where 1=1
-		ORDER BY `order` ASC
+		ORDER BY parent_id ASC,`order` ASC
 	</select>
 	<!--增加 -->
 	<insert id="insert" parameterType="com.sankai.inside.crm.entity.SysDict"
@@ -104,7 +104,7 @@
 	<select id="getBrotherId" parameterType="com.sankai.inside.crm.entity.DictOrderDTO"
 			resultType="java.lang.Integer">
 		SELECT id FROM sys_dict WHERE parent_id=#{pid} AND
-		`order`=#{newOrder} AND state=0
+		`order`=#{newOrder} AND state=0 limit 1
 	</select>
 	<!--2. 修改前一个/后一个目标的order -->
 	<update id="updateBrotherOrder" parameterType="com.sankai.inside.crm.entity.DictOrderDTO">

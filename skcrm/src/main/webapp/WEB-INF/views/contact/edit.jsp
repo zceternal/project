@@ -46,7 +46,7 @@
 					</div>
 
 				</div>
-				<div class="form-group">
+				<%--<div class="form-group">
 					<label for="" class="col-sm-2 control-label">职务： </label>
 					<div class="col-sm-4 favorite">
 						<div>
@@ -65,17 +65,17 @@
 								value="${model.department }">
 						</div>
 					</div>
-				</div>
+				</div>--%>
 
 				<div class="form-group">
 					<label for="" class="col-sm-2 control-label">所属客户： </label>
-					<div class="col-sm-10 favorite">
+					<div class="col-sm-4 favorite">
 						<input id="customerId" name="customerId"
 							value="${model.customerId}" type="hidden"> <input
 							type="text" class="form-control " id="customerName"
 							name="customerName" value="${model.customerName}"
 							placeholder="请选择客户" readonly="readonly"
-							style="width: 400px !important; display: inline;">
+							style="width: 200px !important; display: inline;">
 						<c:if test="${type == 1 }">
 							<a href="javascript:void(0)" id="selectCustomer"
 								style="font-size: 16px; color: green;"> <span
@@ -83,6 +83,15 @@
 							</a>
 						</c:if>
 
+					</div>
+					<label for="" class="col-sm-2 control-label">职务： </label>
+					<div class="col-sm-4 favorite">
+						<div>
+							<input type="text" data-prompt-position="inline"
+								   class="form-control input150 validate[maxSize[10]]"
+								   id="position" name="position" placeholder="请输入职务"
+								   value="${model.position }">
+						</div>
 					</div>
 				</div>
 
@@ -126,7 +135,7 @@
 								</c:choose>
 								</label>
 								<c:if test="${item.id==150}">
-									<input type="text" id="referrerPerson" name="referrerPerson" value="${model.referrerPerson}" class="form-control input100 validate[maxSize[10]]">
+									<input type="text" id="referrerPerson" name="referrerPerson" value="${model.referrerPerson}" style="width: 70px !important; margin-left: -30px !important;" class=" validate[maxSize[10]]">
 								</c:if>
 							</c:forEach>
 						</div>
@@ -153,7 +162,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
+				<%--<div class="form-group">
 					<label for="" class="col-sm-2 control-label">直属上级： </label>
 					<div class="col-sm-4 favorite">
 						<div>
@@ -172,7 +181,7 @@
 								value="${model.subordinate }">
 						</div>
 					</div>
-				</div>
+				</div>--%>
 
 				<div class="form-group">
 					<label for="" class="col-sm-2 control-label">常用手机<em
@@ -212,7 +221,7 @@
 						</a>
 					</div>
 				</div>
-				<div class="form-group">
+				<%--<div class="form-group">
 					<label for="" class="col-sm-2 control-label">微信： </label>
 					<div class="col-sm-4 favorite">
 
@@ -268,37 +277,41 @@
 								name="fax" placeholder="请输入传真" value="${model.fax }">
 						</div>
 					</div>
-				</div>
+				</div>--%>
 
 				<div class="form-group">
 					<label for="" class="col-sm-2 control-label">生日： </label>
-					<div class="col-sm-4"
-						style="margin-left: -15px; padding-left: 0px;">
-
+					<div class="col-sm-4" style="margin-left: -15px; padding-left: 0px;">
 						<div class="inline relative mr0">
 							<input type="text" class="form-control input150"
 								placeholder="请输入生日" name="birthday" id="birthday"
 								input-type="date" onchange="ages(this.value)" value="${birthday }"> <span
 								class="date_icon" style="cursor: pointer;"><i></i></span>
 						</div>
-
-
 					</div>
-					<label for="" class="col-sm-2 control-label">年龄： </label>
+						<label for="" class="col-sm-2 control-label">爱好： </label>
+						<div class="col-sm-4 favorite">
+							<div>
+								<input type="text" data-prompt-position="inline"
+									   class="form-control input150  validate[maxSize[50]]"
+									   id="hobby" name="hobby" value="${model.hobby }" placeholder="请输入爱好">
+							</div>
+						</div>
+					<%--<label for="" class="col-sm-2 control-label">年龄： </label>
 					<div class="col-sm-4 favorite">
 						<div>
 							<label id="lblAge" class="col-sm-1 control-label">${age }</label>
 						</div>
-					</div>
+					</div>--%>
 				</div>
-				<div class="form-group">
+				<%--<div class="form-group">
 					<label for="" class="col-sm-2 control-label">爱好： </label>
 					<div class="col-sm-4 favorite">
 						<div style="padding-left: 1px;">
 							<textarea name="hobby" class="form-control validate[maxSize[500]]" cols=80 style="width:615px" rows=4>${model.hobby }</textarea>
 						</div>
 					</div>
-				</div>
+				</div>--%>
 				<div class="form-group">
 					<label for="" class="col-sm-2 control-label">名片： </label>
 					<div class="col-sm-10 favorite">

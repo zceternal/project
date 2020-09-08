@@ -34,8 +34,8 @@ $(function() {
 	$("a[data-id=task_add]").live("click", function() {
 		dialogaddtask = $.sk.open({
 			url : "add",
-			width : 900,
-			height:600,
+			width :940,
+			height:680,
 			title : "新增任务",
 			buttons : [ {
 				html : "确定",

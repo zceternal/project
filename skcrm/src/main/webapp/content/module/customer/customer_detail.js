@@ -9,8 +9,8 @@ $(function() {
 			data : {
 				customerId : $this.data("cusid")
 			},
-			width : 900,
-			height:600,
+			width :100,
+			height:680,
 			title : "新增沟通记录",
 			buttons : [ {
 				html : "确定",

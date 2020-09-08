@@ -3,10 +3,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <style>
-.dev-col-sm-120 {width:134px !important;}
+.dev-col-sm-120 {width:160px !important;}
 .col-sm-4,.col-sm-10,.wh_ul{padding-left:0px}
+col-sm-2{width:120px; text-align:right;}
 </style>
-	<div class="main_content dialog">
+	<div class="main_content dialog" style="padding: 0px 0px 0px 0px">
 			<div class="panel panel-default">
 				<form class="form-horizontal old_block" id="mytaskFormAdd"
 					action="add" method="post" role="form" data-ajax="true" data-ajax-success="onTaskSuccessAdd">
@@ -14,8 +15,8 @@
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">任务名称<em
 								class="colorred">*</em>：</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control validate[required,maxSize[50]]" id="taskname" placeholder="请输入任务名称" name="name" style="width: 625px" >
+						<div class="col-sm-8">
+							<input type="text" class="form-control validate[required,maxSize[50]]" id="taskname" placeholder="请输入任务名称" name="name" style="width: 580px;margin-left: -16px;" >
 						</div>
 					</div>
 
@@ -30,7 +31,7 @@
                                             <c:forEach var="child" items="${item.childList }">
                                                 <li><label><input  name="taskNature" class="dev-khly" type="radio" value="${child.id }" />${child.name }</label>
 													<c:if test="${child.id == 167}">
-														<li><label><a href="javascript:void(0)" data-id="customer_list" id="a_selName">选择客户+</a></label></li>
+														(<label><a href="javascript:void(0)" data-id="customer_list" id="a_selName">选择客户+</a></label>)
 													</c:if>
 												</li>
                                             </c:forEach>
@@ -41,45 +42,46 @@
                         </div>
                     </div>
 
-					<div class="form-group">
+					<div class="form-group" style="margin-top: -20px">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">下一步工作计划<em
 								class="colorred">*</em>：</label>
-						<div class="col-sm-10">
-							<textarea class="form-control validate[required,maxSize[500]]" id="nextPlan" placeholder="请输入下一步工作计划" name="nextPlan" style="width: 625px" data-prompt-position="inline"
-									  rows=4></textarea>
+						<div class="col-sm-8">
+							<textarea class="form-control validate[required,maxSize[500]]" id="nextPlan" placeholder="请输入下一步工作计划" name="nextPlan" style="width: 580px;margin-left: -16px;" data-prompt-position="inline"
+									  rows=2></textarea>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">计划标准<em
 								class="colorred">*</em>：</label>
-						<div class="col-sm-10">
-							<textarea class="form-control validate[required,maxSize[200]]" id="planStandard" placeholder="请输入计划标准" name="planStandard" style="width: 625px" data-prompt-position="inline"
-									  rows=4></textarea>
+						<div class="col-sm-8">
+							<textarea class="form-control validate[required,maxSize[200]]" id="planStandard" placeholder="请输入计划标准" name="planStandard" style="width: 580px;margin-left: -16px;" data-prompt-position="inline"
+									  rows=2></textarea>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" style="margin-bottom: -10px">
 						<label class="col-sm-2 dev-col-sm-120 control-label">计划执行人<em
 								class="colorred">*</em>：</label>
 						<div class="wh_ul">
-							<ul class="wh_ul">
-								<c:if test="${accList != null }">
-									<c:forEach var="item" items="${accList }">
-										<li class="dev-acclist ${search.accountId == item.id ? "on":"" }" data-value="${item.id }">
-											<input  name="planExecutorUser" class="dev-cjztmx" type="checkbox" value="${item.id }" />${item.isMySelf()?"自己":item.name }
-										</li>
-									</c:forEach>
-								</c:if>
-							</ul>
-							<ul class="wh_ul">
-								<c:if test="${xxrList != null }">
-									<c:forEach var="item" items="${xxrList }">
-										<li class="dev-acclist " data-value="${item.id }">
-											<input  name="planExecutorContact" class="dev-cjztmx" type="checkbox" value="${item.id }" />${item.name }
-										</li>
-									</c:forEach>
-								</c:if>
-							</ul>
+							<c:if test="${accList != null }">
+								<ul class="wh_ul">
+								<c:forEach var="item" items="${accList }">
+									<li class="dev-acclist ${search.accountId == item.id ? "on":"" }" data-value="${item.id }">
+										<input  name="planExecutorUser" class="dev-cjztmx" type="checkbox" value="${item.id }" />${item.isMySelf()?"自己":item.name }
+									</li>
+								</c:forEach>
+								</ul>
+							</c:if>
+
+							<c:if test="${xxrList != null }">
+								<ul class="wh_ul">
+										<c:forEach var="item" items="${xxrList }">
+											<li class="dev-acclist " data-value="${item.id }">
+												<input  name="planExecutorContact" class="dev-cjztmx" type="checkbox" value="${item.id }" />${item.name }
+											</li>
+										</c:forEach>
+								</ul>
+							</c:if>
 							<ul class="wh_ul">
 								<c:if test="${qdhbList != null }">
 									<c:forEach var="item" items="${qdhbList }">
@@ -92,7 +94,7 @@
 
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" style="margin-bottom: -10px">
 						<label class="col-sm-2 dev-col-sm-120 control-label">告知执行人方式：</label>
 						<div class="wh_ul">
 							<ul class="wh_ul">
@@ -114,33 +116,36 @@
 							</ul>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" style="margin-bottom: -10px">
 						<label class="col-sm-2 dev-col-sm-120 control-label">任务象限<em
 								class="colorred">*</em>：</label>
-						<div class="wh_ul">
+						<div >
 							<c:if test="${taskxx != null }">
+								<ul class="wh_ul">
 								<c:forEach var="item" items="${taskxx }" varStatus="sta" >
-									<label class="col-sm-2 control-label wh_lab" style="text-align: left; padding-left:0px; margin-right: -20px;">
-										<input  name="quadrant" class="dev-cjztmx" type="radio" value="${item.id}" />${item.name }
-									</label>
+									<li class="dev-acclist " >
+										<label >
+											<input  name="quadrant" class="dev-cjztmx" type="radio" value="${item.id}" />${item.name }
+										</label>
+									</li>
 								</c:forEach>
+								</ul>
 							</c:if>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" >
 						<label class="col-sm-2 dev-col-sm-120 control-label">计划反馈时间：</label>
-						<div class="col-sm-10">
-							<div class="inline relative mr0">
+						<div class="col-sm-8">
+							<div class="inline relative mr0" style="margin-left: -16px;">
 								<input type="text" class="form-control input150" placeholder="请输入计划反馈时间" name="backTime" id="backTime" input-type="date" >
 								<span class="date_icon" style="cursor: pointer;"><i></i></span>
 							</div>
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group" style="margin-bottom: -10px">
 						<label class="col-sm-2 dev-col-sm-120 control-label">提醒方式：</label>
-						<div class="col-sm-10">
-							<div class="">
+						<div >
 								<ul class="wh_ul">
 									<li class="dev-acclist " >
 										<input  name="backWay" class="dev-cjztmx" type="radio" value="1" />提前一天
@@ -158,7 +163,6 @@
 										<input  name="backWay" class="dev-cjztmx" type="radio" value="5" />搁置
 									</li>
 								</ul>
-							</div>
 						</div>
 					</div>
 

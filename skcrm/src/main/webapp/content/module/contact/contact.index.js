@@ -5,7 +5,7 @@ $(function() {
 		dialog = $.sk.open({
 			url : "add",
 			width : 1000,
-			height : 600,
+			height : 650,
 			title : "新增联系人",
 			buttons : [ {
 				html : "确定",
@@ -73,7 +73,7 @@ $(function() {
 				type:1
 			},
 			width : 1000,
-			height : 600,
+			height : 650,
 			title : "编辑联系人",
 			buttons : [ {
 				html : "确定",

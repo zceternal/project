@@ -42,13 +42,13 @@
 			<th >最近一次推进记录
 			<%--	<div id="allowAccountName" class="dev-order up"></div>--%>
 			</th>
-			<th width="10%">下一步计划
+			<th width="14%">下一步计划
 				<%--<div id="allowAccountName" class="dev-order up"></div>--%>
 			</th>
-			<th width="8%">计划配合人
+			<th width="7%">计划配合人
 				<%--<div id="statusName" class="dev-order up"></div>--%>
 			</th>
-			<th width="8%">计划状态
+			<th width="6%">计划状态
 				<div id="taskStatus" class="dev-order up"></div>
 			</th>
 			<th width="6%">操作
@@ -79,7 +79,7 @@
 						data-order="${item.order }"
 							class="colorblue">置顶</a></span></td>
 				</c:if>
-				<td xyz='z' data-customerid="${item.customerId }" title="${item.shortName }">${extf:subStr(item.shortName,9) }</td>
+				<td xyz='z' data-customerid="${item.customerId }" title="${item.shortName }">${extf:subStr(item.shortName,7) }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.provinceName }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${elf:getDictName(item.buyService) }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${elf:getDictName(item.followState) }</td>
@@ -90,8 +90,8 @@
 				<c:if test="${item.cusSourceType !=1 }">
 					<td xyz='z' data-customerid="${item.customerId }">直销-${elf:getDictName(item.cusSource)}</td>
 				</c:if>
-				<td xyz='z' data-customerid="${item.customerId }" title="${item.nextReport }">${extf:subStr(item.nextReport,8) }</td>
-				<td xyz='z' data-customerid="${item.customerId }" title="${item.nextPlan }">${extf:subStr(item.nextPlan,8) }</td>
+				<td xyz='z' data-customerid="${item.customerId }" title="${item.nextReport }">${extf:subStr(item.nextReport,12) }</td>
+				<td xyz='z' data-customerid="${item.customerId }" title="${item.nextPlan }">${extf:subStr(item.nextPlan,12) }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.planExecutorAll }</td>
 				<td xyz='z' data-customerid="${item.customerId }">${item.status }</td>
 				<td>

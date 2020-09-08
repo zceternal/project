@@ -36,6 +36,7 @@ td span{cursor:pointer}
 td:hover>a{color:#31B0D5;text-decoration:underline}
 .inline{display:inline-block!important;margin-right:10px}
 .inline .form-control{margin-right:10px}
+.input70{width:70px!important;display:inline-block}
 .input100{width:100px!important;display:inline-block}
 .input150{width:150px!important;display:inline-block}
 .input300{width:300px!important;display:inline-block}

@@ -269,6 +269,7 @@ public class CustomerController {
 		model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
 		model.addAttribute("lxr", contactService.getList("112"));;// 客户来源-渠道
 		model.addAttribute("xstjzt", sysDictService.findAllByPid2(11));// 销售推进状态
+		model.addAttribute("xybrwzt", sysDictService.findAllByPid(17));// 下一步任务状态
 
 		model.addAttribute("accList", accListNew);
 		model.addAttribute("isDeptLeader", isDeptLeader);
@@ -373,7 +374,7 @@ public class CustomerController {
 		model.addAttribute("khly", sysDictService.findAllByPid(67));// 客户来源-直销
 		model.addAttribute("lxr", contactService.getList("112"));;// 客户来源-渠道
 		model.addAttribute("xstjzt", sysDictService.findAllByPid2(11));// 销售推进状态
-
+		model.addAttribute("xybrwzt", sysDictService.findAllByPid(17));// 下一步任务状态
 		model.addAttribute("accList", accList);
 		model.addAttribute("isShowTop", (search.getAccountId() != -1));// 是否显示置顶列
 		return "customer/_list";

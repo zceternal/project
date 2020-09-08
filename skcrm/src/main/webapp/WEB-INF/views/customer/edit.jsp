@@ -30,7 +30,7 @@
 						   id="shortName" name="shortName" placeholder="请输入客户简称" value="${model.shortName }">
 				</div>
 			</div>
-			<div class="form-group">
+			<%--<div class="form-group">
 				<label for="" class="col-sm-2 dev-col-sm-120 control-label " >联系人姓名<em
 						class="colorred">*</em>：</label>
 				<div class="col-sm-4">
@@ -47,7 +47,7 @@
 							   id="contactPhone" name="contactPhone" placeholder="请输入联系人电话" value="${model.contactPhone}">
 					</div>
 				</div>
-			</div>
+			</div>--%>
 			<div class="form-group">
 				<label class="col-sm-2 dev-col-sm-120 control-label wh_lab">产品及服务：</label>
 				<ul class="wh_ul">
@@ -81,7 +81,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<%--<div class="form-group">
 				<label for="" class="col-sm-2 dev-col-sm-120 control-label">客户网站：</label>
 				<div class="col-sm-4">
 					<input type="text" data-prompt-position="inline"
@@ -94,7 +94,7 @@
 						   class="form-control input200 validate[maxSize[20],custom[mobile_phone]]"
 						   id="phone" name="phone" placeholder="请输入联系方式"  value="${model.phone }">
 				</div>
-			</div>
+			</div>--%>
 
 			<div class="form-group">
 				<label for="" class="col-sm-2 dev-col-sm-120 control-label">客户地址：</label>

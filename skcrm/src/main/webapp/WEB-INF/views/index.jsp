@@ -8,7 +8,7 @@
  <meta name="renderer" content="webkit"/>
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>三开科技客户关系管理系统-主页</title>
+<title>公司运管平台-主页</title>
 <jsp:include page="layout/importCSS.jsp" />
 
 <link rel="stylesheet" href="content/css/glyphicon.css" />
@@ -42,8 +42,7 @@ body.left_short {
 	style="background: #edf0f2 url(content/img/left_bg.jpg) repeat-y 0px 0px;">
 	<div class="header">
 		<div class="logo fl">
-			<a href="index"><img src="content/img/logo.png" width="219px"
-				height="37px" /></a>
+			<a href="index"><img src="content/img/logo.png"  /></a>
 		</div>
 		<div class="fr">
 			<div class="login_box pull-right btn-group">

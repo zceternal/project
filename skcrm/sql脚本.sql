@@ -16,7 +16,8 @@ INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`,
 INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (15, '0', '任务性质', 0, 2, 53, sysdate(), 0, '任务性质', NULL, NULL);
 -- 1.8沟通方式
 INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (16, '0', '沟通方式', 0, 2, 53, sysdate(), 0, '沟通方式', NULL, NULL);
-
+-- 1.9沟通方式
+INSERT INTO `sys_dict`(`id`, `value`, `name`, `parent_id`, `order`, `create_id`, `create_time`, `state`, `remark`, `pycode`, `pyname`) VALUES (17, '0', '下一步任务状态', 0, 2, 53, sysdate(), 0, '下一步任务状态', NULL, NULL);
 
 -- 2、客户表新增字段
 ALTER TABLE `sys_customer`

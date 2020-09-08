@@ -5,7 +5,7 @@
 <%@ taglib uri="/sankai-ext" prefix="elf"%>
 
 <style>
-.dev-col-sm-120 {width:134px !important;}
+.dev-col-sm-120 {width:150px !important;}
 .col-sm-4,.col-sm-10,.wh_ul{padding-left:0px}
 </style>
 	<div class="main_content dialog">
@@ -20,6 +20,8 @@
 						<div class="col-sm-4">
 							${model.shortName}
 						</div>
+					</div>
+					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label " >产品与服务：</label>
 						<div class="col-sm-4">
 							${elf:getDictName(model.buyService)}
@@ -159,8 +161,8 @@
 
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">推进记录：</label>
-						<div class="col-sm-10">
-							<textarea class="form-control validate[maxSize[500]]" id="reportRemark" placeholder="请输入推进记录" name="reportRemark" style="width: 625px" data-prompt-position="inline"
+						<div class="col-sm-8">
+							<textarea class="form-control validate[maxSize[500]]" id="reportRemark" placeholder="请输入推进记录" name="reportRemark" style="width: 580px" data-prompt-position="inline"
 									  rows=4></textarea>
 						</div>
 					</div>
@@ -275,17 +277,17 @@
 					</div>
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">下一步工作计划：</label>
-						<div class="col-sm-10">
-							<textarea class="form-control validate[maxSize[500]]" id="nextPlan" placeholder="请输入下一步工作计划" name="nextPlan" style="width: 625px" data-prompt-position="inline"
-									  rows=4></textarea>
+						<div class="col-sm-8">
+							<textarea class="form-control validate[maxSize[500]]" id="nextPlan" placeholder="请输入下一步工作计划" name="nextPlan" style="width: 580px" data-prompt-position="inline"
+									  rows=2></textarea>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label for="" class="col-sm-2 dev-col-sm-120 control-label">计划标准：</label>
-						<div class="col-sm-10">
-							<textarea class="form-control validate[maxSize[500]]" id="planStandard" placeholder="请输入计划标准" name="planStandard" style="width: 625px" data-prompt-position="inline"
-									  rows=4></textarea>
+						<div class="col-sm-8">
+							<textarea class="form-control validate[maxSize[500]]" id="planStandard" placeholder="请输入计划标准" name="planStandard" style="width: 580px" data-prompt-position="inline"
+									  rows=2></textarea>
 						</div>
 					</div>
 					<div class="form-group">
@@ -348,7 +350,7 @@
 						<div class="wh_ul">
 							<c:if test="${taskxx != null }">
 								<c:forEach var="item" items="${taskxx }" varStatus="sta" >
-									<label class="col-sm-2 control-label wh_lab" style="text-align: left; padding-left:0px; margin-right: -20px;">
+									<label class="col-sm-2 control-label wh_lab" style="text-align: left; width: 120px !important; padding-left:0px; margin-right: -20px;">
 										<input  name="quadrant" class="dev-cjztmx" type="radio" value="${item.id}" />${item.name }
 									</label>
 								</c:forEach>

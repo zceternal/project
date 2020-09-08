@@ -38,7 +38,7 @@ public class CustomerListSearch  extends FormPage{
 	private String cusSource;//客户来源(销售形式)
 	private String buyService;//产品与服务
 	private String followState;//销售推进状态
-	private String nextPlanState;//下一步计划状态
+	private String nextPlanState;//下一步任务状态
 
 	public String getCusSource() {
 		return cusSource;
