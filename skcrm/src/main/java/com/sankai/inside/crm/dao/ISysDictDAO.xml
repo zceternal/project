@@ -34,7 +34,7 @@
 	<select id="findAllByPidSearch2" parameterType="com.sankai.inside.crm.entity.SysDictSearchDTO"
 			resultType="com.sankai.inside.crm.entity.SysDictListDTO">
 		select * from (
-		select id,parent_id,`value`,`name`,remark,create_time,pycode,pyname,state,`order`,
+		select id,parent_id,`value`,`name`,remark,create_time,pycode,pyname,state,`order`,#{pid} as ppid,
 		(SELECT `name` FROM sys_account WHERE id=t3.`create_id`) AS createName,
 		(SELECT `name` FROM sys_dict WHERE id=t3.`parent_id`) AS parentName
 		from (select

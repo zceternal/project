@@ -29,11 +29,11 @@
 				<tr id="tr_${dict.id }_${dictsMap.pid==null||dictsMap.pid==''?pid:dictsMap.pid }">
 					<td>
 						<span>
-						<a data-action="move" data-id="${dict.id }" data-pid="${dict.parentId }" data-moveid="${dict.id }_${dictsMap.pid==null||dictsMap.pid==''?pid:dictsMap.pid }"
+						<a data-action="move" data-id="${dict.id }" data-pid="${dict.parentId }" data-ppid="${dict.ppid}" data-moveid="${dict.id }_${dictsMap.pid==null||dictsMap.pid==''?pid:dictsMap.pid }"
 						 	data-order="${dict.order }" data-move=-1 data-url="../setting/move" class="colorblue edit" href="javascript:void(0)">上移</a>
 						</span>
 						<span>
-						<a data-action="move" data-id="${dict.id }" data-pid="${dict.parentId }" 
+						<a data-action="move" data-id="${dict.id }" data-pid="${dict.parentId }"  data-ppid="${dict.ppid}"
 						 	data-order="${dict.order }" data-move=1 data-url="../setting/move" class="colorblue edit" href="javascript:void(0)">下移</a>
 						</span>
 						

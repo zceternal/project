@@ -64,7 +64,8 @@ $(function(){
 			})
 		}else if($(this).data("action")=="move"){
 			var id=$(this).data("id");
-			var pid=$(this).data("pid");
+			var pid=$(this).data("pid");//父级id
+			var ppid=$(this).data("ppid");//主要用于查询
 			var iOrder=$(this).data("order");
 			var moveid=$(this).data("moveid");
 			var move=$(this).data("move");
@@ -83,7 +84,7 @@ $(function(){
 			
 			$.post("../setting/move",{"id":id,"pid":pid,"iOrder":iOrder,"move":move},function(obj){
 				if(obj.success){
-					$("#dictForm_"+pid).submit();
+					$("#dictForm_"+ppid).submit();
 //					if(move==1){
 //						$(this).removeAttr("data-order");
 //						$(this).attr("data-order",iOrder+1);

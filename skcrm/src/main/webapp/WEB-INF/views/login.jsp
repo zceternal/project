@@ -13,7 +13,7 @@
         top.location.href = location.href;
 </script>
 
-<title>公司运管平台</title>
+<title>公司运管平台-登录</title>
 
 <link rel="shortcut icon" type="image/x-icon" href="content/img/common/favicon.ico" />
 <link rel="stylesheet" href="content/vendor/bootstrap/css/bootstrap.min.css" />

@@ -7,12 +7,22 @@ public class SysDictListDTO {
 	private String value;
 	private String name;
 	private Integer parentId;
+	private Integer ppid;
 	private Integer order;
 	private Integer createId;
 	private Date createTime;
 	private Integer state;
 	private String remark;
 	private String createName;
+
+	public Integer getPpid() {
+		return ppid;
+	}
+
+	public void setPpid(Integer ppid) {
+		this.ppid = ppid;
+	}
+
 	public Integer getId() {
 		return id;
 	}
